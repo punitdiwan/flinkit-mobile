@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
 import React from 'react'
-import { useMyContext } from '../Context/Context'
-import Header from '../Components/Header'
+import { useMyContext } from '../context/Context'
+import Header from '../components/Header'
 import {NativeStackScreenProps} from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App';
-import Category from '../Components/Category'
+import Category from '../components/Category'
 
 type HomeProps =NativeStackScreenProps<RootStackParamList,'Home'>
 
