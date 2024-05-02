@@ -1,25 +1,28 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
-import React from 'react'
-import { useMyContext } from '../context/Context'
-import Header from '../components/Header'
-import {NativeStackScreenProps} from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../App';
-import Category from '../components/Category'
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import React from "react";
 
-type HomeProps =NativeStackScreenProps<RootStackParamList,'Home'>
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
 
-const Home = ({navigation,route}:HomeProps) => {
-    const { count } = useMyContext();
-    return (
-        <SafeAreaView>
-            <ScrollView>
-                <Header navigation={navigation} route={route} />
-                <Category navigation={navigation} route={route}/>
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
+import { useMyContext } from "../context/Context";
+import Header from "../components/Header";
 
-export default Home
+import Category from "../components/Category";
 
-const styles = StyleSheet.create({})
+type HomeProps = NativeStackScreenProps<RootStackParamList, "Home", "Category">;
+
+const Home = ({ navigation, route }: HomeProps) => {
+  const { count } = useMyContext();
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <Header navigation={navigation} route={route} />
+        <Category navigation={navigation} route={route} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default Home;
+
+const styles = StyleSheet.create({});
