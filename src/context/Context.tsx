@@ -6,40 +6,42 @@ interface MyContextData {
   // Define the properties and their types here
   // For example:
   count: number;
-  toggle:Boolean;
+  isSignedIn:Boolean;
   categoryName:string;
   increment: () => void;
-  ModalToggle: () => void;
+  setisSignedIn: () => void;
   setcategoryname: (newCategoryName: string) => void;
 }
 
 // Create the context with initial values
 const MyContext = createContext<MyContextData>({
   count: 0,
-  toggle:false,
+  isSignedIn:false,
   categoryName:'',
   increment: () => {},
-  ModalToggle: () => {},
-  setcategoryname: () => {},
+  setisSignedIn: () => {},
+  setcategoryname: () => {}
+
 });
 
 // Define a provider component to wrap your app
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Define state variables and functions to manipulate them
   const [count, setCount] = useState(1);
-  const [toggle,setToggle] =useState(false);
+  const [isSignedIn,setisSignedIn] =useState(false);
   const [categoryName,setcategoryname] =useState("zeeshan");
+  // const [isSignedIn, isSignedIn] = useState(false)
   // Define functions to manipulate state
   const increment = () => {
     setCount(count + 1);
   };
   const ModalToggle=()=>{
-    setToggle(!toggle)
+    setisSignedIn(!isSignedIn)
   }
 
   // Provide the context value to the components
   return (
-    <MyContext.Provider value={{categoryName, count, increment,toggle,ModalToggle,setcategoryname }}>
+    <MyContext.Provider value={{categoryName, count, increment,isSignedIn,setisSignedIn,setcategoryname }}>
       {children}
     </MyContext.Provider>
   );
