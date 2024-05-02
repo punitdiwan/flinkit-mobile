@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import React from "react";
-import { useMyContext } from "../Context/Context";
-import Header from "../Components/Header";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import Category from "../Components/Category";
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
+import { useMyContext } from "../context/Context";
+import Header from "../components/Header";
+
+import Category from "../components/Category";
+
+type HomeProps = NativeStackScreenProps<RootStackParamList, "Home", "Category">;
 
 const Home = ({ navigation, route }: HomeProps) => {
   const { count } = useMyContext();

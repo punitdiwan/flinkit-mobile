@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native'
 import React from 'react'
-import { useMyContext } from '../Context/Context'
+import { useMyContext } from '../context/Context'
 import {NativeStackScreenProps} from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { useNavigation } from '@react-navigation/native'
 
-const CategoryData = [
+export const CategoryData = [
     {
         name: "Vegetables & Fruits",
         imgUrl: "https://cdn.grofers.com/app/images/category/cms_images/rc-upload-1702618300089-5",
