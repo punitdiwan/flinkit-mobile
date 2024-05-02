@@ -10,6 +10,7 @@ import CategoryScreen from "./src/screens/CategoryScreen";
 import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
 import { useMyContext } from "./src/context/Context";
+import Product_Details from "./src/screens/Product_Details";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -18,7 +19,7 @@ export type RootStackParamList = {
   CategoryScreen: undefined;
   AddAddress: undefined;
   Address: undefined;
-
+  Product_Details: {name:string,imgUrl:string};
   OrderListScreen: undefined;
 
   // Feed: { sort: 'latest' | 'top' } | undefined;
@@ -42,11 +43,7 @@ export default function App() {
             component={SearchScreen}
             options={{ title: "Search" }}
           />
-          <Stack.Screen
-            name="CategoryScreen"
-            component={CategoryScreen}
-            options={{ title: "Category" }}
-          />
+
           <Stack.Screen
             name="AddAddress"
             component={AddAddress}
@@ -56,6 +53,16 @@ export default function App() {
             name="OrderListScreen"
             component={OrderListScreen}
             options={{ title: "Order List" }}
+          />
+          <Stack.Screen
+            name="CategoryScreen"
+            component={CategoryScreen}
+            options={{ title: "Category" }}
+          />
+          <Stack.Screen
+            name="Product_Details"
+            component={Product_Details}
+            options={{ title: "Product Details" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

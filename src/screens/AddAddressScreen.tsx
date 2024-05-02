@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import Search from "./Search";
-import AddNewAddressBtn from "./AddNewAddressBtn";
+import AddNewAddressBtn from "./AddNewAddress";
 
 const AddAddress = () => {
   const [errorMsg, setErrorMsg] = useState("");
@@ -53,11 +53,12 @@ export default AddAddress;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: "flex",
+    justifyContent: "space-around",
   },
   map: {
     width: "100%",
-    height: "85%",
+    height: "92%",
   },
   addNewAddressMain: {
     width: "100%",
