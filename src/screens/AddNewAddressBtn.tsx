@@ -11,7 +11,7 @@ import Modal from "react-native-modal";
 import React, { useState } from "react";
 const AddNewAddressBtn = () => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [homeAddress, setHomeAddress] = useState(false);
+  const [homeAddress, setHomeAddress] = useState(true);
   const [officeAddress, setOfficeAddress] = useState(false);
   const [otherAddress, setOtherAddress] = useState(false);
 
@@ -26,6 +26,7 @@ const AddNewAddressBtn = () => {
     } else if (value === "office") {
       setOfficeAddress(true);
       setHomeAddress(false);
+      setOtherAddress(false);
     } else {
       setHomeAddress(false);
       setOfficeAddress(false);
@@ -114,19 +115,92 @@ const AddNewAddressBtn = () => {
               {homeAddress ? (
                 <TouchableOpacity style={styles.inputContainer}>
                   <TextInput
+                    selectionColor={"green"}
                     placeholder="Receiver Name"
                     style={styles.input1}
                   />
                   <TextInput
-                    placeholder="Current Address"
+                    selectionColor={"green"}
+                    placeholder="Complete Address"
                     style={styles.input1}
                   />
                   <TextInput
-                    placeholder="Landmark optional"
+                    selectionColor={"green"}
+                    placeholder="Floor (optional)"
                     style={styles.input1}
                   />
                   <TextInput
-                    placeholder="Phone optional"
+                    selectionColor={"green"}
+                    placeholder="Landmark (optional)"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Phone (optional)"
+                    style={styles.input1}
+                  />
+                  <Text style={styles.savtBtn}>Save Address</Text>
+                </TouchableOpacity>
+              ) : null}
+
+              {/* Office Address */}
+              {officeAddress ? (
+                <TouchableOpacity style={styles.inputContainer}>
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Receiver Name"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Complete Address"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Floor (optional)"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Landmark (optional)"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Phone (optional)"
+                    style={styles.input1}
+                  />
+                  <Text style={styles.savtBtn}>Save Address</Text>
+                </TouchableOpacity>
+              ) : null}
+              {/* Other Address */}
+              {otherAddress ? (
+                <TouchableOpacity style={styles.inputContainer}>
+                  <TextInput placeholder="Type" style={styles.input1} />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Receiver Name"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Complete Address"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Floor (optional)"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Landmark (optional)"
+                    style={styles.input1}
+                  />
+                  <TextInput
+                    selectionColor={"green"}
+                    placeholder="Phone (optional)"
                     style={styles.input1}
                   />
                   <Text style={styles.savtBtn}>Save Address</Text>
@@ -166,22 +240,22 @@ const styles = StyleSheet.create({
     width: "100%",
 
     // borderWidth: 1,
-    marginVertical: 10,
+    marginVertical: 8,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
   },
   homebtnTouchable: {
     width: "25%",
-    borderWidth: 1,
+    // borderWidth: 1,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
   },
   homeBtn: {
-    width: "25%",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    width: "20%",
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     borderRadius: 10,
     borderWidth: 1,
 
@@ -192,9 +266,9 @@ const styles = StyleSheet.create({
     borderColor: "green",
   },
   activebtn: {
-    width: "25%",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    width: "20%",
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     borderRadius: 10,
     display: "flex",
     justifyContent: "center",
@@ -219,21 +293,22 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     display: "flex",
     justifyContent: "space-around",
-    height: 350,
+    height: 390,
   },
   input1: {
-    width: "96%",
-    marginHorizontal: "2%",
+    width: "90%",
+    marginHorizontal: "5%",
     borderWidth: 1,
     borderRadius: 5,
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderColor: "green",
+    paddingHorizontal: 10,
   },
   savtBtn: {
     width: "96%",
 
     marginHorizontal: "2%",
-    paddingVertical: 12,
+    paddingVertical: 6,
     backgroundColor: "green",
     borderRadius: 5,
     color: "white",
