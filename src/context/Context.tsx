@@ -1,16 +1,18 @@
-// Context.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
 
-// Define the shape of your context data
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+
+
 interface MyContextData {
-  // Define the properties and their types here
-  // For example:
+
   count: number;
   toggle: Boolean;
   categoryName: string;
 
   increment: () => void;
-  ModalToggle: () => void;
+  setToggle: (toggle:boolean)=> void;
+  loginToggle: () => void;
+  logoutToggle: () => void;
   setcategoryname: (newCategoryName: string) => void;
 }
 
@@ -20,37 +22,36 @@ const MyContext = createContext<MyContextData>({
   toggle: false,
   categoryName: "",
   increment: () => {},
-  ModalToggle: () => {},
+  loginToggle: () => {},
+  logoutToggle: () => {},
   setcategoryname: () => {},
+  setToggle:()=>{}
 });
 
-// Define a provider component to wrap your app
+
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Define state variables and functions to manipulate them
   const [count, setCount] = useState(1);
-  const [toggle, setToggle] = useState(false);
-  const [categoryName, setcategoryname] = useState("zeeshan");
-  // Define functions to manipulate state
+
+  const [toggle,setToggle] = useState(false);
+  const [categoryName,setcategoryname] =useState("zeeshan");
+  
   const increment = () => {
     setCount(count + 1);
   };
-  const ModalToggle = () => {
-    setToggle(!toggle);
-  };
+  const loginToggle= async ()=>{
+    setToggle(true)
+    console.log("true")
 
-  // Provide the context value to the components
+  }
+  const logoutToggle =()=>{
+    setToggle(false)
+    console.log("false")
+  }
+
+
   return (
-    <MyContext.Provider
-      value={{
-        categoryName,
+    <MyContext.Provider value={{categoryName, count, increment,toggle,loginToggle,setcategoryname,logoutToggle,setToggle }}>
 
-        count,
-        increment,
-        toggle,
-        ModalToggle,
-        setcategoryname,
-      }}
-    >
       {children}
     </MyContext.Provider>
   );

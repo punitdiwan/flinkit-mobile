@@ -1,4 +1,5 @@
-import { StyleSheet, SafeAreaView, ScrollView, Text } from "react-native";
+
+import { StyleSheet, SafeAreaView, ScrollView,Text } from "react-native";
 import React from "react";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -17,8 +18,7 @@ const Home = ({ navigation, route }: HomeProps) => {
     <SafeAreaView>
       <ScrollView>
         <Header navigation={navigation} route={route} />
-        <Category navigation={navigation} route={route} />
-    
+        <Category  />
       </ScrollView>
     </SafeAreaView>
   );

@@ -11,7 +11,14 @@ import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
 import { useMyContext } from "./src/context/Context";
 import Product_Details from "./src/screens/Product_Details";
+
 import Cart from "./src/screens/Cart";
+
+import Login from "./src/screens/Authentication/Login";
+import Otp from "./src/screens/Authentication/Otp";
+import { useEffect, useState } from "react";
+
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -20,20 +27,30 @@ export type RootStackParamList = {
   CategoryScreen: undefined;
   AddAddress: undefined;
   Address: undefined;
+
   Product_Details: { name: string; imgUrl: string };
   OrderListScreen: undefined;
   Cart: undefined;
   // Cart: { name: string; imgUrl: string; price: number };
 
+ 
+ 
+  Login: undefined;
+  Otp: undefined;
+
+
   // Feed: { sort: 'latest' | 'top' } | undefined;
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
-  const { categoryName } = useMyContext();
+
+
   return (
     <MyProvider>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator >
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Otp" component={Otp} options={{ headerShown: false }} />
           <Stack.Screen
             name="Home"
             component={Home}
