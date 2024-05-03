@@ -102,7 +102,7 @@ const Category = ({navigation}:CategoryScreenProps) => {
         <>
             <View style={{ padding: 10 }}>
                 <View style={{paddingLeft:10 ,marginVertical:25}}>
-                    <Text style={{fontSize:25,fontWeight:'600'}}>Shop by Category</Text>
+                    <Text style={{fontSize:25,fontWeight:'600'}}>Shop Category</Text>
                 </View>
                 <View style={{display:"flex",flexDirection:'row',flexWrap:'wrap',gap:10,alignItems:'center',justifyContent:'center'}}>
                 {
