@@ -18,8 +18,7 @@ const Home = ({ navigation, route }: HomeProps) => {
     <SafeAreaView>
       <ScrollView>
         <Header navigation={navigation} route={route} />
-        <Category navigation={navigation} route={route} />
-        <Text>Hello User</Text>
+        <Category  />
       </ScrollView>
     </SafeAreaView>
   );
