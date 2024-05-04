@@ -58,7 +58,7 @@ const AddNewAddressBtn = () => {
             <View
               style={{
                 width: "100%",
-                height: "65%",
+                height: "100%",
                 backgroundColor: "white",
                 display: "flex",
                 marginTop: 400,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginHorizontal: 0,
     display: "flex",
-    marginBottom: 0,
+    marginBottom: 100,
   },
   inputContainer: {
     width: "100%",

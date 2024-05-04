@@ -5,20 +5,23 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
+
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { CategoryData } from "../components/Category";
 import MinusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import PlusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CartIcon from "react-native-vector-icons/FontAwesome6";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useMyContext } from "../context/Context";
 
 const CategoryScreen = () => {
   const navigation = useNavigation<any>();
-  const [addToCart, setAddToCart] = useState(false);
+
+  const { itemIncrement, itemDecrement, itemsAddInCart, itemValue, myCart } =
+    useMyContext();
+
   return (
     <>
       <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -104,7 +107,7 @@ const CategoryScreen = () => {
                       <Text>400</Text>
                     </View>
 
-                    {addToCart ? (
+                    {item.buttonActive ? (
                       <TouchableOpacity
                         style={{
                           // backgroundColor: "#c3e3c1",
@@ -130,17 +133,24 @@ const CategoryScreen = () => {
                             name="minus-circle"
                             color={"green"}
                             size={20}
+                            onPress={() => {
+                              itemDecrement(item.id, item);
+                            }}
                           />
-                          <Text style={{ fontSize: 20 }}>1</Text>
+                          <Text style={{ fontSize: 20 }}>{itemValue}</Text>
                           <PlusIcon
                             name="plus-circle"
                             color={"green"}
                             size={20}
+                            onPress={() => {
+                              itemIncrement(item.id, item);
+                            }}
                           />
                         </View>
                       </TouchableOpacity>
                     ) : (
                       <TouchableOpacity
+                        key={index}
                         style={{
                           backgroundColor: "#c3e3c1",
                           display: "flex",
@@ -151,8 +161,9 @@ const CategoryScreen = () => {
                         }}
                       >
                         <Text
+                          key={item.id}
                           style={{ color: "green" }}
-                          onPress={() => setAddToCart(true)}
+                          onPress={() => itemsAddInCart(item)}
                         >
                           ADD
                         </Text>
@@ -213,31 +224,32 @@ const CategoryScreen = () => {
             </View>
           </ScrollView>
         </View>
-        {addToCart ? (
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              // borderWidth: 1,
-              borderRadius: 50,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "green",
-              position: "absolute",
-              // position: "relative",
-              marginVertical: 550,
-              marginHorizontal: 280,
-            }}
-          >
-            <CartIcon
-              name="cart-plus"
-              size={30}
-              color={"white"}
-              onPress={() => navigation.navigate("Cart")}
-            />
-          </View>
-        ) : null}
+        {/* {showButton ? ( */}
+        <View
+          style={{
+            width: 80,
+            height: 80,
+            // borderWidth: 1,
+            borderRadius: 50,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "green",
+            position: "absolute",
+            // position: "relative",
+            marginVertical: 550,
+            marginHorizontal: 280,
+          }}
+        >
+          <CartIcon
+            name="cart-plus"
+            size={30}
+            color={"white"}
+            onPress={() => navigation.navigate("Cart")}
+          />
+          <Text style={{ color: "white", fontSize: 20 }}>{myCart.length}</Text>
+        </View>
+        {/* ) : null} */}
       </View>
     </>
   );
