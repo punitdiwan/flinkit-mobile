@@ -28,7 +28,7 @@ export type RootStackParamList = {
   AddAddress: undefined;
   Address: undefined;
 
-  Product_Details: { name: string; imgUrl: string };
+  Product_Details: { name: string; imgUrl: string,id:string };
   OrderListScreen: undefined;
   Cart: undefined;
   // Cart: { name: string; imgUrl: string; price: number };
