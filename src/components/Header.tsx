@@ -21,6 +21,7 @@ import Category from "./Category";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 
+
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const Header = ({ navigation, route }: HomeProps) => {
@@ -29,6 +30,7 @@ const Header = ({ navigation, route }: HomeProps) => {
   const img = {
     uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
+ 
   return (
     <SafeAreaView>
       <View style={styles.header}>

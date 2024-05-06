@@ -3,7 +3,7 @@ import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App';
 import AddressList from '../components/AddressList';
-import { useMyContext } from '../context/Context';
+// import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, 'Profile'>
 
@@ -45,7 +45,7 @@ const arr=[
 
 const Profile = ({ navigation,route }: ProfileProps) => {
   const { userId } = route.params
-  const {logoutToggle}=useMyContext();
+  // const {logoutToggle}=useMyContext();
   return (
     <View style={{ width: '100%', height: "100%", backgroundColor: "#fffff" }}>
       <View style={{ width: "100%", height: "auto" }}>

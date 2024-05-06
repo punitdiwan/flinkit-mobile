@@ -15,10 +15,13 @@ import MinusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import PlusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CartIcon from "react-native-vector-icons/FontAwesome6";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import SearchCard from "../components/SearchCard";
+import { useMyContext } from "../context/Context";
 
 const CategoryScreen = () => {
   const navigation = useNavigation<any>();
-  const [addToCart, setAddToCart] = useState(false);
+  // const [addToCart, setAddToCart] = useState(false);
+  const {cartItem} =useMyContext()
   return (
     <>
       <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -60,160 +63,13 @@ const CategoryScreen = () => {
                 paddingTop: 10,
               }}
             >
-              {CategoryData?.map((item, index) => (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Product_Details", {
-                      name: item.name,
-                      imgUrl: item.imgUrl,
-                    })
-                  }
-                  key={index}
-                  style={{
-                    width: "45%",
-                    backgroundColor: "#ffffff",
-                    height: 200,
-                    overflow: "hidden",
-                    padding: 10,
-                    borderRadius: 15,
-                    shadowColor: "#171717",
-                    shadowOffset: { width: -2, height: 4 },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
-                  }}
-                >
-                  <View>
-                    <Image
-                      source={{ uri: item.imgUrl }}
-                      resizeMode="contain"
-                      style={{ width: "100%", height: 100 }}
-                    />
-                  </View>
-                  <Text>{item.name}</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View>
-                      <Text style={{ textDecorationLine: "line-through" }}>
-                        500
-                      </Text>
-                      <Text>400</Text>
-                    </View>
-
-                    {addToCart ? (
-                      <TouchableOpacity
-                        style={{
-                          // backgroundColor: "#c3e3c1",
-
-                          // padding: 5,
-                          borderRadius: 8,
-                          flexDirection: "row",
-                          borderWidth: 1,
-                          borderColor: "#c3e3c1",
-                          width: "50%",
-                        }}
-                      >
-                        <View
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <MinusIcon
-                            name="minus-circle"
-                            color={"green"}
-                            size={20}
-                          />
-                          <Text style={{ fontSize: 20 }}>1</Text>
-                          <PlusIcon
-                            name="plus-circle"
-                            color={"green"}
-                            size={20}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={{
-                          backgroundColor: "#c3e3c1",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: 5,
-                          borderRadius: 8,
-                        }}
-                      >
-                        <Text
-                          style={{ color: "green" }}
-                          onPress={() => setAddToCart(true)}
-                        >
-                          ADD
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </TouchableOpacity>
+              {CategoryData?.map((item) => (
+                <SearchCard key={item.id} item={item} />
               ))}
-              <TouchableOpacity
-                style={{
-                  width: "45%",
-                  backgroundColor: "#ffffff",
-                  height: 200,
-                  overflow: "hidden",
-                  padding: 10,
-                  borderRadius: 15,
-                  shadowColor: "#171717",
-                  shadowOffset: { width: -2, height: 4 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 3,
-                }}
-              >
-                <View>
-                  <Image
-                    source={{ uri: CategoryData[0].imgUrl }}
-                    resizeMode="contain"
-                    style={{ width: "100%", height: 100 }}
-                  />
-                </View>
-                <Text>{CategoryData[0].name}</Text>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <View>
-                    <Text style={{ textDecorationLine: "line-through" }}>
-                      500
-                    </Text>
-                    <Text>400</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#c3e3c1",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 5,
-                      borderRadius: 8,
-                    }}
-                  >
-                    <Text style={{ color: "green" }}>ADD</Text>
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
-        {addToCart ? (
+        {cartItem.length !==0 ? (
           <View
             style={{
               width: 80,
@@ -236,6 +92,7 @@ const CategoryScreen = () => {
               color={"white"}
               onPress={() => navigation.navigate("Cart")}
             />
+            <Text style={{color:'white'}}>{cartItem.length}</Text>
           </View>
         ) : null}
       </View>
