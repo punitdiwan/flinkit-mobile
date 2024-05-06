@@ -32,6 +32,12 @@
         "projectId": "650e8f9b-7ead-4cee-953e-2a539caf86e2"
       }
     },
-    "owner": "prince01"
+    "owner": "prince01",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/650e8f9b-7ead-4cee-953e-2a539caf86e2"
+    }
   }
 }
