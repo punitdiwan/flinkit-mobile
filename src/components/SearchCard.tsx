@@ -25,11 +25,11 @@ const SearchCard = ({ item }: Props) => {
         navigation.navigate("Product_Details", {
           name: item.name,
           imgUrl: item.imgUrl,
-          id:item.id,
+          id: item.id,
         })
       }
     >
-      <View>
+      <View >
         <Image
           style={{ width: "100%", height: 110 }}
           resizeMode="contain"
@@ -48,11 +48,11 @@ const SearchCard = ({ item }: Props) => {
         <View
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "space-between",
           }}
         >
-          <View>
+          <View style={{ display: 'flex', alignItems: "center", justifyContent: 'flex-start', flexDirection: 'row', gap: 10 }}>
             <Text
               style={{
                 textDecorationLine: "line-through",
@@ -69,47 +69,48 @@ const SearchCard = ({ item }: Props) => {
           </View>
           {quantity === 0 ? (
             <>
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  backgroundColor: "#b5e8ae",
-                  borderRadius: 5,
-                  borderColor: "green",
-                  borderWidth: 1,
-                }}
-                onPress={() => increaseCardQuantity(item.id)}
-              >
-                <Text style={{ color: "green" }}>ADD</Text>
-              </TouchableOpacity>
+              <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    backgroundColor: "#b5e8ae",
+                    borderRadius: 5,
+                    borderColor: "green",
+                    borderWidth: 1,
+                    width: '80%',
+
+                  }}
+                  onPress={() => increaseCardQuantity(item.id)}
+                >
+                  <Text style={{ color: "green", textAlign: 'center' }}>ADD</Text>
+                </TouchableOpacity>
+              </View>
             </>
           ) : (
             <>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "green",
-                  borderRadius: 5,
-                  borderColor: "green",
-                  borderWidth: 1,
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                  width: "50%",
-                  justifyContent: 'center',
-                  paddingHorizontal: 5 
-                }}
-                onPress={() => navigation.navigate("Cart")}
-              >
-                <CartIcon
-                    name="cart-plus"
-                    size={20}
-                    color={"white"}
-                   
-                  />
-                {/* <Text onPress={()=>decreaseCardQuantity(item.id)} style={{fontSize:30,fontWeight:'500',color:"#ffffff",height:'100%'}}>-</Text> */}
-                {/* <Text style={{fontSize:15,fontWeight:'500',color:'#ffffff'}}>{quantity}</Text> */}
-                {/* <Text onPress={()=>increaseCardQuantity(item.id)} style={{fontSize:30,fontWeight:'500',color:'#ffffff',height:'100%'}}>+</Text> */}
-              </TouchableOpacity>
+              <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
+                <View
+                  style={{
+                    backgroundColor: "green",
+                    borderRadius: 5,
+                    borderColor: "green",
+                    borderWidth: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 10,
+                    alignItems: "center",
+                    width: "80%",
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    // paddingVertical:10
+                  }}
+
+                >
+                  <Text onPress={() => decreaseCardQuantity(item.id)} style={{ fontSize: 30, fontWeight: '500', color: "#ffffff", height: '100%' }}>-</Text>
+                  <Text style={{ fontSize: 15, fontWeight: '500', color: '#ffffff' }}>{quantity}</Text>
+                  <Text onPress={() => increaseCardQuantity(item.id)} style={{ fontSize: 30, fontWeight: '500', color: '#ffffff', height: '100%' }}>+</Text>
+                </View>
+              </View>
             </>
           )}
         </View>
@@ -123,7 +124,7 @@ export default SearchCard;
 const styles = StyleSheet.create({
   body: {
     width: "45%",
-    height: 250,
+    height: "auto",
     backgroundColor: "#ffffff",
     borderRadius: 10,
     padding: 10,

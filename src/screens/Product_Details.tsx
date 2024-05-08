@@ -38,7 +38,8 @@ const Product_Details = ({ route }: any) => {
               alignItems: "center",
               width: "30%",
               justifyContent: 'space-between',
-              paddingHorizontal: 5
+              paddingHorizontal: 10,
+              // paddingVertical:10
             }}
 
           >
