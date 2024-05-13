@@ -1,24 +1,22 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MyProvider } from "./src/context/Context";
-import Home from "./src/screens/Home";
+
 import Profile from "./src/screens/Profile";
+import Login from "./src/screens/Authentication/Login";
 import SearchScreen from "./src/screens/SearchScreen";
-import CategoryScreen from "./src/screens/CategoryScreen";
+import Otp from "./src/screens/Authentication/Otp";
 import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
-import { useMyContext } from "./src/context/Context";
+import CategoryScreen from "./src/screens/CategoryScreen";
 import Product_Details from "./src/screens/Product_Details";
 
 import Cart from "./src/screens/Cart";
 
-import Login from "./src/screens/Authentication/Login";
-import Otp from "./src/screens/Authentication/Otp";
-import { useEffect, useState } from "react";
-
-
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import BottomNav from "./src/screens/BottomNav";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -27,35 +25,43 @@ export type RootStackParamList = {
   CategoryScreen: undefined;
   AddAddress: undefined;
   Address: undefined;
-
-  Product_Details: { name: string; imgUrl: string,id:string };
+  Category: undefined;
+  BottomNav: { route: string; color: string };
+  Product_Details: { name: string; imgUrl: string; id: string };
   OrderListScreen: undefined;
   Cart: undefined;
   // Cart: { name: string; imgUrl: string; price: number };
 
- 
- 
   Login: undefined;
   Otp: undefined;
 
-
   // Feed: { sort: 'latest' | 'top' } | undefined;
 };
+const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
 export default function App() {
-
-
   return (
     <MyProvider>
       <NavigationContainer>
-        <Stack.Navigator >
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="Otp" component={Otp} options={{ headerShown: false }} />
+        <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="Login"
+            component={Login}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Otp"
+            component={Otp}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Home"
+            component={BottomNav}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen name="Profile" component={Profile} />
 
           <Stack.Screen
@@ -79,6 +85,7 @@ export default function App() {
             component={CategoryScreen}
             options={{ title: "Category" }}
           />
+
           <Stack.Screen
             name="Product_Details"
             component={Product_Details}
@@ -86,8 +93,8 @@ export default function App() {
           />
           <Stack.Screen
             name="Cart"
+            options={{ title: "Cart" }}
             component={Cart}
-            options={{ title: "My Cart" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
