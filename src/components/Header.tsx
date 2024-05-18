@@ -6,21 +6,18 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Modal,
-  Pressable,
-  Alert,
-  Button,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
-import Icon2 from "react-native-vector-icons/Fontisto";
-// import { useNavigation } from '@react-navigation/native';
+// import Icon from "react-native-vector-icons/FontAwesome";
+// import Icon2 from "react-native-vector-icons/Fontisto";
+// import Icon from "react-native-vector-icons/Fontisto";
+import Icon from "@expo/vector-icons/FontAwesome";
+import Icon2 from "@expo/vector-icons/Fontisto";
 import Carousel from "./Carousel";
-import Category from "./Category";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -30,7 +27,7 @@ const Header = ({ navigation, route }: HomeProps) => {
   const img = {
     uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
- 
+
   return (
     <SafeAreaView>
       <View style={styles.header}>
@@ -63,7 +60,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View>
+              {/* <View>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("Profile", { userId: "123" })
@@ -85,7 +82,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                     <Icon name="user" size={30} color="#000000" />
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
             <TouchableOpacity
               onPress={() => navigation.navigate("SearchScreen")}
@@ -102,7 +99,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                   alignItems: "center",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  padding: 15,
+                  padding: 12,
                 }}
               >
                 <View>
@@ -111,7 +108,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                   </Text>
                 </View>
                 <View>
-                  <Icon name="search" size={20} color="rgba(0, 0, 0, 0.459)" />
+                  <Icon name="search" size={20} color="gray" />
                 </View>
               </View>
             </TouchableOpacity>
