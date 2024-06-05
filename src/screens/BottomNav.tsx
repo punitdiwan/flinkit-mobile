@@ -1,16 +1,21 @@
 import { View, Text } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Entypo";
-import Ionicons2 from "@expo/vector-icons/MaterialIcons";
-import Ionicons3 from "@expo/vector-icons/FontAwesome";
 import Ionicons4 from "@expo/vector-icons/FontAwesome6";
 import Home from "./Home";
 import Profile from "./Profile";
+import Favourite from "./Favourite"
 import { useMyContext } from "../context/Context";
 import Cart from "./Cart";
+import SearchScreen from "./SearchScreen";
 import { RootStackParamList } from "../../App";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CategoryScreen from "./CategoryScreen";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
+import Filter from "./Filter";
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const BottomNav = () => {
@@ -30,23 +35,34 @@ const BottomNav = () => {
               return <Ionicons name="home" color={color} size={25} />;
             } else if (route.name === "Profile") {
               iconName = focused ? "ios-list" : "ios-list-outline";
-              return <Ionicons3 name="user-circle" color={color} size={25} />;
+              return (
+                <MaterialCommunityIcons
+                  name="account"
+                  size={25}
+                  color={color}
+                /> 
+              );
             } else if (route.name === "Cart") {
               iconName = focused ? "ios-list" : "ios-list-outline";
-              return <Ionicons4 name="cart-plus" color={color} size={25} />;
+              return <Feather name="shopping-cart" size={24} color={color} />;
             } else if (route.name === "Category") {
               iconName = focused ? "ios-list" : "ios-list-outline";
-              return <Ionicons2 name="category" color={color} size={25} />;
+              return (
+                <MaterialIcons name="manage-search" size={24} color={color} />
+              );
+            } else if (route.name === "Favourite") {
+              iconName = focused ? "ios-list" : "ios-list-outline";
+              return <Entypo name="heart-outlined" size={24} color="black" />
             }
           },
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "green",
+          tabBarActiveTintColor: "green",
+          tabBarInactiveTintColor: "black",
 
           tabBarLabelStyle: {
             textAlign: "center",
             marginBottom: 10,
           },
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
         })}
       >
         <Tab.Screen
@@ -61,29 +77,19 @@ const BottomNav = () => {
           }}
         />
         <Tab.Screen
-          name="Category"
-          component={CategoryScreen}
+          name="Search"
+          component={SearchScreen}
           options={{
-            title: "Category",
-            headerShown: true,
+            // title: "SearchScreen",
+            // headerShown: true,
             tabBarIcon: ({ color, size }) => {
-              return <Ionicons2 name="category" color={color} size={25} />;
+              return (
+                <MaterialIcons name="manage-search" size={30} color={color} />
+              );
             },
+            header: () => <YourCustomHeaderComponent name={"Find Products"} />,
           }}
         />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: "Profile",
-            headerShown: true,
-
-            tabBarIcon: ({ color, size }) => {
-              return <Ionicons3 name="user-circle" color={color} size={25} />;
-            },
-          }}
-        />
-
         {cartItem.length === 0 ? (
           <Tab.Screen
             name="Cart"
@@ -92,7 +98,8 @@ const BottomNav = () => {
               title: "Cart",
               headerShown: true,
               tabBarIcon: ({ color, size }) => {
-                return <Ionicons4 name="cart-plus" color={color} size={25} />;
+                return <Feather name="shopping-cart" size={25} color={color} />;
+               
               },
             }}
           />
@@ -105,11 +112,43 @@ const BottomNav = () => {
               tabBarBadge: cartItem.length,
 
               tabBarIcon: ({ color, size }) => {
-                return <Ionicons4 name="cart-plus" color={color} size={25} />;
+                return <Ionicons4 name="cart-plus" color={color} size={30} />;
               },
             }}
           />
         )}
+        <Tab.Screen
+          name="Favourite"
+          component={Favourite}
+          options={{
+            headerShown: false,
+
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <Entypo name="heart-outlined" size={24} color={color} />
+              );
+            },
+          }}
+        />
+
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerShown: false,
+
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <MaterialCommunityIcons
+                  name="account"
+                  size={25}
+                  color={color}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen name="Filter" component={Filter} options={{ tabBarItemStyle: { display: "none" }, headerShown: false, }} />
       </Tab.Navigator>
     </>
   );

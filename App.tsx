@@ -3,15 +3,23 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MyProvider } from "./src/context/Context";
-
+import Signin from "./src/screens/Authentication/Signin";
+import Signup from "./src/screens/Authentication/Signup";
 import Profile from "./src/screens/Profile";
+import Onboarding from "./src/screens/Onboarding";
 import Login from "./src/screens/Authentication/Login";
+import Maillogin from "./src/screens/Authentication/maillogin";
 import SearchScreen from "./src/screens/SearchScreen";
+import Orderaccepted from "./src/screens/Orderaccepted";
+import ErrorCard from "./src/screens/Errorcard";
+import Checkout from "./src/screens/Checkout";
 import Otp from "./src/screens/Authentication/Otp";
 import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
 import Product_Details from "./src/screens/Product_Details";
+import Productdetail from "./src/screens/Productdetail";
+import Favourite from "./src/screens/Favourite";
 
 import Cart from "./src/screens/Cart";
 
@@ -34,7 +42,16 @@ export type RootStackParamList = {
 
   Login: undefined;
   Otp: undefined;
-
+  Filter:undefined;
+  Onboarding: undefined;
+  Signin: undefined;
+  Maillogin: undefined;
+  Signup: undefined;
+  Orderaccepted: undefined;
+  ErrorCard: undefined;
+  Checkout: undefined;
+  Productdetail: undefined;
+  Favourite: undefined;
   // Feed: { sort: 'latest' | 'top' } | undefined;
 };
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -45,6 +62,16 @@ export default function App() {
     <MyProvider>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Signin"
+            component={Signin}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Login"
             component={Login}
@@ -55,9 +82,20 @@ export default function App() {
             component={Otp}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Maillogin"
+            component={Maillogin}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ headerShown: false }}
+          />
+
 
           <Stack.Screen
-            name="Home"
+            name="BottomNav"
             component={BottomNav}
             options={{ headerShown: false }}
           />
@@ -95,6 +133,31 @@ export default function App() {
             name="Cart"
             options={{ title: "Cart" }}
             component={Cart}
+          />
+          <Stack.Screen
+            name="Orderaccepted"
+            options={{ title: "Orderaccepted" }}
+            component={Orderaccepted}
+          />
+           <Stack.Screen
+            name="ErrorCard"
+            options={{ title: "ErrorCard" }}
+            component={ErrorCard}
+          />
+           <Stack.Screen
+            name="Checkout"
+            options={{ title: "Checkout" }}
+            component={Checkout}
+          />
+          <Stack.Screen
+            name="Productdetail"
+            options={{ title: "Productdetail" }}
+            component={Productdetail}
+          />
+           <Stack.Screen
+            name="Favourite"
+            options={{ title: "Favourite" }}
+            component={Favourite}
           />
         </Stack.Navigator>
       </NavigationContainer>
