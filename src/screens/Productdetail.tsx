@@ -12,7 +12,11 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import { useMyContext } from "../context/Context";
 
+
+// import AppLoading from "expo-app-loading";
+// import * as Font from "expo-font";
 const loadFonts = async () => {
   await Font.loadAsync({
     "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
@@ -20,6 +24,16 @@ const loadFonts = async () => {
     "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
   });
 };
+// const [fontLoaded, setFontLoaded] = useState(false);
+// if (!fontLoaded) {
+//   return (
+//     <AppLoading
+//       startAsync={loadFonts}
+//       onFinish={() => setFontLoaded(true)}
+//       onError={console.warn}
+//     />
+//   );
+// }
 
 const Productdetail = ({ name }: any) => {
   const navigation = useNavigation();
@@ -27,6 +41,10 @@ const Productdetail = ({ name }: any) => {
   const [nutritionExpanded, setNutritionExpanded] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [toggleFavItem,setToggleFavItem] = useState(false);
+  const { favouriteItem, addFavouriteItem } = useMyContext();
+  console.log(favouriteItem);
+  
 
   if (!fontLoaded) {
     return (
@@ -69,14 +87,14 @@ const Productdetail = ({ name }: any) => {
           name="left"
           size={24}
           color="black"
-          style={styles.backIcon}
+          style={{position:"absolute",top:10,left:10}}
           onPress={() => navigation.replace("Favourite")}
         />
         <Octicons
           name="share"
           size={24}
           color="black"
-          style={{ marginLeft: 320 }}
+          style={{position:"absolute",top:10,right:10}}
           onPress={() => navigation.replace("Favourite")}
         />
         <Image
@@ -86,31 +104,48 @@ const Productdetail = ({ name }: any) => {
       </ImageBackground>
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.productName}>
+        <View style={{display:"flex",width:"100%",flexDirection:"row",justifyContent:"space-between",alignItems:"center",marginVertical:5}}>
+        <Text style={{fontSize:24,fontFamily:"Gilroy-Bold"}}>
           Natural Red Apples
-          <Entypo
+        </Text>
+        <Entypo
             name="heart-outlined"
             size={24}
-            color="black"
-            onPress={() => navigation.replace("Favourite")}
+            onPress={() => {
+              if(toggleFavItem){
+                navigation.navigate("Favourite");
+              }else{
+                addFavouriteItem('image1.png', 'Product Details', 100, '1');
+                setToggleFavItem(!toggleFavItem);
+              }
+
+            }}
+            // onPress={() => navigation.replace("Favourite")}
+            color={toggleFavItem ? "red" : "black"}
           />
-        </Text>
-        <Text style={styles.productPrice}>1Kg, price</Text>
-        <View style={styles.quantityContainer}>
+        </View>
+       
+        <Text style={{width:"100%",color:"#c4b7b7",fontWeight:"500"}}>1Kg, Price</Text>
+        <View style={{display:"flex",width:"100%",justifyContent:"space-between",flexDirection:"row",alignItems:"center",padding:15}}>
+          <View style={{display:"flex",flexDirection:"row",gap:5}}>
           <TouchableOpacity
             onPress={decreaseQuantity}
-            style={styles.quantityButton}
+            style={{display:"flex",justifyContent:"center",alignItems:"center",width:50,height:50,borderRadius:10}}
           >
             <Entypo name="minus" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
+          <View style={{display:"flex",justifyContent:"center",alignItems:"center",width:50,height:50,borderRadius:15,borderWidth:2,borderColor:"#c4b7b7"}}>
+             <Text style={{fontSize:20}}>{quantity}</Text>
+          </View>
+         
           <TouchableOpacity
             onPress={increaseQuantity}
-            style={styles.quantityButton}
+            style={{display:"flex",justifyContent:"center",alignItems:"center",width:50,height:50,borderRadius:10}}
           >
-            <Entypo name="plus" size={24} color="black" />
+            <Entypo name="plus" size={24} color="#69AF5D" />
           </TouchableOpacity>
-          <Text style={{ fontSize: 18, marginLeft: 85 }}>R99</Text>
+          </View>
+          <Text style={{ fontSize: 18, marginLeft: 85 }}>₹99</Text>
         </View>
 
         <View style={styles.reviewContainer}>
@@ -205,9 +240,9 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 24,
     fontFamily: "Gilroy-Bold",
-    marginTop: 15,
-    marginRight: 80,
-    textAlign: "center",
+    position:"absolute",
+    top:10,
+    left:20,
   },
   quantityContainer: {
     flexDirection: "row",

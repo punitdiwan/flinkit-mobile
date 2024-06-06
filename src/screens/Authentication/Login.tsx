@@ -38,7 +38,7 @@ const Login = (props: Props) => {
   const apikey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
   const handleLogin = async () => {
-    const apiUrl = "https://admin.delivery.launchmysite.in/api/setConfirmation";
+    // const apiUrl = "https://admin.delivery.launchmysite.in/api/setConfirmation";
 
     if (MobileNumber.length == 10) {
       // const response = await fetch(apiUrl, {
@@ -61,6 +61,7 @@ const Login = (props: Props) => {
       });
       console.log("Login.tsx, response:", response);
       navigation.replace("Otp", { MobileNumber });
+      // navigation.navigate("BottomNav")
 
       // ---------------------------------------------------------
       // const resp = await supabase.auth.admin.createUser({

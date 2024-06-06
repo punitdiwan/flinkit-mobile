@@ -12,6 +12,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Cart">;
 
 const Cart = () => {
   const { cartItem } = useMyContext();
+
   const navigation = useNavigation<any>();
   return (
     <View>
@@ -38,7 +39,7 @@ const Cart = () => {
           // borderWidth: 1,
           borderColor: "lightgrey",
           paddingHorizontal: 10,
-          backgroundColor:'#ffffff',
+          backgroundColor: '#ffffff',
           marginBottom: 10,
 
           display: "flex",
@@ -46,54 +47,75 @@ const Cart = () => {
           height: 110,
         }}
       >
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <TouchableOpacity   onPress={() => navigation.replace("Checkout")}
-            style={{
-              backgroundColor: "#69AF5D",
-              height: 67,
-              width: 300,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              borderRadius: 20,
-              flexDirection: "row",
-            }}
-          >
-            <Text>Go To Checkout:</Text>
-            <View
-              style={{
-                height: 37,
-                width: 73,
-                position: "absolute",
-                backgroundColor: "#166432",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-                borderRadius: 5,
-                right: 15,
-              }}
-            >
-              <FontAwesome name="rupee" size={14} color="#ffffff" />
-              <Text style={{ fontSize: 14, color: "#ffffff" }}>
-                {cartItem.reduce((total, cartItem) => {
-                  const item = CategoryData.find((i) => i.id === cartItem?.id);
-                  return total + (item?.price || 0) * cartItem?.quantity;
-                }, 0)}
-              </Text>
+        {cartItem.length === 0 ? (
+          <TouchableOpacity style={{ width: "100%", backgroundColor: "#69AF5D", display: "flex", justifyContent: "center", alignItems: "center", height: 70, borderRadius: 20 }} onPress={() => navigation.navigate("Category")}>
+            <View>
+              <Text style={{ fontSize: 20, fontWeight: 500, color: "white" }}>Empty cart,Go to category</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        ) : (
+          <TouchableOpacity style={{ width: "100%", backgroundColor: "#69AF5D", display: "flex", justifyContent: "center", alignItems: "center", height: 70, borderRadius: 20 }}>
+            <Text style={{ fontSize: 20, fontWeight: 500, color: "white", position: "absolute", left: 80 }}>Go to Checkout</Text>
+            <View style={{ position: "absolute", right: 65, backgroundColor: "#166432", height: 40, width: 80, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 5 }}>
+              <Text style={{ color: "white", fontWeight: 500, fontSize: 20 }}>₹{cartItem.reduce((total, cartItem) => {
+                const item = CategoryData.find((i) => i.id === cartItem?.id);
+                return total + (item?.price || 0) * cartItem?.quantity;
+              }, 0)}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 };
 export default Cart;
+
+
+// <View
+// style={{
+//   width: "100%",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "space-between"
+
+// }}
+// >
+{/* <TouchableOpacity   onPress={() => navigation.replace("Checkout")}
+  style={{
+    backgroundColor: "#69AF5D",
+    height: 67,
+    width: 300,
+    display: "flex",
+    alignItems: "center",
+    justifyContent:"center",
+    gap:5,
+    position: "relative",
+    borderRadius: 20,
+    flexDirection: "row",
+  }}
+>
+  <Text>Go To Checkout:</Text>
+  <View
+    style={{
+      height: 37,
+      width: 73,
+      position: "absolute",
+      backgroundColor: "#166432",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      borderRadius: 5,
+      right: 15,
+    }}
+  >
+    <FontAwesome name="rupee" size={14} color="#ffffff" />
+    <Text style={{ fontSize: 14, color: "#ffffff" }}>
+      {cartItem.reduce((total, cartItem) => {
+        const item = CategoryData.find((i) => i.id === cartItem?.id);
+        return total + (item?.price || 0) * cartItem?.quantity;
+      }, 0)}
+    </Text>
+  </View>
+</TouchableOpacity> */}
+// </View>

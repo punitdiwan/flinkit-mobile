@@ -10,6 +10,8 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const HomePageCard = ({ name, data }: any) => {
+    console.log("datacom",data);
+  
   const imgUrl =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
 
@@ -53,7 +55,8 @@ const HomePageCard = ({ name, data }: any) => {
               borderColor: "#E2E2E2",
               marginHorizontal: 5,
             }}
-            onPress={() => navigation.navigate("Product_Details")}
+            onPress={() => navigation.navigate("Productdetail")}
+            // onPress={() => console.log("id",item)}
           >
             <View
               style={{

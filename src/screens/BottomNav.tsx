@@ -113,7 +113,7 @@ const BottomNav = () => {
 
               tabBarIcon: ({ color, size }) => {
                 return <Ionicons4 name="cart-plus" color={color} size={30} />;
-              },
+              }
             }}
           />
         )}

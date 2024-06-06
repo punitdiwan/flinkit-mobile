@@ -190,13 +190,17 @@ const myArray = [1];
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const apikey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw";
+
+
 const CategoryScreen = (category_id: any) => {
+  console.log("categoryIdComingInCategoryScreen",category_id.route.params.category_id);
+  const newId=category_id.route.params.category_id
   const {
     getItemQuintity,
-    // increaseCardQuantity,
     decreaseCardQuantity,
     removeFromcart,
   } = useMyContext();
+
   const { cartItem } = useMyContext();
   const [products, setProducts] = useState([]);
   const [increaseCardQuantity, setincreaseCardQuantity] = useState<string[]>(
@@ -216,20 +220,19 @@ const CategoryScreen = (category_id: any) => {
   // );
   // const quantity = getItemQuintity("0");
 
-  const fetchData = async () => {
-    console.log("working");
-    console.log("category_id:", category_id.route.params.category_id);
+  const fetchData = async (newId:string) => {
+console.log("newid",newId)
     const resp: any = await supabase
       .from("newproducts")
       .select("*")
       .eq("category_id", newId);
-    console.log("resp", resp.data);
+    console.log("resp", resp);
 
     setProducts(resp.data);
   };
-  const newId = category_id.route.params.category_id;
+  // const newId = category_id.route.params.category_id;
   useEffect(() => {
-    fetchData();
+    fetchData(newId);
   }, [category_id]);
   const navigation = useNavigation<any>();
   return (
@@ -274,6 +277,7 @@ const CategoryScreen = (category_id: any) => {
               }}
             >
               {products?.map((item, index) => {
+                // {console.log("find Products",item)}
                 return (
                   <TouchableOpacity
                     style={styles.body}

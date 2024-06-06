@@ -9,6 +9,9 @@ import {
 import React from "react";
 import RupeeIcon from "react-native-vector-icons/FontAwesome6";
 import { useMyContext } from "../context/Context";
+
+
+
 const Product_Details = ({ route }: any) => {
   const { imgUrl, id }: any = route.params;
   const {

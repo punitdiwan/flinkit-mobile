@@ -54,8 +54,8 @@ const Header = ({ navigation, route }: HomeProps) => {
           <ScrollView>
             <View style={styles.main}>
               <View>
-                <Text style={[styles.headerText, { fontSize: 14,fontFamily:'Gilroy-SemiBold.ttf' }]}>
-                  DELIVERY IN
+                <Text style={[styles.headerText, { fontSize: 14,fontFamily:'Gilroy-SemiBold.ttf',fontWeight:"500" }]}>
+                  Delivery in
                 </Text>
                 <Text style={[styles.headerText, { fontSize: 26,fontFamily:'Gilroy-SemiBold.ttf' }]}>
                   10 minutes

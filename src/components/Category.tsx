@@ -157,15 +157,22 @@ const Category = () => {
   const [productId, setProductId] = useState<any>("");
   // const{setcategoryname}=useMyContext();
   const navigation = useNavigation<any>();
-  const setCategoryName = async (category_id: string) => {
-    // console.log("name", category_id);
 
-    navigation.navigate("CategoryScreen", { category_id });
-  };
-  // const showProducts = ({item.category_id}) => {
-  //   Alert.alert(item.category_id);
-  //   // navigation.navigate("CategoryScreen");
+  // const setCategoryName = async (category_id: string) => {
+  //   // console.log("name", category_id);
+
+  //   // navigation.navigate("CategoryScreen", { category_id });
+  //   console.log("yes categoryId",category_id)
   // };
+  // // const showProducts = ({item.category_id}) => {
+  // //   Alert.alert(item.category_id);
+  // //   // navigation.navigate("CategoryScreen");
+  // // };
+
+const setCategoryName = async (category_id:string) => {
+      navigation.navigate("CategoryScreen",{category_id})
+}
+
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(
@@ -177,7 +184,7 @@ const Category = () => {
         }
       );
       const data = await resp.json();
-      console.log(data);
+      console.log("searchdata.com",data);
       setCategories(data);
     };
 
@@ -200,6 +207,7 @@ const Category = () => {
             categories?.map((item, index): any => (
               <TouchableOpacity
                 onPress={() => setCategoryName(item.category_id)}
+                // onPress={() => navigation.navigate()}
                 // onPress={() => {
                 //   // setProductId(item.category_id),
                 //   setProductId(item.category_id) ,showProducts();

@@ -52,7 +52,7 @@ const SearchScreen = ({navigation}) => {
             <TouchableOpacity onPress={()=>navigation.navigate('Filter')}>
             <Image
               source={require("../../assets/Group 6839.png")}
-              style={{ width: 15, height: 15 }}
+              style={{width: 15, height: 15}}
               />
               </TouchableOpacity>
           </View>

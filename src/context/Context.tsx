@@ -6,7 +6,9 @@ interface MyContextData {
   decreaseCardQuantity: (id: string) => void;
   removeFromcart: (id: string) => void;
   total: (id: string) => void;
+  addFavouriteItem:(product_imagename:string,product_details:string,price:Number,id:string) => void;
   cartItem:[];
+  favouriteItem:[];
 }
 
 // Create the context with initial values
@@ -17,9 +19,26 @@ type CartItem = {
   quantity: number;
 };
 
-export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartItem,setCartItem] =useState<CartItem[]>([])
+type favouriteItem = {
+    product_imagename :string,
+    product_details:string,
+    price:Number,
+    id:string
+}
 
+
+
+export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [cartItem,setCartItem] =useState<CartItem[]>([]);
+  const [favouriteItem,setFavouriteItem] = useState<favouriteItem[]>([])
+
+  // 
+
+  function addFavouriteItem(product_imagename:string,product_details:string,price:Number,id:string){
+     setFavouriteItem([...favouriteItem,{product_imagename,product_details,price,id}])
+  }
+  
+// cart functionality
 
   function getItemQuintity(id:string){
     return cartItem.find(item => item.id === id)?.quantity ||0
@@ -62,6 +81,8 @@ function removeFromcart(id:string){
 }
   return <MyContext.Provider value={{cartItem,getItemQuintity,increaseCardQuantity,decreaseCardQuantity,removeFromcart}}>{children}</MyContext.Provider>;
 };
+
+
 
 // Define a custom hook to easily access context
 export const useMyContext = () => useContext(MyContext);
