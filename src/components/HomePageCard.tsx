@@ -1,3 +1,11 @@
+import * as React from "react";
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +14,6 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const HomePageCard = ({ name, data }: any) => {
@@ -26,7 +33,11 @@ const HomePageCard = ({ name, data }: any) => {
           marginVertical: 10,
         }}
       >
-        <Text style={{ color: "#181725", fontSize: 25 }}>{name}</Text>
+        <Text
+          style={{ color: "#181725", fontSize: 24, fontFamily: "Gilroy-Bold" }}
+        >
+          {name}
+        </Text>
         <Text style={{ color: "#69AF5D" }}>See all</Text>
       </View>
       <ScrollView
@@ -37,67 +48,116 @@ const HomePageCard = ({ name, data }: any) => {
           paddingTop: 10,
         }}
       >
-        {data?.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-              backgroundColor: "white",
-              width: 150,
-              padding: 20,
-              height: 250,
-              borderWidth: 2,
-              borderRadius: 15,
-              borderColor: "#E2E2E2",
-              marginHorizontal: 5,
-            }}
-            onPress={() => navigation.navigate("Product_Details")}
-          >
-            <View
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={{ uri: item?.imgUrl }}
-                style={{ width: 70, height: 70 }}
-                resizeMode="cover"
-              />
-            </View>
-            <View>
-              <Text style={{ fontSize: 20 }}>{item?.name}</Text>
-              <Text style={{ color: "#7C7C7C" }}>7ps Price</Text>
-            </View>
-            <View
+        {data?.map(
+          (
+            item: {
+              imgUrl: any;
+              name:
+                | string
+                | number
+                | boolean
+                | ReactElement<any, string | JSXElementConstructor<any>>
+                | Iterable<ReactNode>
+                | ReactPortal
+                | null
+                | undefined;
+              price:
+                | string
+                | number
+                | boolean
+                | ReactElement<any, string | JSXElementConstructor<any>>
+                | Iterable<ReactNode>
+                | ReactPortal
+                | null
+                | undefined;
+            },
+            index: Key | null | undefined
+          ) => (
+            <TouchableOpacity
+              key={index}
               style={{
                 display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: "column",
+                gap: 10,
+                backgroundColor: "white",
+                width: 150,
+                padding: 20,
+                height: 250,
+                borderWidth: 2,
+                borderRadius: 15,
+                borderColor: "#E2E2E2",
+                marginHorizontal: 5,
               }}
+              onPress={() => navigation.navigate("Product_Details")}
             >
-              <Text>Rs{item?.price}</Text>
-              <TouchableOpacity
+              <View
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: "#69AF5D",
-                  borderRadius: 8,
                 }}
               >
-                <Text style={{ fontSize: 25, color: "white" }}>+</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        ))}
+                <Image
+                  source={{ uri: item?.imgUrl }}
+                  style={{ width: 70, height: 70 }}
+                  resizeMode="cover"
+                />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "semibold",
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  {item?.name}
+                </Text>
+                <Text style={{ color: "#7C7C7C" }}>7ps Price</Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#181725",
+                    fontFamily: "Gilroy-Bold",
+                    fontSize: 18,
+                  }}
+                >
+                  ₹ {item?.price}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    width: 40,
+                    height: 40,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#69AF5D",
+                    borderRadius: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      fontWeight: "bold",
+                      color: "white",
+                    }}
+                  >
+                    +
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          )
+        )}
       </ScrollView>
     </View>
   );

@@ -1,20 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 import Constants from "../../lib/constant";
 
-const supabaseUrl = Constants.NEXTPUBLICSUPABASE_URL;
-const supabaseserviceKey = Constants.NEXTPUBLIC_SERVICE_KEY;
-const supabaseKey = Constants.NEXTPUBLIC_ANON_KEY;
+const supabaseUrl = Constants.EXPOPUBLICSUPABASE_URL;
+const supabaseserviceKey = Constants.EXPOPUBLIC_SERVICE_KEY;
+const supabaseKey = Constants.EXPOPUBLIC_ANON_KEY;
 
-// export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  // auth: {
-  //   // storage: AsyncStorage,
-  //   autoRefreshToken: true,
-  //   persistSession: true,
-  //   detectSessionInUrl: false,
-  // },
-});
+// export const supabase = createClient(supabaseUrl, supabaseKey, {
+//   auth: {
+//     // storage: AsyncStorage,
+//     autoRefreshToken: true,
+//     persistSession: true,
+//     detectSessionInUrl: false,
+//   },
+// });
 
 export const setConfirmation = async (MobileNumber) => {
   // const response = supabase.rpc("set_confirmation", {

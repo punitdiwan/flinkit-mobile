@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import * as React from "react";
 import {
   View,
   Text,
@@ -12,7 +13,7 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-
+import { supabase } from "./supabaseClient";
 const loadFonts = async () => {
   await Font.loadAsync({
     "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
@@ -21,22 +22,41 @@ const loadFonts = async () => {
   });
 };
 
-const Productdetail = ({ name }: any) => {
+const Productdetail = (id: any) => {
+  console.log("product_id", id.route.params.id);
+  const productId = id.route.params.id;
   const navigation = useNavigation();
   const [detailsExpanded, setDetailsExpanded] = useState(false);
   const [nutritionExpanded, setNutritionExpanded] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [fetchProduct, setFetchProduct] = useState<any>([]);
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+  // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
+
+  const fetchData = async () => {
+    console.log("working");
+    console.log("category_id:", id.route.params.id);
+    const resp: any = await supabase
+      .from("newproducts")
+      .select("*")
+      .eq("product_id", productId);
+    console.log("product-details", resp.data);
+
+    setFetchProduct(resp.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [productId]);
 
   const toggleDetails = () => {
     setDetailsExpanded(!detailsExpanded);
@@ -59,122 +79,149 @@ const Productdetail = ({ name }: any) => {
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
+    <>
+      <View style={styles.container}>
+        {/* <ImageBackground
         source={require("../../assets/productdetailback.png")}
         resizeMode="cover"
         style={styles.imageBackground}
-      >
-        <AntDesign
-          name="left"
-          size={24}
-          color="black"
-          style={styles.backIcon}
-          onPress={() => navigation.replace("Favourite")}
-        />
-        <Octicons
-          name="share"
-          size={24}
-          color="black"
-          style={{ marginLeft: 320 }}
-          onPress={() => navigation.replace("Favourite")}
-        />
-        <Image
-          source={require("../../assets/Vectorapples.png")}
-          style={styles.image}
-        />
-      </ImageBackground>
+      > */}
+        {fetchProduct?.map((item: any, index: number) => {
+          return (
+            <>
+              <View
+                style={{
+                  height: "50%",
+                  width: "100%",
 
-      <View style={styles.detailsContainer}>
-        <Text style={styles.productName}>
-          Natural Red Apples
-          <Entypo
-            name="heart-outlined"
-            size={24}
-            color="black"
-            onPress={() => navigation.replace("Favourite")}
-          />
-        </Text>
-        <Text style={styles.productPrice}>1Kg, price</Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity
-            onPress={decreaseQuantity}
-            style={styles.quantityButton}
-          >
-            <Entypo name="minus" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
-          <TouchableOpacity
-            onPress={increaseQuantity}
-            style={styles.quantityButton}
-          >
-            <Entypo name="plus" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 18, marginLeft: 85 }}>R99</Text>
-        </View>
+                  display: "flex",
 
-        <View style={styles.reviewContainer}>
-          <Text style={styles.reviewTitle}>Product Details</Text>
-          <TouchableOpacity onPress={toggleDetails} style={styles.toggleButton}>
-            <Entypo
-              name={detailsExpanded ? "chevron-small-up" : "chevron-small-down"}
-              size={24}
-              color="black"
-            />
-          </TouchableOpacity>
-        </View>
-        {detailsExpanded && (
-          <Text style={styles.detailsText}>
-            Apples are Nutritious. Apples May Be Good For Weight Loss. Apples
-            May Be Good for your heart. As part of a healthful and varied diet.
-          </Text>
-        )}
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  source={{ uri: item.product_imagename }}
+                  style={styles.image}
+                />
+              </View>
 
-        <View style={styles.reviewContainer}>
-          <Text style={styles.reviewTitle}>Nutritions</Text>
-          <TouchableOpacity
-            onPress={toggleNutrition}
-            style={styles.toggleButton}
-          >
-            <Entypo
-              name={
-                nutritionExpanded ? "chevron-small-up" : "chevron-small-down"
-              }
-              size={24}
-              color="black"
-            />
-          </TouchableOpacity>
-        </View>
-        {nutritionExpanded && (
-          <Text style={styles.detailsText}>
-            Total Fat 0.2 g, Cholesterol 0 mg 0%, Sodium 1 mg 0%, Potassium 107
-            mg
-          </Text>
-        )}
+              <View style={styles.detailsContainer}>
+                <View
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginVertical: 5,
+                  }}
+                >
+                  <Text style={{ fontSize: 24, fontFamily: "Gilroy-Bold" }}>
+                    {item.product_name}
+                  </Text>
+                </View>
 
-        <View style={styles.reviewContainer}>
-          <Text style={styles.reviewTitle}>Review</Text>
-          <View style={styles.starsContainer}>
-            <Feather name="star" size={18} color="black" />
-            <Feather name="star" size={18} color="black" />
-            <Feather name="star" size={18} color="black" />
-            <Feather name="star" size={18} color="black" />
-            <Feather name="star" size={18} color="black" />
-          </View>
-          <Image
-            source={require("../../assets/Vector.png")}
-            style={styles.reviewImage}
-          />
-        </View>
+                <Text style={styles.productPrice}>1Kg, price</Text>
+                <View style={styles.quantityContainer}>
+                  <TouchableOpacity
+                    onPress={decreaseQuantity}
+                    style={styles.quantityButton}
+                  >
+                    <Entypo name="minus" size={24} color="black" />
+                  </TouchableOpacity>
+                  <Text style={styles.quantityText}>{quantity}</Text>
+                  <TouchableOpacity
+                    onPress={increaseQuantity}
+                    style={styles.quantityButton}
+                  >
+                    <Entypo name="plus" size={24} color="black" />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      marginLeft: 85,
+                      fontFamily: "Gilroy-Bold",
+                    }}
+                  >
+                    {item.price}
+                  </Text>
+                </View>
 
-        <TouchableOpacity
-          style={styles.addToCartButton}
-          onPress={() => navigation.replace("Onboarding")}
-        >
-          <Text style={styles.addToCartButtonText}>Add to Basket</Text>
-        </TouchableOpacity>
+                <View style={styles.reviewContainer}>
+                  <Text style={styles.reviewTitle}>Product Details</Text>
+                  <TouchableOpacity
+                    onPress={toggleDetails}
+                    style={styles.toggleButton}
+                  >
+                    <Entypo
+                      name={
+                        detailsExpanded
+                          ? "chevron-small-up"
+                          : "chevron-small-down"
+                      }
+                      size={24}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {detailsExpanded && (
+                  <Text style={styles.detailsText}>{item.product_details}</Text>
+                )}
+
+                <View style={styles.reviewContainer}>
+                  <Text style={styles.reviewTitle}>Nutritions</Text>
+                  <TouchableOpacity
+                    onPress={toggleNutrition}
+                    style={styles.toggleButton}
+                  >
+                    <Entypo
+                      name={
+                        nutritionExpanded
+                          ? "chevron-small-up"
+                          : "chevron-small-down"
+                      }
+                      size={24}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {nutritionExpanded && (
+                  <Text style={styles.detailsText}>
+                    Total Fat 0.2 g, Cholesterol 0 mg 0%, Sodium 1 mg 0%,
+                    Potassium 107 mg
+                  </Text>
+                )}
+
+                <View style={styles.reviewContainer}>
+                  <Text style={styles.reviewTitle}>Review</Text>
+                  <View style={styles.starsContainer}>
+                    <Feather name="star" size={18} color="black" />
+                    <Feather name="star" size={18} color="black" />
+                    <Feather name="star" size={18} color="black" />
+                    <Feather name="star" size={18} color="black" />
+                    <Feather name="star" size={18} color="black" />
+                  </View>
+                  <Image
+                    source={require("../../assets/Vector.png")}
+                    style={styles.reviewImage}
+                  />
+                </View>
+
+                <TouchableOpacity
+                  style={styles.addToCartButton}
+                  onPress={() => navigation.navigate("Onboarding")}
+                >
+                  <Text style={styles.addToCartButtonText}>Add to Basket</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          );
+        })}
+
+        {/* </ImageBackground> */}
       </View>
-    </View>
+    </>
   );
 };
 
@@ -183,6 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageBackground: {
+    width: "80%",
     height: "40%",
     justifyContent: "flex-end",
   },
@@ -193,10 +241,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   image: {
-    width: 329,
-    height: 199,
-    alignSelf: "center",
-    marginBottom: 30,
+    marginTop: 30,
+    width: "100%",
+    height: "45%",
   },
   detailsContainer: {
     padding: 20,

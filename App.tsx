@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-
+import { Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MyProvider } from "./src/context/Context";
@@ -25,6 +25,7 @@ import Cart from "./src/screens/Cart";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomNav from "./src/screens/BottomNav";
+import React, { version } from "react";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -42,7 +43,7 @@ export type RootStackParamList = {
 
   Login: undefined;
   Otp: undefined;
-  Filter:undefined;
+  Filter: undefined;
   Onboarding: undefined;
   Signin: undefined;
   Maillogin: undefined;
@@ -62,7 +63,7 @@ export default function App() {
     <MyProvider>
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen
+          <Stack.Screen
             name="Onboarding"
             component={Onboarding}
             options={{ headerShown: false }}
@@ -93,7 +94,6 @@ export default function App() {
             options={{ headerShown: false }}
           />
 
-
           <Stack.Screen
             name="BottomNav"
             component={BottomNav}
@@ -121,7 +121,11 @@ export default function App() {
           <Stack.Screen
             name="CategoryScreen"
             component={CategoryScreen}
-            options={{ title: "Category" }}
+            // options={{ title: "" }}
+
+            options={({ route }) => ({
+              title: route?.params?.name,
+            })}
           />
 
           <Stack.Screen
@@ -139,12 +143,12 @@ export default function App() {
             options={{ title: "Orderaccepted" }}
             component={Orderaccepted}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="ErrorCard"
             options={{ title: "ErrorCard" }}
             component={ErrorCard}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="Checkout"
             options={{ title: "Checkout" }}
             component={Checkout}
@@ -154,7 +158,7 @@ export default function App() {
             options={{ title: "Productdetail" }}
             component={Productdetail}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="Favourite"
             options={{ title: "Favourite" }}
             component={Favourite}

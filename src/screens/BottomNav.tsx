@@ -1,17 +1,17 @@
 import { View, Text } from "react-native";
-import React from "react";
+import * as React from "react";
 import Ionicons from "@expo/vector-icons/Entypo";
 import Ionicons4 from "@expo/vector-icons/FontAwesome6";
 import Home from "./Home";
 import Profile from "./Profile";
-import Favourite from "./Favourite"
+import Favourite from "./Favourite";
 import { useMyContext } from "../context/Context";
 import Cart from "./Cart";
 import SearchScreen from "./SearchScreen";
 import { RootStackParamList } from "../../App";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Entypo } from '@expo/vector-icons';
+import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
@@ -40,7 +40,7 @@ const BottomNav = () => {
                   name="account"
                   size={25}
                   color={color}
-                /> 
+                />
               );
             } else if (route.name === "Cart") {
               iconName = focused ? "ios-list" : "ios-list-outline";
@@ -52,7 +52,7 @@ const BottomNav = () => {
               );
             } else if (route.name === "Favourite") {
               iconName = focused ? "ios-list" : "ios-list-outline";
-              return <Entypo name="heart-outlined" size={24} color="black" />
+              return <Entypo name="heart-outlined" size={24} color="black" />;
             }
           },
           tabBarActiveTintColor: "green",
@@ -99,8 +99,8 @@ const BottomNav = () => {
               headerShown: true,
               tabBarIcon: ({ color, size }) => {
                 return <Feather name="shopping-cart" size={25} color={color} />;
-               
               },
+              header: () => <YourCustomHeaderComponent name={"My Cart"} />,
             }}
           />
         ) : (
@@ -124,9 +124,7 @@ const BottomNav = () => {
             headerShown: false,
 
             tabBarIcon: ({ color, size }) => {
-              return (
-                <Entypo name="heart-outlined" size={24} color={color} />
-              );
+              return <Entypo name="heart-outlined" size={24} color={color} />;
             },
           }}
         />
@@ -148,7 +146,11 @@ const BottomNav = () => {
             },
           }}
         />
-        <Tab.Screen name="Filter" component={Filter} options={{ tabBarItemStyle: { display: "none" }, headerShown: false, }} />
+        <Tab.Screen
+          name="Filter"
+          component={Filter}
+          options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
+        />
       </Tab.Navigator>
     </>
   );

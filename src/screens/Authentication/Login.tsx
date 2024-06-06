@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
@@ -72,15 +72,15 @@ const Login = (props: Props) => {
     }
   };
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+  // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
 
   return (
     <View style={styles.container}>

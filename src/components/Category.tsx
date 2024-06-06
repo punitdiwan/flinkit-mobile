@@ -5,8 +5,11 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
@@ -155,12 +158,20 @@ type Values = {
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [productId, setProductId] = useState<any>("");
+  const [refreshing, setRefreshing] = React.useState(false);
   // const{setcategoryname}=useMyContext();
   const navigation = useNavigation<any>();
-  const setCategoryName = async (category_id: string) => {
-    // console.log("name", category_id);
+  const setCategoryName = async (
+    category_id: string,
+    category_name: string
+  ) => {
+    // console.log("category_id", category_id);
+    // console.log("product_category", category_name);
 
-    navigation.navigate("CategoryScreen", { category_id });
+    navigation.navigate("CategoryScreen", {
+      category_id,
+      name: `${category_name}`,
+    });
   };
   // const showProducts = ({item.category_id}) => {
   //   Alert.alert(item.category_id);
@@ -183,52 +194,76 @@ const Category = () => {
 
     fetchData();
   }, []);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
   return (
     <>
-      <View style={{ padding: 10 }}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            gap: 10,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {CategoryData &&
-            categories?.map((item, index): any => (
-              <TouchableOpacity
-                onPress={() => setCategoryName(item.category_id)}
-                // onPress={() => {
-                //   // setProductId(item.category_id),
-                //   setProductId(item.category_id) ,showProducts();
-                // }}
-                key={index}
-                style={styles.cardBody}
-              >
-                <View style={[styles.imgBody, { backgroundColor: "#EEEDEB" }]}>
-                  <Image
-                    style={{ width: "60%", aspectRatio: 1 }}
-                    source={{ uri: item.category_imgpath }}
-                  />
-                  <View>
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        fontSize: 15,
-                        fontStyle: "normal",
-                        fontWeight: "500",
-                      }}
-                    >
-                      {item.category_name}
-                    </Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={{ padding: 10 }}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 10,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {CategoryData &&
+              categories?.map((item: any, index: any): any => (
+                <TouchableOpacity
+                  onPress={() =>
+                    setCategoryName(item.category_id, item.category_name)
+                  }
+                  // onPress={() => {
+                  //   // setProductId(item.category_id),
+                  //   setProductId(item.category_id) ,showProducts();
+                  // }}
+                  key={index}
+                  style={styles.cardBody}
+                >
+                  <View
+                    style={[
+                      styles.imgBody,
+                      {
+                        backgroundColor: "white",
+                        borderColor: "#DC5F00",
+                        borderWidth: 1,
+                      },
+                    ]}
+                  >
+                    <Image
+                      style={{ width: "60%", aspectRatio: 1 }}
+                      source={{ uri: item.category_imgpath }}
+                    />
+                    <View>
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          fontSize: 16,
+                          fontStyle: "normal",
+                          fontWeight: "500",
+                          fontFamily: "Gilroy-Bold",
+                        }}
+                      >
+                        {item.category_name}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -250,7 +285,7 @@ const styles = StyleSheet.create({
   imgBody: {
     width: "100%",
     height: "100%",
-    // backgroundColor:"#666666",
+    // backgroundColor: "#666666",
     borderRadius: 35,
     padding: 7,
     display: "flex",
