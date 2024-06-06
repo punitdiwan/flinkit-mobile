@@ -4,6 +4,8 @@ import MinusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import PlusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CategoryData } from "./Category";
 import { useMyContext } from "../context/Context";
+import { Feather } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 type cardItemsProps = {
   item: {
@@ -12,8 +14,13 @@ type cardItemsProps = {
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
-  const items:any = CategoryData.find((i) => i.id === item.id);
-  const{getItemQuintity,increaseCardQuantity,decreaseCardQuantity,removeFromcart}=useMyContext()
+  const items: any = CategoryData.find((i) => i.id === item.id);
+  const {
+    getItemQuintity,
+    increaseCardQuantity,
+    decreaseCardQuantity,
+    removeFromcart,
+  } = useMyContext();
   if (item == null) {
     return null;
   }
@@ -32,11 +39,12 @@ const CartItemCard = ({ item }: cardItemsProps) => {
         borderColor: "lightgrey",
         paddingHorizontal: 20,
         paddingVertical: 10,
+        borderBottomWidth: 1,
       }}
     >
       <View
         style={{
-          borderWidth: 1,
+          // borderWidth: 1,
           width: "20%",
           // height: "auto",
 
@@ -54,7 +62,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             width: "100%",
             height: "auto",
             aspectRatio: 1,
-            borderColor: "black",
+            // borderColor: "black",
           }}
         />
       </View>
@@ -69,10 +77,27 @@ const CartItemCard = ({ item }: cardItemsProps) => {
           justifyContent: "space-between",
           paddingHorizontal: 20,
           backgroundColor: "white",
+          position: "relative",
         }}
       >
         <Text style={{ fontSize: 20 }}>{items?.name}</Text>
-        <Text style={{ color: "green", fontSize: 20 }}>₹{items?.price}</Text>
+        <Text
+          style={{
+            color: "green",
+            fontSize: 20,
+            position: "absolute",
+            right: 5,
+            bottom: 10,
+          }}
+        >
+          ₹{items?.price}
+        </Text>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 0, top: 0 }}
+          onPress={() => removeFromcart(item?.id)}
+        >
+          <Entypo name="cross" size={20} color="#B3B3B3" />
+        </TouchableOpacity>
 
         <View
           style={{
@@ -93,14 +118,41 @@ const CartItemCard = ({ item }: cardItemsProps) => {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              marginTop: 20,
             }}
           >
-            <TouchableOpacity  onPress={()=>decreaseCardQuantity(items?.id)}>
-              <MinusIcon name="minus-circle" color={"green"} size={35} />
+            <TouchableOpacity
+              onPress={() => decreaseCardQuantity(items?.id)}
+              style={{
+                width: 46,
+                height: 46,
+                borderWidth: 2,
+                borderColor: "#F0F0F0",
+                borderRadius: 20,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Feather name="minus" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={{ fontSize: 25, fontWeight:"500" }}>{item.quantity}</Text>
-            <TouchableOpacity onPress={()=>increaseCardQuantity(items?.id)}>
-              <PlusIcon name="plus-circle" color={"green"} size={35} />
+            <Text style={{ fontSize: 25, fontWeight: "500" }}>
+              {item.quantity}
+            </Text>
+            <TouchableOpacity
+              onPress={() => increaseCardQuantity(items?.id)}
+              style={{
+                width: 46,
+                height: 46,
+                borderWidth: 2,
+                borderColor: "#F0F0F0",
+                borderRadius: 20,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Feather name="plus" size={24} color="#69AF5D" />
             </TouchableOpacity>
           </View>
         </View>

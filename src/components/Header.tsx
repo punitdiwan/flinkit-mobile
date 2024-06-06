@@ -15,42 +15,57 @@ import { useState } from "react";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Icon2 from "@expo/vector-icons/Fontisto";
 import Carousel from "./Carousel";
-
+import  AppLoading  from 'expo-app-loading';
+import * as Font from 'expo-font';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
+import { LinearGradient } from 'expo-linear-gradient';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
+const loadFonts = async () => {
+  await Font.loadAsync({
+      'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
+      'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf'),
+    });
 
+};
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   const img = {
     uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
+  const [fontLoaded, setFontLoaded] = useState(false);
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
+
 
   return (
     <SafeAreaView>
       <View style={styles.header}>
-        <ImageBackground
-          style={[styles.header, { height: 400 }]}
-          resizeMode="cover"
-          source={img}
-        >
+        <LinearGradient colors={['#69AF5D','#4B933F']} style={{borderBottomRightRadius:15,borderBottomLeftRadius:15}}>
           <ScrollView>
             <View style={styles.main}>
               <View>
-                <Text style={[styles.headerText, { fontSize: 25 }]}>
+                <Text style={[styles.headerText, { fontSize: 14,fontFamily:'Gilroy-SemiBold.ttf' }]}>
                   DELIVERY IN
                 </Text>
-                <Text style={[styles.headerText, { fontSize: 35 }]}>
-                  59 minutes
+                <Text style={[styles.headerText, { fontSize: 26,fontFamily:'Gilroy-SemiBold.ttf' }]}>
+                  10 minutes
                 </Text>
                 <TouchableOpacity>
                   <Text
-                    style={[styles.headerText, { fontSize: 16 }]}
+                    style={[styles.headerText, { fontSize: 14,marginTop:10,fontFamily:'Gilroy-SemiBold.ttf' }]}
                     onPress={() => setModalVisible(true)}
                   >
-                    please select an address...{" "}
+                    Home - Vijay Nagar, Lalghati, Bhopal-462030{" "}
                     <Icon
                       name="chevron-down"
                       size={15}
@@ -89,8 +104,8 @@ const Header = ({ navigation, route }: HomeProps) => {
               style={{
                 backgroundColor: "white",
                 margin: 20,
-                borderRadius: 5,
-                marginTop: 50,
+                borderRadius: 15,
+                marginTop: 30,
               }}
             >
               <View
@@ -98,22 +113,24 @@ const Header = ({ navigation, route }: HomeProps) => {
                   display: "flex",
                   alignItems: "center",
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
+                  gap:20,
                   padding: 12,
                 }}
               >
-                <View>
-                  <Text style={{ color: "#0000004d", fontSize: 17 }}>
-                    Search Products...
-                  </Text>
-                </View>
-                <View>
+                 <View>
                   <Icon name="search" size={20} color="gray" />
                 </View>
+                <View>
+                  <Text style={{ color: "#0000004d", fontSize: 17 }}>
+                    Search store
+                  </Text>
+                </View>
+               
               </View>
             </TouchableOpacity>
           </ScrollView>
-        </ImageBackground>
+          </LinearGradient>
         <Carousel />
         {modalVisible ? (
           <View style={styles.addressParent}>
@@ -169,7 +186,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   headerText: {
-    fontWeight: "bold",
     color: "white",
   },
 
