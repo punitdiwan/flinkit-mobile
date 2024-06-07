@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +10,7 @@ import { useMyContext } from '../context/Context';
 
 const loadFonts = async () => {
   await Font.loadAsync({
+
     'Gilroy-Medium': require('../../assets/fonts/Gilroy-Medium.ttf'),
     'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf'),
     'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
@@ -83,12 +85,16 @@ const renderItem = ({ item }) => (
 
 
 
+
+
+
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
   const [list,setList] = useState([]);
   const {addItemsToFavourite,favouriteItem} = useMyContext();
   console.log("fav statte",favouriteItem);
+
 
   console.log("li",list);
   
@@ -116,50 +122,65 @@ const Favourite = () => {
     gettingListFavItem();
   },[])
 
+ 
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Favourite</Text>
-      <Text style={{ width: "100%", backgroundColor: "#e3e1e1", height: 1, fontWeight: "500" }}></Text>
+      <Text
+        style={{
+          width: "100%",
+          backgroundColor: "#e3e1e1",
+          height: 1,
+          fontWeight: "500",
+        }}
+      ></Text>
       <FlatList
         data={list}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
       <View>
-        <TouchableOpacity style={{ width: "100%", backgroundColor: "#69AF5D", paddingVertical: 20, borderRadius: 10 }} onPress={() => navigation.replace("Onboarding")}>
+
+        <TouchableOpacity
+          style={{
+            width: "100%",
+            backgroundColor: "#69AF5D",
+            paddingVertical: 20,
+            borderRadius: 10,
+          }}
+          onPress={() => navigation.replace("Onboarding")}
+        >
           <Text style={styles.addToCartButtonText}>Add all to cart</Text>
         </TouchableOpacity>
       </View>
     </View>
 
-  );
+ );
 };
 
-{/* <Text style={{ width: "100%", backgroundColor: "#e3e1e1", height: 1, fontWeight: "500" }}></Text> */}
 
-{/* <Image source={item.img} /> */}
 
-{/* <Text style={styles.itemName}>{item.name}</Text>
-<Text style={styles.itemVolume}>{item.volume}</Text> */}
 
-{/* <Text style={styles.itemPrice}>₹{item.price}</Text>
-            <Image source={require("../../assets/Vector.png")} /> */}
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
     flex: 1,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 20,
+
     textAlign: 'center',
     fontFamily: 'Gilroy-Bold',
     paddingVertical: 10,
     marginTop: 10,
     marginBottom: 20
+
+
   },
   listContainer: {
     flexGrow: 1,
@@ -169,7 +190,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 1,
     flexWrap: "wrap",
+
     backgroundColor: "#c9c7c7"
+
   },
   itemImg: {
     width: 60,
@@ -179,16 +202,22 @@ const styles = StyleSheet.create({
   itemDetails: {
     // marginLeft: 10,
     // justifyContent: 'center',
+
     backgroundColor: "red"
+
   },
   itemName: {
     fontSize: 16,
     // fontWeight: 'bold',
+
     fontFamily: 'Gilroy-Bold'
+
+
   },
   itemPrice: {
     marginLeft: 200,
     fontSize: 16,
+
     color: '#333',
     fontFamily: 'Gilroy-Semibold'
   },
@@ -196,13 +225,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     fontFamily: 'Gilroy-Medium'
+
   },
   itemQuantity: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   addToCartButton: {
-    backgroundColor: '#69AF5D',
+    backgroundColor: "#69AF5D",
     width: 300,
     height: 67,
     paddingVertical: 15,
@@ -215,16 +245,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
 
+
   },
   addToCartButtonText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
     fontFamily: 'Gilroy-Semibold',
+
+  },
+  addToCartButtonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
+    fontFamily: "Gilroy-Semibold",
+
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+
+
 
   },
 });

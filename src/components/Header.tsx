@@ -15,26 +15,27 @@ import { useState } from "react";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Icon2 from "@expo/vector-icons/Fontisto";
 import Carousel from "./Carousel";
-import  AppLoading  from 'expo-app-loading';
-import * as Font from 'expo-font';
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
+
+// import { Font } from 'expo'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 const loadFonts = async () => {
   await Font.loadAsync({
-      'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
-      'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf'),
-    });
-
+    "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
+    "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
+  });
 };
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
-  const img = {
-    uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  };
+  // const img = {
+  //   uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  // };
   const [fontLoaded, setFontLoaded] = useState(false);
   if (!fontLoaded) {
     return (
@@ -46,23 +47,43 @@ const Header = ({ navigation, route }: HomeProps) => {
     );
   }
 
-
   return (
     <SafeAreaView>
       <View style={styles.header}>
-        <LinearGradient colors={['#69AF5D','#4B933F']} style={{borderBottomRightRadius:15,borderBottomLeftRadius:15}}>
+        <LinearGradient
+          colors={["#69AF5D", "#4B933F"]}
+          style={{ borderBottomRightRadius: 15, borderBottomLeftRadius: 15 }}
+        >
           <ScrollView>
             <View style={styles.main}>
               <View>
-                <Text style={[styles.headerText, { fontSize: 14,fontFamily:'Gilroy-SemiBold.ttf',fontWeight:"500" }]}>
+                <Text
+                  style={[
+                    styles.headerText,
+                    { fontSize: 14, fontFamily: "Gilroy-Bold" },
+                  ]}
+                >
                   Delivery in
                 </Text>
-                <Text style={[styles.headerText, { fontSize: 26,fontFamily:'Gilroy-SemiBold.ttf' }]}>
+                <Text
+                  style={[
+                    styles.headerText,
+                    { fontSize: 26, fontFamily: "Gilroy-Bold" },
+                  ]}
+                >
                   10 minutes
                 </Text>
                 <TouchableOpacity>
                   <Text
-                    style={[styles.headerText, { fontSize: 14,marginTop:10,fontFamily:'Gilroy-SemiBold.ttf' }]}
+                    style={[
+                      styles.headerText,
+                      {
+                        fontSize: 14,
+                        marginTop: 10,
+                        fontFamily: "Gilroy",
+                        color: "white",
+                      },
+                    ]}
                     onPress={() => setModalVisible(true)}
                   >
                     Home - Vijay Nagar, Lalghati, Bhopal-462030{" "}
@@ -114,11 +135,11 @@ const Header = ({ navigation, route }: HomeProps) => {
                   alignItems: "center",
                   flexDirection: "row",
                   justifyContent: "flex-start",
-                  gap:20,
+                  gap: 20,
                   padding: 12,
                 }}
               >
-                 <View>
+                <View>
                   <Icon name="search" size={20} color="gray" />
                 </View>
                 <View>
@@ -126,11 +147,10 @@ const Header = ({ navigation, route }: HomeProps) => {
                     Search store
                   </Text>
                 </View>
-               
               </View>
             </TouchableOpacity>
           </ScrollView>
-          </LinearGradient>
+        </LinearGradient>
         <Carousel />
         {modalVisible ? (
           <View style={styles.addressParent}>
@@ -244,3 +264,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+function componentDidMount() {
+  throw new Error("Function not implemented.");
+}

@@ -6,14 +6,27 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React from "react";
+import * as React from "react";
 import RupeeIcon from "react-native-vector-icons/FontAwesome6";
 import { useMyContext } from "../context/Context";
 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
 
 
 const Product_Details = ({ route }: any) => {
   const { imgUrl, id }: any = route.params;
+
+
+type ProfileProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Product_Details"
+>;
+const Product_Details = ({ navigate, route, name }: any) => {
+  const id: any = route.params;
+  const navigation = useNavigation<any>();
+
   const {
     getItemQuintity,
     increaseCardQuantity,
@@ -33,7 +46,7 @@ const Product_Details = ({ route }: any) => {
         </View>
         <View style={{ width: "100%", height: "auto", marginVertical: 10 }}>
           <Text style={{ color: "#5c5a5a", fontSize: 25, fontWeight: "700" }}>
-            {name} Vegetables &fruits
+            Vegetables &fruits
           </Text>
         </View>
         <View
@@ -191,13 +204,13 @@ const Product_Details = ({ route }: any) => {
             </Text>
           </View>
         </View>
-        <view style={{ paddingHorizontal: 15, display: "flex", gap: 15 }}>
+        <View style={{ paddingHorizontal: 15, display: "flex", gap: 15 }}>
           <button
             title="go to cart"
             color="#57a336"
             onProgress={() => navigation.navigate("cart")}
           />
-        </view>
+        </View>
       </ScrollView>
     </View>
   );

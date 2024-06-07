@@ -5,8 +5,11 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
@@ -14,13 +17,14 @@ import CategoryScreen from "../screens/CategoryScreen";
 import BottomNav from "../screens/BottomNav";
 // import { fetchData } from "../screens/supabaseClient";
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
 export const CategoryData = [
   {
     id: "1523654",
     name: "Vegetables & Fruits",
     imgUrl:
       "https://cdn.grofers.com/app/images/category/cms_images/rc-upload-1702618300089-5",
-    bg: "#66CDAA",
+    bg: "",
     price: 25,
   },
   {
@@ -28,7 +32,7 @@ export const CategoryData = [
     name: "Dairy & Breakfast",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png",
-    bg: "#FFE4C4",
+    bg: "",
     price: 255,
   },
   {
@@ -44,7 +48,7 @@ export const CategoryData = [
     name: "Cold Drinks & Juices",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/332_1680269002502.png",
-    bg: "#b7d8ed",
+    bg: "",
     price: 25,
   },
   {
@@ -52,7 +56,7 @@ export const CategoryData = [
     name: "Instant & Frozen Food",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/15_1676610279582.png",
-    bg: "#b299d1",
+    bg: "",
     price: 256,
   },
   {
@@ -60,7 +64,7 @@ export const CategoryData = [
     name: "Bakery & Biscuits",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/888_1688712847171.png",
-    bg: "#db93ba",
+    bg: "",
     price: 25,
   },
   {
@@ -68,7 +72,7 @@ export const CategoryData = [
     name: "Sweet Tooth",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/9_1693202755712.png",
-    bg: "#97d3db",
+    bg: "",
     price: 25,
   },
   {
@@ -76,7 +80,7 @@ export const CategoryData = [
     name: "Atta, Rice & Dal",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/16_1670926686695.png",
-    bg: "#5c6e70",
+    bg: "",
     price: 25,
   },
   {
@@ -92,7 +96,7 @@ export const CategoryData = [
     name: "Personal Care",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/163_1698986628342.png",
-    bg: "#bddbc6",
+    bg: "",
     price: 25,
   },
   {
@@ -100,7 +104,7 @@ export const CategoryData = [
     name: "Vegetables & Fruits",
     imgUrl:
       "https://cdn.grofers.com/app/images/category/cms_images/rc-upload-1702618300089-5",
-    bg: "#e6d29c",
+    bg: "",
     price: 25,
   },
   {
@@ -108,7 +112,7 @@ export const CategoryData = [
     name: "Dairy & Breakfast",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png",
-    bg: "#eaedaf",
+    bg: "",
     price: 25,
   },
   {
@@ -116,7 +120,7 @@ export const CategoryData = [
     name: "Munchies",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/1237_1670927167688.png",
-    bg: "#ebc5ae",
+    bg: "",
     price: 25,
   },
   {
@@ -132,7 +136,7 @@ export const CategoryData = [
     name: "Instant & Frozen Food",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/15_1676610279582.png",
-    bg: "#b299d1",
+    bg: "",
     price: 25,
   },
   {
@@ -140,7 +144,7 @@ export const CategoryData = [
     name: "Instant & Frozen Food",
     imgUrl:
       "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/15_1676610279582.png",
-    bg: "#b299d1",
+    bg: "",
     price: 25,
   },
 ];
@@ -155,23 +159,64 @@ type Values = {
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [productId, setProductId] = useState<any>("");
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [myColor, setMyColor] = useState<string>();
+  const [myBorder, setBorder] = useState<string>();
+
+  const colorArray = [
+    "    rgba(240, 247, 239, 0.7)",
+    "  rgba(254, 246, 237, 0.8)",
+    "  rgba(253, 232, 228, 0.5)",
+    "  rgba(244, 235, 247, 0.8)",
+    "  rgba(255, 248, 229, 0.6)",
+    "  rgba(237, 247, 252, 0.5)",
+    "  rgba(231, 228, 249, 0.7)",
+    "  rgba(241, 219, 228, 0.5)",
+  ];
+  const borderColorArray = [
+    "    rgba(240, 247, 239, 2)",
+    "  rgba(254, 246, 237, 1)",
+    "  rgba(253, 232, 228, 1)",
+    "  rgba(244, 235, 247, 1)",
+    "  rgba(255, 248, 229, 1)",
+    "  rgba(237, 247, 252, 1)",
+    "  rgba(231, 228, 249, 1)",
+    "  rgba(241, 219, 228, 1)",
+  ];
+  function getRandomColor() {
+    let color = Math.floor(Math.random() * 9);
+    console.log(color);
+    setMyColor(colorArray[color]);
+    setBorder(borderColorArray[color]);
+    console.log(myColor);
+  }
+
   // const{setcategoryname}=useMyContext();
   const navigation = useNavigation<any>();
+  const setCategoryName = async (
+    category_id: string,
+    category_name: string
+  ) => {
+    // console.log("category_id", category_id);
+    // console.log("product_category", category_name);
 
-  // const setCategoryName = async (category_id: string) => {
-  //   // console.log("name", category_id);
-
-  //   // navigation.navigate("CategoryScreen", { category_id });
-  //   console.log("yes categoryId",category_id)
+    navigation.navigate("CategoryScreen", {
+      category_id,
+      name: `${category_name}`,
+    });
+  };
+  // const showProducts = ({item.category_id}) => {
+  //   Alert.alert(item.category_id);
+  //   // navigation.navigate("CategoryScreen");
   // };
   // // const showProducts = ({item.category_id}) => {
   // //   Alert.alert(item.category_id);
   // //   // navigation.navigate("CategoryScreen");
   // // };
 
-const setCategoryName = async (category_id:string) => {
-      navigation.navigate("CategoryScreen",{category_id})
-}
+// const setCategoryName = async (category_id:string) => {
+//       navigation.navigate("CategoryScreen",{category_id})
+// }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -190,24 +235,35 @@ const setCategoryName = async (category_id:string) => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    getRandomColor();
+  }, [refreshing]);
+
   return (
     <>
-      <View style={{ padding: 10 }}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            gap: 10,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {CategoryData &&
-            categories?.map((item, index): any => (
+      <ScrollView>
+        <View style={{ padding: 10 }}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 10,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {categories?.map((item: any, index: any): any => (
               <TouchableOpacity
+<<<<<<< HEAD
                 onPress={() => setCategoryName(item.category_id)}
                 // onPress={() => navigation.navigate()}
+=======
+                onAccessibilityAction={() => setRefreshing(!false)}
+                onPress={() =>
+                  setCategoryName(item.category_id, item.category_name)
+                }
+>>>>>>> main
                 // onPress={() => {
                 //   // setProductId(item.category_id),
                 //   setProductId(item.category_id) ,showProducts();
@@ -215,7 +271,16 @@ const setCategoryName = async (category_id:string) => {
                 key={index}
                 style={styles.cardBody}
               >
-                <View style={[styles.imgBody, { backgroundColor: "#EEEDEB" }]}>
+                <View
+                  style={[
+                    styles.imgBody,
+                    {
+                      backgroundColor: `${colorArray[index]}`,
+                      borderColor: `${borderColorArray[index]}`,
+                      borderWidth: 1,
+                    },
+                  ]}
+                >
                   <Image
                     style={{ width: "60%", aspectRatio: 1 }}
                     source={{ uri: item.category_imgpath }}
@@ -224,9 +289,10 @@ const setCategoryName = async (category_id:string) => {
                     <Text
                       style={{
                         textAlign: "center",
-                        fontSize: 15,
+                        fontSize: 16,
                         fontStyle: "normal",
                         fontWeight: "500",
+                        fontFamily: "Gilroy-Bold",
                       }}
                     >
                       {item.category_name}
@@ -235,8 +301,9 @@ const setCategoryName = async (category_id:string) => {
                 </View>
               </TouchableOpacity>
             ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -258,7 +325,7 @@ const styles = StyleSheet.create({
   imgBody: {
     width: "100%",
     height: "100%",
-    // backgroundColor:"#666666",
+    // backgroundColor: "#666666",
     borderRadius: 35,
     padding: 7,
     display: "flex",
