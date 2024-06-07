@@ -16,8 +16,8 @@ type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
   "Product_Details"
 >;
-const Product_Details = ({ navigate, route }: any) => {
-  const { name, imgUrl, id }: any = route.params;
+const Product_Details = ({ navigate, route, name }: any) => {
+  const id: any = route.params;
   const navigation = useNavigation<any>();
   const {
     getItemQuintity,

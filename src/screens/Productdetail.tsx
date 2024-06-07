@@ -124,28 +124,42 @@ const Productdetail = (id: any) => {
 
                 <Text style={styles.productPrice}>1Kg, price</Text>
                 <View style={styles.quantityContainer}>
-                  <TouchableOpacity
-                    onPress={decreaseQuantity}
-                    style={styles.quantityButton}
-                  >
-                    <Entypo name="minus" size={24} color="black" />
-                  </TouchableOpacity>
-                  <Text style={styles.quantityText}>{quantity}</Text>
-                  <TouchableOpacity
-                    onPress={increaseQuantity}
-                    style={styles.quantityButton}
-                  >
-                    <Entypo name="plus" size={24} color="black" />
-                  </TouchableOpacity>
-                  <Text
+                  <View
                     style={{
-                      fontSize: 18,
-                      marginLeft: 85,
-                      fontFamily: "Gilroy-Bold",
+                      display: "flex",
+                      flexDirection: "row",
+
+                      width: "35%",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    {item.price}
-                  </Text>
+                    <TouchableOpacity onPress={decreaseQuantity}>
+                      <Entypo name="minus" size={24} color="black" />
+                    </TouchableOpacity>
+                    <Text style={styles.quantityText}>{quantity}</Text>
+                    <TouchableOpacity onPress={increaseQuantity}>
+                      <Entypo name="plus" size={24} color="#53B175" />
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      width: "60%",
+
+                      alignItems: "flex-end",
+                      alignContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+
+                        fontFamily: "Gilroy-Bold",
+                      }}
+                    >
+                      ₹ {item.price}
+                    </Text>
+                  </View>
                 </View>
 
                 <View style={styles.reviewContainer}>
@@ -243,7 +257,8 @@ const styles = StyleSheet.create({
   image: {
     marginTop: 30,
     width: "100%",
-    height: "45%",
+    height: "auto",
+    aspectRatio: 1,
   },
   detailsContainer: {
     padding: 20,
@@ -257,15 +272,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   quantityContainer: {
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    width: "98%",
     marginVertical: 10,
-    marginRight: 50,
+    marginHorizontal: "1%",
   },
-  quantityButton: {
-    marginHorizontal: 30,
-  },
+
   quantityText: {
     fontSize: 18,
     fontFamily: "Gilroy-Medium",

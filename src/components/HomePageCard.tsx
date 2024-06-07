@@ -34,11 +34,25 @@ const HomePageCard = ({ name, data }: any) => {
         }}
       >
         <Text
-          style={{ color: "#181725", fontSize: 24, fontFamily: "Gilroy-Bold" }}
+          style={{
+            width: "60%",
+            color: "#181725",
+            fontSize: 22,
+            fontFamily: "Gilroy-Bold",
+          }}
         >
           {name}
         </Text>
-        <Text style={{ color: "#69AF5D" }}>See all</Text>
+        <Text
+          style={{
+            width: "auto",
+            color: "#69AF5D",
+            fontSize: 15,
+            fontFamily: "Gilroy-Bold",
+          }}
+        >
+          See all
+        </Text>
       </View>
       <ScrollView
         horizontal
@@ -80,15 +94,16 @@ const HomePageCard = ({ name, data }: any) => {
                 flexDirection: "column",
                 gap: 10,
                 backgroundColor: "white",
-                width: 150,
+
+                width: "5%",
                 padding: 20,
-                height: 250,
-                borderWidth: 2,
+                height: "100%",
+                // borderWidth: 2,
                 borderRadius: 15,
                 borderColor: "#E2E2E2",
                 marginHorizontal: 5,
               }}
-              onPress={() => navigation.navigate("Product_Details")}
+              onPress={() => navigation.navigate("Productdetail", { id: 1 })}
             >
               <View
                 style={{
@@ -100,11 +115,11 @@ const HomePageCard = ({ name, data }: any) => {
               >
                 <Image
                   source={{ uri: item?.imgUrl }}
-                  style={{ width: 70, height: 70 }}
+                  style={{ width: "100%", height: "auto", aspectRatio: 1 }}
                   resizeMode="cover"
                 />
               </View>
-              <View>
+              <View style={{ width: "100%" }}>
                 <Text
                   style={{
                     fontSize: 20,

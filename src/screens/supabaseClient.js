@@ -2,8 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import Constants from "../../lib/constant";
 
 const supabaseUrl = Constants.EXPOPUBLICSUPABASE_URL;
-const supabaseserviceKey = Constants.EXPOPUBLIC_SERVICE_KEY;
-const supabaseKey = Constants.EXPOPUBLIC_ANON_KEY;
+const supabaseserviceKey = Constants.EXPO_PUBLIC_SERVICE_KEY;
+const supabaseKey = Constants.EXPO_PUBLIC_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 

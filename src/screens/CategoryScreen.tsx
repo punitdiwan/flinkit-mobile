@@ -149,6 +149,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                 ) => {
                   return (
                     <TouchableOpacity
+                      key={item.product_id}
                       style={styles.body}
                       // onPress={() =>
                       //   console.log("Productdetail", item.product_id)

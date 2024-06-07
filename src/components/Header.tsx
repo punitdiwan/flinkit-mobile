@@ -20,6 +20,8 @@ import * as Font from "expo-font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { LinearGradient } from "expo-linear-gradient";
+import Carousel2 from "./Carousel2";
+// import { Font } from 'expo'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 const loadFonts = async () => {
@@ -31,9 +33,9 @@ const loadFonts = async () => {
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
-  const img = {
-    uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  };
+  // const img = {
+  //   uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  // };
   const [fontLoaded, setFontLoaded] = useState(false);
   if (!fontLoaded) {
     return (
@@ -262,3 +264,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+function componentDidMount() {
+  throw new Error("Function not implemented.");
+}
