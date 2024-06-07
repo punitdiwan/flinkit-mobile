@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { CategoryData } from "../components/Category";
 
 import SearchCard from "../components/SearchCard";
@@ -16,181 +17,22 @@ import { useMyContext } from "../context/Context";
 
 import { RootStackParamList } from "../../App";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import BottomNav from "./BottomNav";
+import * as React from "react";
 import { supabase } from "./supabaseClient";
-const myArray = [1];
 
-// ----------------------------------------------------------
-// {products?.map((item, index) => {
-//   return (
-// <TouchableOpacity
-//   style={styles.body}
-//   onPress={() =>
-//     navigation.navigate("Product_Details", {
-//       // name: item.name,
-//       // imgUrl: item.imgUrl,
-//       // id: item.id,
-//     })
-//   }
-// >
-//   <View style={{ backgroundColor: "pink" }}>
-//     <Image
-//       style={{ width: "100%", height: 110 }}
-//       resizeMode="contain"
-//       source={{ uri: item.product_imagename }}
-//     />
-//     <Text
-//       style={{
-//         margin: 10,
-//         fontSize: 15,
-//         color: "#6b6e6a",
-//         fontWeight: "600",
-//       }}
-//     >
-//       {item.product_name}
-//     </Text>
-//     <View
-//       style={{
-//         display: "flex",
-//         flexDirection: "column",
-//         justifyContent: "space-between",
-//         backgroundColor: "green",
-//       }}
-//     >
-//       <View
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           justifyContent: "flex-start",
-//           flexDirection: "row",
-//           gap: 10,
-//           backgroundColor: "red",
-//         }}
-//       >
-//         <Text
-//           style={{
-//             textDecorationLine: "line-through",
-//             fontSize: 15,
-//             color: "#6b6e6a",
-//             fontWeight: "600",
-//           }}
-//         >
-//           ₹
-//         </Text>
-//         <Text
-//           style={{
-//             fontSize: 15,
-//             color: "#000000",
-//             fontWeight: "600",
-//           }}
-//         >
-//           ₹ {item.price}
-//         </Text>
-//       </View>
-//       {quantity === 0 ? (
-//         <>
-//           <View
-//             style={{
-//               display: "flex",
-//               alignItems: "center",
-//               justifyContent: "center",
-//               marginVertical: 10,
-//             }}
-//           >
-//             <TouchableOpacity
-//               style={{
-//                 padding: 10,
-//                 backgroundColor: "#b5e8ae",
-//                 borderRadius: 5,
-//                 borderColor: "green",
-//                 borderWidth: 1,
-//                 width: "80%",
-//               }}
-//               onPress={() => increaseCardQuantity(item.id)}
-//             >
-//               <Text
-//                 style={{
-//                   color: "green",
-//                   textAlign: "center",
-//                 }}
-//               >
-//                 ADD
-//               </Text>
-//             </TouchableOpacity>
-//           </View>
-//         </>
-//       ) : (
-//         <>
-//           <View
-//             style={{
-//               display: "flex",
-//               alignItems: "center",
-//               justifyContent: "center",
-//               marginVertical: 10,
-//             }}
-//           >
-//             <View
-//               style={{
-//                 backgroundColor: "green",
-//                 borderRadius: 5,
-//                 borderColor: "green",
-//                 borderWidth: 1,
-//                 display: "flex",
-//                 flexDirection: "row",
-//                 gap: 10,
-//                 alignItems: "center",
-//                 width: "80%",
-//                 justifyContent: "space-between",
-//                 paddingHorizontal: 10,
-//                 // paddingVertical:10
-//               }}
-//             >
-//               <Text
-//                 onPress={() => decreaseCardQuantity(item.id)}
-//                 style={{
-//                   fontSize: 30,
-//                   fontWeight: "500",
-//                   color: "#ffffff",
-//                   height: "100%",
-//                 }}
-//               >
-//                 -
-//               </Text>
-//               <Text
-//                 style={{
-//                   fontSize: 15,
-//                   fontWeight: "500",
-//                   color: "#ffffff",
-//                 }}
-//               >
-//                 {quantity}
-//               </Text>
-//               <Text
-//                 // onPress={() => increaseCardQuantity(item.id)}
-//                 style={{
-//                   fontSize: 30,
-//                   fontWeight: "500",
-//                   color: "#ffffff",
-//                   height: "100%",
-//                 }}
-//               >
-//                 +
-//               </Text>
-//             </View>
-//           </View>
-//         </>
-//       )}
-//     </View>
-//   </View>
-// </TouchableOpacity>
-//   );
-
-// })}
-// --------------------------------------------------------------------------------
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const apikey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw";
-const CategoryScreen = (category_id: any) => {
+const CategoryScreen = (category_id: any, { navigate }: any) => {
+  interface Products {
+    product: {
+      product_id: string;
+      product_imagename: string;
+      product_name: string;
+      price: number;
+    };
+  }
+  const ref = useRef<{ product_id: string }>(null);
   const {
     getItemQuintity,
     // increaseCardQuantity,
@@ -198,7 +40,7 @@ const CategoryScreen = (category_id: any) => {
     removeFromcart,
   } = useMyContext();
   const { cartItem } = useMyContext();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<any>([]);
   const [increaseCardQuantity, setincreaseCardQuantity] = useState<string[]>(
     []
   );
@@ -234,208 +76,221 @@ const CategoryScreen = (category_id: any) => {
   const navigation = useNavigation<any>();
   return (
     <>
-      <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
-        {/* <View style={{ width: "20%", height: "auto" }}>
-          <ScrollView
-            style={{ padding: 5 }}
-            showsVerticalScrollIndicator={true}
-          >
-            {CategoryData.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  backgroundColor: "#ffffff",
-                  marginVertical: 5,
-                  borderRadius: 5,
-                }}
-              >
-                <Image
-                  source={{ uri: item.imgUrl }}
-                  resizeMode="contain"
-                  style={{ width: "100%", height: 100 }}
-                />
-                <Text style={{ textAlign: "center", fontSize: 10 }}>
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View> */}
-        <View style={{ width: "100%", height: "auto" }}>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+
+          // gap: 2,
+          // backgroundColor: "red",
+
+          minHeight: "100%",
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            minHeight: "100%",
+            // backgroundColor: "green",
+            display: "flex",
+
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            alignContent: "flex-start",
+          }}
+        >
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
               style={{
                 display: "flex",
                 flexDirection: "row",
+                justifyContent: "space-between",
                 gap: 15,
-                justifyContent: "center",
+                paddingHorizontal: 10,
+                columnGap: 5,
+                // justifyContent: "center",
                 flexWrap: "wrap",
                 paddingTop: 10,
               }}
             >
-              {products?.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    style={styles.body}
-                    onPress={() =>
-                      navigation.navigate("Product_Details", {
-                        // name: item.name,
-                        // imgUrl: item.imgUrl,
-                        // id: item.id,
-                      })
-                    }
-                  >
-                    <View key={item.product_id}>
-                      <Image
-                        style={{ width: "100%", height: 110 }}
-                        resizeMode="contain"
-                        source={{ uri: item.product_imagename }}
-                      />
-                      <Text
-                        style={{
-                          margin: 10,
-                          fontSize: 15,
-                          color: "#6b6e6a",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item.product_name}
-                      </Text>
-                      <View
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          // backgroundColor: "green",
-                        }}
-                      >
+              {products?.map(
+                (
+                  item: {
+                    product_category: any;
+                    product_id: React.Key | null | undefined;
+                    product_imagename: any;
+                    product_name:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    price:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    id: string;
+                  },
+                  index: any
+                ) => {
+                  return (
+                    <TouchableOpacity
+                      key={item.product_id}
+                      style={styles.body}
+                      // onPress={() =>
+                      //   console.log("Productdetail", item.product_id)
+                      // }
+                      onPress={() =>
+                        navigation.navigate("Productdetail", {
+                          id: item.product_id,
+                        })
+                      }
+                    >
+                      <View key={item.product_id}>
+                        <Image
+                          style={{ width: "100%", height: 110 }}
+                          resizeMode="contain"
+                          source={{ uri: item.product_imagename }}
+                        />
+                        <Text
+                          style={{
+                            margin: 10,
+                            fontSize: 16,
+                            color: "#6b6e6a",
+                            fontWeight: "600",
+                            fontFamily: "Gilroy-Bold",
+                          }}
+                        >
+                          {item.product_name}
+                        </Text>
                         <View
                           style={{
                             display: "flex",
-                            alignItems: "center",
-                            justifyContent: "flex-start",
-                            flexDirection: "row",
-                            gap: 10,
+                            flexDirection: "column",
+                            justifyContent: "space-between",
                           }}
                         >
-                          <Text
+                          <View
                             style={{
-                              textDecorationLine: "line-through",
-                              fontSize: 15,
-                              color: "#6b6e6a",
-                              fontWeight: "600",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-around",
+                              flexDirection: "row",
                             }}
                           >
-                            ₹
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              color: "#000000",
-                              fontWeight: "600",
-                            }}
-                          >
-                            ₹ {item.price}
-                          </Text>
-                        </View>
-                        {increaseCardQuantity.length === 0 ? (
-                          <>
-                            <View
+                            <Text
                               style={{
+                                fontSize: 15,
+                                color: "#000000",
+                                fontWeight: "600",
+                              }}
+                            >
+                              ₹ {item.price}
+                            </Text>
+                            <TouchableOpacity
+                              style={{
+                                width: 40,
+                                height: 40,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                marginVertical: 10,
+                                backgroundColor: "#69AF5D",
+                                borderRadius: 15,
                               }}
                             >
-                              <TouchableOpacity
+                              <Text
                                 style={{
-                                  padding: 10,
-                                  backgroundColor: "#b5e8ae",
-                                  borderRadius: 5,
-                                  borderColor: "green",
-                                  borderWidth: 1,
-                                  width: "80%",
+                                  fontSize: 30,
+                                  fontWeight: "bold",
+                                  color: "white",
                                 }}
-                                onPress={() => increaseCardQuantity(item.id)}
                               >
-                                <Text
-                                  style={{
-                                    color: "green",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  ADD
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-                          </>
-                        ) : (
-                          <>
-                            <View
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                marginVertical: 10,
-                              }}
-                            >
+                                +
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                          {increaseCardQuantity.length === 0 ? (
+                            <></>
+                          ) : (
+                            <>
                               <View
                                 style={{
-                                  backgroundColor: "green",
-                                  borderRadius: 5,
-                                  borderColor: "green",
-                                  borderWidth: 1,
                                   display: "flex",
-                                  flexDirection: "row",
-                                  gap: 10,
                                   alignItems: "center",
-                                  width: "80%",
-                                  justifyContent: "space-between",
-                                  paddingHorizontal: 10,
-                                  // paddingVertical:10
+                                  justifyContent: "center",
+                                  marginVertical: 10,
                                 }}
                               >
-                                <Text
-                                  onPress={() => decreaseCardQuantity(item.id)}
+                                <View
                                   style={{
-                                    fontSize: 30,
-                                    fontWeight: "500",
-                                    color: "#ffffff",
-                                    height: "100%",
+                                    backgroundColor: "green",
+                                    borderRadius: 5,
+                                    borderColor: "green",
+                                    borderWidth: 1,
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 10,
+                                    alignItems: "center",
+                                    width: "80%",
+                                    justifyContent: "space-between",
+                                    paddingHorizontal: 10,
+                                    // paddingVertical:10
                                   }}
                                 >
-                                  -
-                                </Text>
-                                <Text
-                                  style={{
-                                    fontSize: 15,
-                                    fontWeight: "500",
-                                    color: "#ffffff",
-                                  }}
-                                >
-                                  {quantity}
-                                </Text>
-                                <Text
-                                  onPress={() => increaseCardQuantity(item.id)}
-                                  style={{
-                                    fontSize: 30,
-                                    fontWeight: "500",
-                                    color: "#ffffff",
-                                    height: "100%",
-                                  }}
-                                >
-                                  +
-                                </Text>
+                                  <Text
+                                    onPress={() =>
+                                      decreaseCardQuantity(item.id)
+                                    }
+                                    style={{
+                                      fontSize: 30,
+                                      fontWeight: "500",
+                                      color: "#ffffff",
+                                      height: "100%",
+                                    }}
+                                  >
+                                    -
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: 15,
+                                      fontWeight: "500",
+                                      color: "#ffffff",
+                                    }}
+                                  ></Text>
+                                  <Text
+                                    style={{
+                                      fontSize: 30,
+                                      fontWeight: "500",
+                                      color: "#ffffff",
+                                      height: "100%",
+                                    }}
+                                  >
+                                    +
+                                  </Text>
+                                </View>
                               </View>
-                            </View>
-                          </>
-                        )}
+                            </>
+                          )}
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
+                    </TouchableOpacity>
+                  );
+                }
+              )}
             </View>
           </ScrollView>
         </View>
@@ -443,30 +298,21 @@ const CategoryScreen = (category_id: any) => {
     </>
   );
 };
-{
-  /* {products.map((item, index) => {
-                return <SearchCard key={item.product_id} item={products} />;
-              // })} */
-}
+
 export default CategoryScreen;
 
 const styles = StyleSheet.create({
   body: {
     width: "45%",
     height: "auto",
-    backgroundColor: "#ffffff",
-
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "space-around",
+    flexDirection: "column",
     borderRadius: 10,
     padding: 10,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.39,
-    shadowRadius: 8.3,
-
-    elevation: 13,
+    borderWidth: 1,
+    borderColor: "#f0ebeb",
+    shadowColor: "white",
   },
 });

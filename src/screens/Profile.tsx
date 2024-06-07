@@ -7,28 +7,27 @@ import {
   Alert,
   FlatList,
   TouchableOpacity,
-  Image, 
+  Image,
 } from "react-native";
 import React from "react";
-import {useState} from 'react';
+import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import AddressList from "../components/AddressList";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import  AppLoading  from 'expo-app-loading';
-import * as Font from 'expo-font';
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
 // import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 const loadFonts = async () => {
   await Font.loadAsync({
-      'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
-      'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf'),
-    });
-
+    "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
+    "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
+  });
 };
 const arr = [
   {
@@ -79,14 +78,14 @@ const Profile = ({ navigation, route }: ProfileProps) => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   if (!fontLoaded) {
-      return (
-        <AppLoading
-          startAsync={loadFonts}
-          onFinish={() => setFontLoaded(true)}
-          onError={console.warn}
-        />
-      );
-    }
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   // const {logoutToggle}=useMyContext();
 
@@ -125,10 +124,14 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 width: 150,
               }}
             >
-              <Text style={{ fontSize: 20, fontFamily:'Gilroy-Bold' }}>Test Test</Text>
+              <Text style={{ fontSize: 20, fontFamily: "Gilroy-Bold" }}>
+                Test Test
+              </Text>
               <Feather name="edit-2" size={20} color="#69AF5D" />
             </View>
-            <Text style={{Color:'#7C7C7C', fontSize:16}}>test@gmail.com</Text>
+            <Text style={{ color: "#7C7C7C", fontSize: 16 }}>
+              test@gmail.com
+            </Text>
           </View>
         </View>
         <View style={{ width: "100%", height: "auto", padding: 5 }}>
@@ -150,7 +153,9 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             >
               <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                 <Image source={item.img} />
-                <Text style={{fontFamily:'Gilroy-SemiBold.ttf' }}>{item.name}</Text>
+                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf" }}>
+                  {item.name}
+                </Text>
               </View>
               <View>
                 <Image source={require("../../assets/Vector.png")} />
@@ -164,7 +169,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height:150
+            height: 150,
           }}
         >
           <TouchableOpacity
@@ -178,12 +183,11 @@ const Profile = ({ navigation, route }: ProfileProps) => {
               backgroundColor: "#F2F3F2",
               borderRadius: 20,
               position: "relative",
-              fontFamily:'Gilroy-Semibold'
-              
+              fontFamily: "Gilroy-Semibold",
             }}
             onPress={() => navigation.replace("Onboarding")}
           >
-            <Text style={{ color: "#69AF5D", fontSize:18}}>Log Out</Text>
+            <Text style={{ color: "#69AF5D", fontSize: 18 }}>Log Out</Text>
             <Feather
               style={{ position: "absolute", left: 30 }}
               name="log-out"

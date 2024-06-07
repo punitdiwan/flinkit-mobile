@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
@@ -35,8 +35,7 @@ const Login = (props: Props) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [MobileNumber, setMobileNumber] = useState("");
 
-  const apikey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
+  const apikey = "";
   const handleLogin = async () => {
     const apiUrl = "https://admin.delivery.launchmysite.in/api/setConfirmation";
 
@@ -72,15 +71,15 @@ const Login = (props: Props) => {
     }
   };
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+  // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
