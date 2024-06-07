@@ -1,9 +1,10 @@
 import React,{useState} from 'react';
-import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
+import { addData, deleteParticulerData, editParticular, editParticularData, showAllData } from './supabaseClient';
 
 
 const image = { url: 'C:/Users/HP/Desktop/Madhukant/flinkit-mobile/assets/homeImage.png' };
@@ -29,6 +30,14 @@ const Onboarding = () => {
           />
         );
       }
+      
+      const addDataToBackend =async () => {
+                // const res= await addData();
+                // const res = await showAllData();
+                // const res = await deleteParticulerData();
+                const res = await editParticularData();
+                console.log("res",res)
+;      }
 
     return (
         <View style={styles.container}>
@@ -48,6 +57,12 @@ const Onboarding = () => {
                             <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: '600',fontFamily:'Gilroy-Semibold' }}>Get Started</Text>
                         </TouchableOpacity>
                     </View>
+                    {/* <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50, marginLeft: 20, }}>
+                        <TouchableOpacity onPress={() => addDataToBackend()} style={styles.otpBtn}>
+                            <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: '600',fontFamily:'Gilroy-Semibold' }}>Add Data</Text>
+                        </TouchableOpacity>
+                    </View> */}
+                    
                 </LinearGradient>
             </ImageBackground>
         </View>

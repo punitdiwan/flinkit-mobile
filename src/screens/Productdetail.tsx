@@ -13,6 +13,7 @@ import { Octicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { useMyContext } from "../context/Context";
+import { addToCart, deleteParticularItemInCart } from "./supabaseClient";
 
 
 // import AppLoading from "expo-app-loading";
@@ -76,6 +77,11 @@ const Productdetail = ({ name }: any) => {
     }
   };
 
+  const addItemToCart = () => {
+    deleteParticularItemInCart(1);
+  }
+
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -115,7 +121,7 @@ const Productdetail = ({ name }: any) => {
               if(toggleFavItem){
                 navigation.navigate("Favourite");
               }else{
-                addFavouriteItem('image1.png', 'Product Details', 100, '1');
+                addFavouriteItem("Apple",100);
                 setToggleFavItem(!toggleFavItem);
               }
 
@@ -206,7 +212,7 @@ const Productdetail = ({ name }: any) => {
           style={styles.addToCartButton}
           onPress={() => navigation.replace("Onboarding")}
         >
-          <Text style={styles.addToCartButtonText}>Add to Basket</Text>
+          <Text style={styles.addToCartButtonText} onPress={addItemToCart}>Add to Basket</Text>
         </TouchableOpacity>
       </View>
     </View>

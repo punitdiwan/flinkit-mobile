@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { useMyContext } from "../context/Context";
 import CartItemCard from "../components/CartItemCard";
@@ -7,11 +7,30 @@ import { CategoryData } from "../components/Category";
 import { RootStackParamList } from "../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { getAllCartItem } from "./supabaseClient";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Cart">;
 
 const Cart = () => {
   const { cartItem } = useMyContext();
+  const [cartData,setCartData] = useState([]);
+
+//   const getAllCartItem = async () => {
+//     const response = await getAllCartItem();
+//     setCartData(response.data)
+// }
+
+const getData = async() => {
+  const data = await getAllCartItem();
+  console.log(data?.data);
+  setCartData(data?.data)
+  
+}
+
+useEffect(() => {
+  getData();
+},[])
+
 
   const navigation = useNavigation<any>();
   return (
@@ -27,7 +46,7 @@ const Cart = () => {
       >
         <View style={{ width: "100%", height: 500 }}>
           <FlatList
-            data={cartItem}
+            data={cartData}
             renderItem={({ item }) => <CartItemCard item={item} />}
             keyExtractor={(item) => item.id}
           />
@@ -47,7 +66,7 @@ const Cart = () => {
           height: 110,
         }}
       >
-        {cartItem.length === 0 ? (
+        {cartData.length === 0 ? (
           <TouchableOpacity style={{ width: "100%", backgroundColor: "#69AF5D", display: "flex", justifyContent: "center", alignItems: "center", height: 70, borderRadius: 20 }} onPress={() => navigation.navigate("Category")}>
             <View>
               <Text style={{ fontSize: 20, fontWeight: 500, color: "white" }}>Empty cart,Go to category</Text>

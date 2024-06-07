@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
+import { deleteFavouriteItem, giveMeAllFavouriteItem } from './supabaseClient';
+import { useMyContext } from '../context/Context';
 
 
 const loadFonts = async () => {
@@ -15,90 +17,111 @@ const loadFonts = async () => {
 
 };
 
+const favouriteItems = [
+  {
+    id: '1',
+    name: 'Sprite Can',
+    price: 39,
+    volume: '325ml,price',
+    img: require("../../assets/sprite.png"),
+  },
+  {
+    id: '2',
+    name: 'Diet Coke',
+    price: 39,
+    volume: '355ml,price',
+    img: require("../../assets/dietcoke.png"),
+  },
+  {
+    id: '3',
+    name: 'Apple & Grape Juice',
+    price: 39,
+    volume: '2L,price',
+    img: require("../../assets/dietcoke.png"),
+  },
+  {
+    id: '4',
+    name: 'Coca Cola Can',
+    price: 39,
+    volume: '325ml,price',
+    img: require("../../assets/cocacola.png"),
+  },
+  {
+    id: '5',
+    name: 'Pepsi Can',
+    price: 39,
+    volume: '330ml,price',
+    img: require("../../assets/pepsi.png"),
+  },
+
+];
+
+const renderItem = ({ item }) => (
+  
+  <View style={{width:"100%"}}>
+      <View>
+        <View style={{display:"flex",flexDirection:"row",backgroundColor:"white",width:"100%",justifyContent:"space-between",alignItems:"center",height:100}}>
+            <View style={{width:"5%"}}>
+              <Image source={{uri:item?.image}} style={{width:"100%",height:50}} /> 
+            </View>
+
+            <View style={{width:"40%"}}>
+             <Text style={styles.itemName} onPress={() => deleteItem()}>{item.name}</Text>
+             <Text style={styles.itemVolume}>{item.volume}</Text>
+            </View>
+
+            <View style={{backgroundColor:"white",display:"flex",flexDirection:"row",width:"20%"}}>
+              <View style={{display:"flex",gap:25,width:50,flexDirection:"row",alignItems:"center"}}>
+              <Text style={{fontWeight:500}}>₹{item.price}</Text>
+              <Image source={require("../../assets/Vector.png")} />
+              </View>
+            </View>
+        </View>
+        <Text style={{ width: "100%", backgroundColor: "#e3e1e1", height: 1, fontWeight: "500" }}></Text>
+      </View>
+  </View>)
+
+
 
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [list,setList] = useState([]);
+  const {addItemsToFavourite,favouriteItem} = useMyContext();
+  console.log("fav statte",favouriteItem);
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
+  console.log("li",list);
+  
+  
+
+  // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
+  
+  const gettingListFavItem = async () => {
+    console.log("calling fav");
+    const data = await giveMeAllFavouriteItem();
+    // console.log(data);
+    // addItemsToFavourite(data);
+    setList(data?.data);
   }
-  const favouriteItems = [
-    {
-      id: '1',
-      name: 'Sprite Can',
-      price: 39,
-      volume: '325ml,price',
-      img: require("../../assets/sprite.png"),
-    },
-    {
-      id: '2',
-      name: 'Diet Coke',
-      price: 39,
-      volume: '355ml,price',
-      img: require("../../assets/dietcoke.png"),
-    },
-    {
-      id: '3',
-      name: 'Apple & Grape Juice',
-      price: 39,
-      volume: '2L,price',
-      img: require("../../assets/dietcoke.png"),
-    },
-    {
-      id: '4',
-      name: 'Coca Cola Can',
-      price: 39,
-      volume: '325ml,price',
-      img: require("../../assets/cocacola.png"),
-    },
-    {
-      id: '5',
-      name: 'Pepsi Can',
-      price: 39,
-      volume: '330ml,price',
-      img: require("../../assets/pepsi.png"),
-    },
 
-  ];
-
-  const renderItem = ({ item }) => (
-    <View style={{width:"100%"}}>
-        <View>
-          <View style={{display:"flex",flexDirection:"row",backgroundColor:"white",width:"100%",justifyContent:"space-between",alignItems:"center",height:100}}>
-              <View style={{width:"5%"}}>
-                <Image source={item.img} /> 
-              </View>
-
-              <View style={{width:"40%"}}>
-               <Text style={styles.itemName}>{item.name}</Text>
-               <Text style={styles.itemVolume}>{item.volume}</Text>
-              </View>
-
-              <View style={{backgroundColor:"white",display:"flex",flexDirection:"row",width:"20%"}}>
-                <View style={{display:"flex",gap:25,width:50,flexDirection:"row",alignItems:"center"}}>
-                <Text style={{fontWeight:500}}>₹{item.price}</Text>
-                <Image source={require("../../assets/Vector.png")} />
-                </View>
-              </View>
-          </View>
-          <Text style={{ width: "100%", backgroundColor: "#e3e1e1", height: 1, fontWeight: "500" }}></Text>
-        </View>
-    </View>
-  );
+  useEffect(() => {
+    gettingListFavItem();
+  },[])
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Favourite</Text>
       <Text style={{ width: "100%", backgroundColor: "#e3e1e1", height: 1, fontWeight: "500" }}></Text>
       <FlatList
-        data={favouriteItems}
+        data={list}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}

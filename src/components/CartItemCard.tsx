@@ -57,7 +57,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
         }}
       >
         <Image
-          source={{ uri: items?.imgUrl }}
+          source={{ uri: item?.image }}
           style={{
             width: "100%",
             height: "auto",
@@ -80,7 +80,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
           position: "relative",
         }}
       >
-        <Text style={{ fontSize: 20 }}>{items?.name}</Text>
+        <Text style={{ fontSize: 20 }}>{item?.name}</Text>
         <Text
           style={{
             color: "green",
@@ -90,7 +90,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             bottom: 10,
           }}
         >
-          ₹{items?.price}
+          ₹{item?.price}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}

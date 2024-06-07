@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { addFavouriteItemToDb } from "../screens/supabaseClient";
 
 interface MyContextData {
   getItemQuintity: (id: string) => number;
@@ -6,7 +7,8 @@ interface MyContextData {
   decreaseCardQuantity: (id: string) => void;
   removeFromcart: (id: string) => void;
   total: (id: string) => void;
-  addFavouriteItem:(product_imagename:string,product_details:string,price:Number,id:string) => void;
+  addFavouriteItem:(name:string,price:Number) => void;
+  addItemsToFavourite:(itemList:[]) => void;
   cartItem:[];
   favouriteItem:[];
 }
@@ -34,8 +36,17 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   // 
 
-  function addFavouriteItem(product_imagename:string,product_details:string,price:Number,id:string){
-     setFavouriteItem([...favouriteItem,{product_imagename,product_details,price,id}])
+  function addItemsToFavourite(itemList:[]){
+    console.log("per",itemList);
+    setFavouriteItem([...itemList]);
+    
+  }
+
+ async function addFavouriteItem(name:string,price:Number){
+    const response = addFavouriteItemToDb(name,price);
+    console.log(response);
+    
+    
   }
   
 // cart functionality
@@ -79,7 +90,7 @@ function removeFromcart(id:string){
       return currItems.filter(item => item.id !== id)
   })
 }
-  return <MyContext.Provider value={{cartItem,getItemQuintity,increaseCardQuantity,decreaseCardQuantity,removeFromcart}}>{children}</MyContext.Provider>;
+  return <MyContext.Provider value={{cartItem,getItemQuintity,increaseCardQuantity,decreaseCardQuantity,removeFromcart,addFavouriteItem,addItemsToFavourite}}>{children}</MyContext.Provider>;
 };
 
 
