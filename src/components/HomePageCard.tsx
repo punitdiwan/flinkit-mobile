@@ -15,10 +15,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { addFavouriteItem, addToCart, deleteParticularItemInCart, loadCartData } from "../screens/supabaseClient";
+import { useDispatch } from "react-redux";
+import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 
-const HomePageCard = ({ name, data }: any) => {
+const HomePageCard = ({ name, data,cartItem }: any) => {
+  const dispatch = useDispatch();
   const imgUrl =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
+
+    const callAddToCart = async() => {
+       addToCart(1,"orange",50)
+       await dispatch(clearCartList());
+       const response = await loadCartData();
+       await dispatch(addItemInCart(response))
+    }
+
+   
+    
 
   const navigation = useNavigation();
   return (
@@ -165,6 +179,7 @@ const HomePageCard = ({ name, data }: any) => {
                       fontWeight: "bold",
                       color: "white",
                     }}
+                    onPress={callAddToCart}
                   >
                     +
                   </Text>
