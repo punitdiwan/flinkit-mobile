@@ -150,7 +150,8 @@ export const CategoryData = [
 ];
 
 
-  const apikey="";
+  // const apikey="";
+
 
 type Values = {
   bg: string;

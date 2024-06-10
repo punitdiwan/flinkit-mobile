@@ -43,7 +43,6 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     //     });
     //   }
     // });
-    console.log("calling increase");
     
     addToCart(id);
     const response = loadCartData();

@@ -150,11 +150,11 @@ export default function App() {
             options={{ title: "ErrorCard" }}
             component={ErrorCard}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Checkout"
             options={{ title: "Checkout" }}
             component={Checkout}
-          />
+          /> */}
           <Stack.Screen
             name="Productdetail"
             options={{ title: "Productdetail" }}

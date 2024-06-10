@@ -49,6 +49,7 @@ export const verifyOtp = async (phone, token) => {
 };
 
 
+// --------------------------------------------------------------------------------------------------
 
 export const addToCart = async (productid,name,price) => {
   try {
@@ -109,32 +110,47 @@ export const deleteCartItem = async (productid) => {
   }
 }
 
-export const addFavouriteItem = async () => {
+export const loadCartData = async () => {
+      try {
+        const response = await supabase.from("cart3").select("*");
+        const list = response?.data;
+        return response?.data;
+      } catch (error) {
+        console.log(error.message)
+      }
+}
+
+// ------------------------------------------------------------------
+
+// Favourite Item
+export const addFavouriteItem = async (id,name,price) => {
   try {
-    console.log("callingg");
-    const response = await supabase.from("fav").select("*");
-    const existingProduct = await supabase.from("fav").select("*").eq("productid",2);
-    console.log(existingProduct.data);
+    console.log(id);
+    const response1 = await supabase.from("fav").select("*");
+    console.log("allFavData",response1);
+    const existingProduct = await supabase.from("fav").select("*").eq("productid",id);
+    console.log("fav",existingProduct.data);
     if(existingProduct?.data?.length == 0){
       console.log("run1");
-      const response = await supabase.from("fav").insert({productid:2,name:"Apple",price:50,image:"https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600"})
+      const response = await supabase.from("fav").insert({"productid":id,name,image:"https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600",price})
       console.log(response);
     }else{
       console.log("run2");
       return ;
     }
+    const response2 = await supabase.from("fav").select("*");
+    return response2.data;
   } catch (error) {
     console.log(error.message)
   }
 }
 
-export const loadCartData = async () => {
-      try {
-        const response = await supabase.from("cart3").select("*");
-        const list = response?.data;
-       
-        return response?.data;
-      } catch (error) {
-        console.log(error.message)
-      }
+export const loadFavItem = async () => {
+  try {
+    const favItemList = await supabase.from("fav").select("*");
+    console.log(favItemList);
+    return favItemList?.data;
+  } catch (error) {
+    console.log(error.message);
+  }
 }

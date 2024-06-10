@@ -13,7 +13,11 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { supabase } from "./supabaseClient";
+import { addFavouriteItem, supabase } from "./supabaseClient";
+import { CiHeart } from "react-icons/ci";
+import { useDispatch } from "react-redux";
+import { addFavItem } from "../../redux/slices/favItemSlice";
+
 const loadFonts = async () => {
   await Font.loadAsync({
     "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
@@ -24,6 +28,8 @@ const loadFonts = async () => {
 
 const Productdetail = (id: any) => {
   console.log("product_id", id.route.params.id);
+ const dispatch = useDispatch();
+
   const productId = id.route.params.id;
   const navigation = useNavigation();
   const [detailsExpanded, setDetailsExpanded] = useState(false);
@@ -78,6 +84,15 @@ const Productdetail = (id: any) => {
     }
   };
 
+  const setFavItem = async () => {
+      const response = await addFavouriteItem(3,"green apple",60);
+      console.log("setFav",response);
+      
+      if(response !== undefined){
+        dispatch(addFavItem(response));
+      }
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -119,6 +134,10 @@ const Productdetail = (id: any) => {
                 >
                   <Text style={{ fontSize: 24, fontFamily: "Gilroy-Bold" }}>
                     {item.product_name}
+                  </Text>
+                  <Text onPress={() => setFavItem()}>
+                  {/* import { CiHeart } from "react-icons/ci"; */}
+                  Fav
                   </Text>
                 </View>
 

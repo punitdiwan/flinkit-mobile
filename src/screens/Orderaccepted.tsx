@@ -30,23 +30,24 @@ const Orderaccepted = ({ navigation }) => {
       <View style={{ marginTop: 60, marginLeft: 20,zIndex:1 }}>
         
       </View>
-      <Image
-        style={styles.image}
-        source={require('../../../flinkit-mobile/assets/done.png')}
-      />
-      <Text style={styles.text}>Your Order have been accepted.</Text>
+
+      <View style={{width:"100%",display:"flex",justifyContent:"center",alignContent:"center",alignItems:"center",right:20,marginBottom:50}}>
+        <Image source={require('../../../flinkit-mobile/assets/done.png')}/>
+      </View>
+
+      <Text style={styles.text}>Your Order has been accepted.</Text>
       <Text style={{fontSize:16,textAlign:'center',width:'80%',color:'#7C7C7C',marginLeft:33,fontFamily:'Gilroy-Bold',}}>
         Your item has been placed and is on it's way to being processed.</Text>
     
 
       <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 70, marginLeft: 20, }}>
         <TouchableOpacity onPress={() => navigation.replace("ErrorCard")} style={styles.otpBtn}>
-          <Text style={{ color: '#ffffff', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600' }}>error card</Text>
+          <Text style={{ color: '#ffffff', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600',fontWeight:"bold" }}>Track Order</Text>
         </TouchableOpacity>
       </View>
       <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 1, marginLeft: 20, }}>
-        <TouchableOpacity onPress={() => navigation.replace("Signin")} style={styles.otpBtn}>
-          <Text style={{ color: '#000000', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600' }}>Back To Home</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.otpBtn}>
+          <Text style={{ color: '#000000', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600',fontWeight:"bold" }}>Back To Home</Text>
         </TouchableOpacity>
       </View>
       </ImageBackground>
@@ -62,16 +63,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 40,
-    marginLeft:60
+    // width: 200,
+    // height: 200,
+    // marginBottom: 40,
+    // marginLeft:60
   },
   text: {
     fontSize: 28,
     marginBottom: 20,
     textAlign:'center',
     fontFamily:'Gilroy-Bold',
+    fontWeight:"bold"
   },
   otpBtn: {
     width: 300,

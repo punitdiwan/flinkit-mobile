@@ -25,7 +25,7 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
 
     const callAddToCart = async() => {
-       addToCart(1,"orange",50)
+       addToCart(3,"orange",50)
        await dispatch(clearCartList());
        const response = await loadCartData();
        await dispatch(addItemInCart(response))

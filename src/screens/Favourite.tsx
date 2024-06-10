@@ -209,7 +209,7 @@
 
 // export default Favourite;
 // -------------------------------------------------------------------------------------------------------------------
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -221,6 +221,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, loadFavItem } from "./supabaseClient";
+import { addFavItem } from "../../redux/slices/favItemSlice";
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -233,6 +236,22 @@ const loadFonts = async () => {
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
+  const dispatch = useDispatch();
+
+  const favItemList = useSelector(store => store.fav.favItemList);
+  
+
+  const loadFav = async() => {
+      const response = await loadFavItem();
+      dispatch(addFavItem(response));
+      
+  }
+
+  useEffect(() => {
+    loadFav();
+  },[])
+  
+  
 
   if (!fontLoaded) {
     return (
@@ -280,6 +299,18 @@ const Favourite = () => {
       img: require("../../assets/pepsi.png"),
     },
   ];
+
+  const addAllFavItemInCart = () => {
+      console.log("add all to cart",favItemList.length);
+      for(let i = 0 ; i < favItemList?.length ; i++){
+        // console.log("loop start");
+        
+        const {productid,name,price} = favItemList[i];
+        addToCart(productid,name,price);
+      }
+      console.log("loop end");
+      
+  }
 
   const renderItem = ({ item }) => (
     <View style={{ width: "100%" }}>
@@ -350,7 +381,7 @@ const Favourite = () => {
         }}
       ></Text>
       <FlatList
-        data={favouriteItems}
+        data={favItemList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
@@ -365,7 +396,7 @@ const Favourite = () => {
           }}
           onPress={() => navigation.replace("Onboarding")}
         >
-          <Text style={styles.addToCartButtonText}>Add all to cart</Text>
+          <Text style={styles.addToCartButtonText} onPress={() => addAllFavItemInCart()}>Add all to cart</Text>
         </TouchableOpacity>
       </View>
     </View>
