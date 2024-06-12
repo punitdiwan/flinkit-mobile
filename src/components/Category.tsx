@@ -150,7 +150,8 @@ export const CategoryData = [
 ];
 
 
-  // const apikey="";
+const apiKey=""
+ 
 
 
 type Values = {

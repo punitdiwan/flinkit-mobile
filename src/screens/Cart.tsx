@@ -38,7 +38,7 @@ useEffect(() => {
 
 const calcuatedPriceOfAllItem = () => {
   let total = 0;
-    for(let i = 0 ; i < cartItemList.length ; i++){
+    for(let i = 0 ; i < cartItemList?.length ; i++){
         const {quantity,price} = cartItemList[i];
         console.log(quantity,price);
         total = total + (price*quantity);
@@ -129,7 +129,7 @@ const calcuatedPriceOfAllItem = () => {
               }}
             >
               <FontAwesome name="rupee" size={14} color="#ffffff" />
-              <Text style={{ fontSize: 14, color: "#ffffff" }} onPress={()=> calcuatedPriceOfAllItem()}>
+              <Text style={{ fontSize: 14, color: "#ffffff" }}>
                 {
                   cartItemList.reduce((accumulator:any, currentValue:any) => {
                     return accumulator + (currentValue.quantity * currentValue.price);
@@ -142,7 +142,7 @@ const calcuatedPriceOfAllItem = () => {
               style={{
                 backgroundColor: "#69AF5D",
                 height: 67,
-                width: 300,
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -152,7 +152,8 @@ const calcuatedPriceOfAllItem = () => {
                 bottom:0
               }}
             >
-              <Text>Your cart is Empty</Text>
+              <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart,Go to Category</Text>
+              {/* <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart</Text> */}
             </TouchableOpacity>
           )}
         </View>
@@ -188,7 +189,11 @@ const calcuatedPriceOfAllItem = () => {
          <Text style={{ width: "100%", height: 2, backgroundColor: "#edebeb" }}></Text>
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 55, shadowColor: "#edebeb" }}>
              <Text style={{ fontSize: 18, color: "#828181", fontWeight: "500" }}>Total Cost</Text>
-             <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹300</Text><Image source={require("../../assets/Vector.png")} /></View>
+             <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹{
+                  cartItemList.reduce((accumulator:any, currentValue:any) => {
+                    return accumulator + (currentValue.quantity * currentValue.price);
+                  }, 0)
+                }</Text><Image source={require("../../assets/Vector.png")} /></View>
          </View>
          <Text style={{ width: "100%", height: 2, backgroundColor: "#edebeb" }}></Text>
          <View style={{ paddingTop: 15, paddingHorizontal: 10, paddingBottom: 20 }}>

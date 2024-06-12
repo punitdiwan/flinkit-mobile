@@ -20,6 +20,12 @@ const loadFonts = async () => {
 const Filter = ({navigation}) => {
   const [isChecked, setChecked] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [categoryName,setCategoryName] = useState("");
+  const [brandName,setBrandName] = useState("");
+  // console.log(categoryName);
+  // console.log(brandName);
+  
+  
 
   if (!fontLoaded) {
       return (
@@ -45,9 +51,13 @@ const Filter = ({navigation}) => {
         }}
       >
         <View style={{ marginLeft: 10 }}>
-        <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate('SearchScreen');
+          setCategoryName("");
+          setBrandName("");
+          }}>
 
-          <Entypo name="cross" size={24} color="black" />
+          <Entypo name="cross" size={24} color="black"/>
         </TouchableOpacity>
         </View>
         <View
@@ -56,24 +66,30 @@ const Filter = ({navigation}) => {
             alignItems: "center",
             justifyContent: "center",
             width: "80%",
+            marginTop:10,
+            marginBottom:10
           }}
         >
-          <Text>Filter</Text>
+          <Text style={{fontSize:20,fontWeight:"bold"}}>Filter</Text>
         </View>
       </View>
       <View style={{height:"100%",padding:10,backgroundColor:'#EEEEEE',width:'100%',borderRadius:40}}>
 
       
       <View>
-        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',}}>Category</Text>
+        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15}}>Category</Text>
         {
           Category?.map((item,index)=>(
-            <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:1}}>
+            <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
-              style={styles.checkbox}
-              value={isChecked}
-              onValueChange={setChecked}
-              color={isChecked ? "#69AF5D" : undefined}
+              // style={styles.checkbox}
+              // value={isChecked}
+              // onValueChange={setChecked}
+              // color={isChecked ? "#69AF5D" : undefined}
+              value={item}
+              onValueChange={() => setCategoryName(item)}
+              color={categoryName == item ? "#69AF5D":"white"}
+              style={categoryName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
             />
             <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
           </View>
@@ -82,15 +98,15 @@ const Filter = ({navigation}) => {
        
       </View>
       <View>
-        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',}}>Brand</Text>
+        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',paddingHorizontal:15,marginTop:15,marginBottom:15}}>Brand</Text>
         {
           Brand?.map((item,index)=>(
-            <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:1}}>
+            <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
-              style={styles.checkbox}
-              value={isChecked}
-              onValueChange={setChecked}
-              color={isChecked ? "#69AF5D" : undefined}
+              value={item}
+              onValueChange={() => setBrandName(item)}
+              color={brandName == item ? "#69AF5D":"white"}
+              style={brandName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
             />
             <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
           </View>
@@ -98,7 +114,7 @@ const Filter = ({navigation}) => {
         }
        
       </View>
-      <TouchableOpacity style={{width:348,height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
+      <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
         <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold'}}>Apply Filter</Text>
       </TouchableOpacity>
       </View>

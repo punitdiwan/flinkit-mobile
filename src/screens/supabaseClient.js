@@ -148,7 +148,7 @@ export const addFavouriteItem = async (id,name,price) => {
 export const loadFavItem = async () => {
   try {
     const favItemList = await supabase.from("fav").select("*");
-    console.log(favItemList);
+    console.log("fav",favItemList);
     return favItemList?.data;
   } catch (error) {
     console.log(error.message);

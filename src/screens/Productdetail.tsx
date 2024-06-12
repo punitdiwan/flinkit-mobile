@@ -137,11 +137,13 @@ const Productdetail = (id: any) => {
                   </Text>
                   <Text onPress={() => setFavItem()}>
                   {/* import { CiHeart } from "react-icons/ci"; */}
-                  Fav
+                     <Entypo name="heart-outlined" size={24}/>
                   </Text>
                 </View>
+                  <View style={{width:"100%"}}>
+                    <Text style={{fontSize:15,fontWeight:"500",color:"#b5b2b1"}}>1Kg, price</Text>
+                  </View>
 
-                <Text style={styles.productPrice}>1Kg, price</Text>
                 <View style={styles.quantityContainer}>
                   <View
                     style={{
@@ -156,7 +158,7 @@ const Productdetail = (id: any) => {
                     <TouchableOpacity onPress={decreaseQuantity}>
                       <Entypo name="minus" size={24} color="black" />
                     </TouchableOpacity>
-                    <Text style={styles.quantityText}>{quantity}</Text>
+                    <View style={{width:40,height:40,display:"flex",justifyContent:"center",borderRadius:10,borderWidth:2,borderColor:"#b5b2b1"}}><Text style={{textAlign:"center",fontSize:20}}>{quantity}</Text></View>
                     <TouchableOpacity onPress={increaseQuantity}>
                       <Entypo name="plus" size={24} color="#53B175" />
                     </TouchableOpacity>

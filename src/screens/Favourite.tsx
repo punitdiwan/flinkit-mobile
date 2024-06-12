@@ -123,24 +123,45 @@
 //         </TouchableOpacity>
 //       </View>
 //     </View>
-//   );
+//   );import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     marginTop: 50,
-//     flex: 1,
-//     padding: 10,
-//     backgroundColor: "#fff",
-//   },
-//   title: {
-//     fontSize: 20,
-//     marginBottom: 2,
-//     textAlign: "center",
-//     fontFamily: "Gilroy-Bold",
-//   },
-//   listContainer: {
-//     flexGrow: 1,
+//     fontSize: 20,import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
+// };
+
+//     flexGrow: 1,import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
+// };
+
 //   },
 //   favouriteItem: {
 //     display: "flex",
@@ -243,6 +264,8 @@ const Favourite = () => {
 
   const loadFav = async() => {
       const response = await loadFavItem();
+      console.log("response",response);
+      
       dispatch(addFavItem(response));
       
   }
@@ -313,7 +336,19 @@ const Favourite = () => {
   }
 
   const renderItem = ({ item }) => (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: "100%"
+    // const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+    // const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+    
+    // export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+    
+    // export const getuserbyphone = async (MobileNumber) => {
+    //   const response = supabase.rpc("test_get_user_by_phone", {
+    //     phone_number: MobileNumber,
+    //   });
+    //   return await response;
+    // };
+     }}>
       <View>
         <View
           style={{
