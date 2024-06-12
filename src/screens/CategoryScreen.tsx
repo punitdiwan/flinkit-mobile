@@ -21,8 +21,7 @@ import * as React from "react";
 import { supabase } from "./supabaseClient";
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
-const apikey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw";
+const apiKey=""
 
 const CategoryScreen = (category_id: any, { navigate }: any) => {
   interface Products {
