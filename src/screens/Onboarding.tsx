@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import  AppLoading  from 'expo-app-loading';
+// import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 
@@ -18,17 +18,17 @@ const image = { url: 'C:/Users/HP/Desktop/Madhukant/flinkit-mobile/assets/homeIm
   };
 const Onboarding = () => {
     const navigation = useNavigation<any>();
-    const [fontLoaded, setFontLoaded] = useState(false);
+    // const [fontLoaded, setFontLoaded] = useState(false);
 
-    if (!fontLoaded) {
-        return (
-          <AppLoading
-            startAsync={loadFonts}
-            onFinish={() => setFontLoaded(true)}
-            onError={console.warn}
-          />
-        );
-      }
+    // if (!fontLoaded) {
+    //     return (
+    //       <AppLoading
+    //         startAsync={loadFonts}
+    //         onFinish={() => setFontLoaded(true)}
+    //         onError={console.warn}
+    //       />
+    //     );
+    //   }
 
     return (
         <View style={styles.container}>

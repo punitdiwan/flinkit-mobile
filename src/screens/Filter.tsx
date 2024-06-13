@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
-import  AppLoading  from 'expo-app-loading';
+// import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
 const Category=["Eggs","Noodles & Pasta","Chips & Crisps","Fast Food"]
 const Brand =["Individidual callection","Cocola","Ifad","Kazi Farmas"]
@@ -27,15 +27,15 @@ const Filter = ({navigation}) => {
   
   
 
-  if (!fontLoaded) {
-      return (
-        <AppLoading
-          startAsync={loadFonts}
-          onFinish={() => setFontLoaded(true)}
-          onError={console.warn}
-        />
-      );
-    }
+  // if (!fontLoaded) {
+  //     return (
+  //       <AppLoading
+  //         startAsync={loadFonts}
+  //         onFinish={() => setFontLoaded(true)}
+  //         onError={console.warn}
+  //       />
+  //     );
+  //   }
 
   return (
     <SafeAreaView style={{backgroundColor:'white'}}>

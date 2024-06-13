@@ -1,7 +1,7 @@
 import React,{ useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import  AppLoading  from 'expo-app-loading';
+// import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 const loadFonts = async () => {
@@ -15,15 +15,15 @@ const loadFonts = async () => {
 const ErrorCard = ({message, navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-    if (!fontLoaded) {
-        return (
-          <AppLoading
-            startAsync={loadFonts}
-            onFinish={() => setFontLoaded(true)}
-            onError={console.warn}
-          />
-        );
-      }
+    // if (!fontLoaded) {
+    //     return (
+    //       <AppLoading
+    //         startAsync={loadFonts}
+    //         onFinish={() => setFontLoaded(true)}
+    //         onError={console.warn}
+    //       />
+    //     );
+    //   }
   return (
     <View style={styles.container}>
         <View style={{ marginRight:300,zIndex:1 }}>

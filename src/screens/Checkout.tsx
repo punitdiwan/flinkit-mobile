@@ -6,18 +6,18 @@ import { CategoryData } from "../components/Category";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Entypo } from '@expo/vector-icons';
 import Modal from "react-native-modal";
-import AppLoading from 'expo-app-loading';
+// import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 
-const loadFonts = async () => {
-    await Font.loadAsync({
-        'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
-        'Gilroy-Medium': require('../../assets/fonts/Gilroy-Medium.ttf'),
-        'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf')
-    });
+// const loadFonts = async () => {
+//     await Font.loadAsync({
+//         'Gilroy-Semibold': require('../../assets/fonts/Gilroy-SemiBold.ttf'),
+//         'Gilroy-Medium': require('../../assets/fonts/Gilroy-Medium.ttf'),
+//         'Gilroy-Bold': require('../../assets/fonts/Gilroy-Bold.ttf')
+//     });
 
-};
+// };
 
 
 const Checkout = () => {
@@ -33,16 +33,15 @@ const Checkout = () => {
         setIsModalVisible(!isModalVisible);
     };
 
-    if (!fontLoaded) {
-        return (
-            <AppLoading
-                startAsync={loadFonts}
-                onFinish={() => setFontLoaded(true)}
-                onError={console.warn}
-            />
-        );
-    }
-
+      // if (!fontLoaded) {
+    //     return (
+    //         <AppLoading
+    //             startAsync={loadFonts}
+    //             onFinish={() => setFontLoaded(true)}
+    //             onError={console.warn}
+    //         />
+    //     );
+    // }
     const handlePlaceOrder = () => {
         // Implement place order functionality
         console.log('Placing order...');
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 24,
-        fontFamily: 'Gilroy-Semibold',
+        fontFamily: '-Semibold',
         marginBottom: 20,
 
     },

@@ -240,7 +240,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AppLoading from "expo-app-loading";
+// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, loadFavItem } from "./supabaseClient";
@@ -276,15 +276,15 @@ const Favourite = () => {
   
   
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+   // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
   const favouriteItems = [
     {
       id: "1",
@@ -335,7 +335,7 @@ const Favourite = () => {
       
   }
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }:any) => (
     <View style={{ width: "100%"
     // const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
     // const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;

@@ -1,6 +1,6 @@
 import React,{ useState } from 'react';
 import { View, Text, Image, Button, StyleSheet, TouchableOpacity,ImageBackground } from 'react-native';
-import  AppLoading  from 'expo-app-loading';
+// import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 const loadFonts = async () => {
@@ -12,18 +12,18 @@ const loadFonts = async () => {
 
 };
 
-const Orderaccepted = ({ navigation }) => {
-  const [fontLoaded, setFontLoaded] = useState(false);
+const Orderaccepted = ({ navigation }:any) => {
+  // const [fontLoaded, setFontLoaded] = useState(false);
 
-    if (!fontLoaded) {
-        return (
-          <AppLoading
-            startAsync={loadFonts}
-            onFinish={() => setFontLoaded(true)}
-            onError={console.warn}
-          />
-        );
-      }
+  //   if (!fontLoaded) {
+  //       return (
+  //         <AppLoading
+  //           startAsync={loadFonts}
+  //           onFinish={() => setFontLoaded(true)}
+  //           onError={console.warn}
+  //         />
+  //       );
+  //     }
   return (
     <View style={styles.container}>
       <ImageBackground source={require('../../assets/loginbackground.png')} resizeMode="cover" style={{height:'100%',width:'100%'}} >
@@ -32,7 +32,7 @@ const Orderaccepted = ({ navigation }) => {
       </View>
 
       <View style={{width:"100%",display:"flex",justifyContent:"center",alignContent:"center",alignItems:"center",right:20,marginBottom:50}}>
-        <Image source={require('../../../flinkit-mobile/assets/done.png')}/>
+        {/* <Image source={require('../../../flinkit-mobile/assets/done.png')}/> */}
       </View>
 
       <Text style={styles.text}>Your Order has been accepted.</Text>

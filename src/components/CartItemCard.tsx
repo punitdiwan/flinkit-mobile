@@ -10,20 +10,31 @@ import { addToCart, decreaseItemQuantity, decreaseTheQuantity, deleteCartItem, d
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
+import { addToCartFun } from "../../lib/cartFun";
 
 type cardItemsProps = {
   item: {
-    id: string;
-    quantity: number;
+    // id: string;
+    // quantity: number;
+    product_name:string,
+    product_price:number,
+    thumbnail:string,
+    qty:number
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
+  console.log("cart item in cart",item);
+
+  const {product_name,product_price,thumbnail,qty} = item;
+  console.log(product_name,product_price,thumbnail);
+  
+  
 const navigation = useNavigation();
 const dispatch = useDispatch();
 
   const items: any = CategoryData.find((i) => i.id === item.id);
   
-  const removeFromcart = async (id) => {
+  const removeFromcart = async (id:any) => {
     // console.log("ready to delete",id)
     await deleteCartItem(id);
     await dispatch(clearCartList());
@@ -31,15 +42,15 @@ const dispatch = useDispatch();
     await dispatch(addItemInCart(response))
   }
 
-  const increaseParticularCartItemQuantity = async (item) => {
+  const increaseParticularCartItemQuantity = async (item:any) => {
         // console.log("ready to increase quantity",item?.productid);
-        await addToCart(item.productid,"Apple",50);
+        await addToCartFun(item);
         await dispatch(clearCartList());
         const response = await loadCartData();
         await dispatch(addItemInCart(response));
   }
 
-const decreaseParticularCartItemQuantity = async(item) => {
+const decreaseParticularCartItemQuantity = async(item:any) => {
   console.log("ready to increase quantity",item?.productid);
   await decreaseItemQuantity(item?.productid);
   await dispatch(clearCartList());
@@ -80,7 +91,7 @@ const decreaseParticularCartItemQuantity = async(item) => {
         }}
       >
         <Image
-          source={{ uri: item?.image }}
+          source={{ uri: thumbnail}}
           style={{
             width: "100%",
             height: "auto",
@@ -103,7 +114,7 @@ const decreaseParticularCartItemQuantity = async(item) => {
           position: "relative",
         }}
       >
-        <Text style={{ fontSize: 20 }}>{item?.name}</Text>
+        <Text style={{ fontSize: 20 }}>{product_name}</Text>
         <Text
           style={{
             color: "green",
@@ -113,7 +124,7 @@ const decreaseParticularCartItemQuantity = async(item) => {
             bottom: 10,
           }}
         >
-          ₹{item?.price}
+          ₹{product_price}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
@@ -160,7 +171,7 @@ const decreaseParticularCartItemQuantity = async(item) => {
               <Feather name="minus" size={24} color="black" />
             </TouchableOpacity>
             <Text style={{ fontSize: 25, fontWeight: "500" }}>
-              {item.quantity}
+              {qty}
             </Text>
             <TouchableOpacity
               onPress={() => increaseParticularCartItemQuantity(item)}

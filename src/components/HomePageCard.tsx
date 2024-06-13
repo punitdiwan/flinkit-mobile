@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { addFavouriteItem, addToCart, deleteParticularItemInCart, loadCartData } from "../screens/supabaseClient";
+import { addFavouriteItem, addToCart, loadCartData } from "../screens/supabaseClient";
 import { useDispatch } from "react-redux";
 import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 
@@ -26,9 +26,9 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
 
     const callAddToCart = async() => {
        addToCart(3,"orange",50)
-       await dispatch(clearCartList());
-       const response = await loadCartData();
-       await dispatch(addItemInCart(response))
+      //  await dispatch(clearCartList());
+      //  const response = await loadCartData();
+      //  await dispatch(addItemInCart(response))
     }
 
    
@@ -52,7 +52,7 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
             width: "60%",
             color: "#181725",
             fontSize: 22,
-            fontFamily: "Gilroy-Bold",
+            // fontFamily: "Gilroy-Bold",
           }}
         >
           {name}
@@ -62,7 +62,7 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
             width: "auto",
             color: "#69AF5D",
             fontSize: 15,
-            fontFamily: "Gilroy-Bold",
+            // fontFamily: "Gilroy-Bold",
           }}
         >
           See all
@@ -138,7 +138,7 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
                   style={{
                     fontSize: 20,
                     fontWeight: "semibold",
-                    fontFamily: "Gilroy-Medium",
+                    // fontFamily: "Gilroy-Medium",
                   }}
                 >
                   {item?.name}
@@ -156,7 +156,7 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
                 <Text
                   style={{
                     color: "#181725",
-                    fontFamily: "Gilroy-Bold",
+                    // fontFamily: "Gilroy-Bold",
                     fontSize: 18,
                   }}
                 >

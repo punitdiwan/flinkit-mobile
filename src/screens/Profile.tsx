@@ -17,7 +17,7 @@ import AddressList from "../components/AddressList";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import AppLoading from "expo-app-loading";
+// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCartList } from "../../redux/slices/cartSlice";
@@ -84,15 +84,15 @@ const Profile = ({ navigation, route }: ProfileProps) => {
   console.log(cartData);
   
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+  // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
 
   // const {logoutToggle}=useMyContext();
 
@@ -193,7 +193,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
               fontFamily: "Gilroy-Semibold",
             }}
             onPress={() => {
-              dispatch(clearCartList());
+              // dispatch(clearCartList());
               navigation.replace("Onboarding");
              
             }}

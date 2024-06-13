@@ -9,7 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { loadCartData } from "./supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemInCart } from "../../redux/slices/cartSlice";
+import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 import { current } from "@reduxjs/toolkit";
 import Checkout from "./Checkout";
 import { Entypo } from '@expo/vector-icons';
@@ -23,32 +23,24 @@ const Cart = () => {
   const navigation = useNavigation<any>();
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
+  const [cartItem,setCartItem] = useState([]);
   
   const dispatch = useDispatch();
   const cartItemList = useSelector((store) => store?.cart?.cartItemList);
+  console.log("cartItemList",cartItemList);
+  
 
   async function loadedCart(){
-    const response = await loadCartData();    
-    dispatch(addItemInCart(response))
+    console.log("running");
+    const response = await loadCartData();
+    await dispatch(clearCartList());
+    await dispatch(addItemInCart(response))
   }
 
 useEffect(() => {
   loadedCart();
 },[])
 
-const calcuatedPriceOfAllItem = () => {
-  let total = 0;
-    for(let i = 0 ; i < cartItemList?.length ; i++){
-        const {quantity,price} = cartItemList[i];
-        console.log(quantity,price);
-        total = total + (price*quantity);
-        console.log("t",total);
-        
-    }
-    console.log("total",total);
-    // setTotalCartPrice(total);
-    return total;
-}
 
   return (
     <View style={{flex:1,backgroundColor:"white"}}>
@@ -96,7 +88,7 @@ const calcuatedPriceOfAllItem = () => {
             justifyContent: "center",
           }}
         >
-           {cartItemList.length > 0 ?
+           {cartItemList?.length > 0 ?
            (<TouchableOpacity
             style={{
               backgroundColor: "#69AF5D",
@@ -131,8 +123,8 @@ const calcuatedPriceOfAllItem = () => {
               <FontAwesome name="rupee" size={14} color="#ffffff" />
               <Text style={{ fontSize: 14, color: "#ffffff" }}>
                 {
-                  cartItemList.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue.quantity * currentValue.price);
+                  cartItemList?.reduce((accumulator:any, currentValue:any) => {
+                    return accumulator + (currentValue.qty * currentValue.product_price);
                   }, 0)
                 }
               </Text>
@@ -191,7 +183,7 @@ const calcuatedPriceOfAllItem = () => {
              <Text style={{ fontSize: 18, color: "#828181", fontWeight: "500" }}>Total Cost</Text>
              <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹{
                   cartItemList.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue.quantity * currentValue.price);
+                    return accumulator + (currentValue?.qty * currentValue?.product_price);
                   }, 0)
                 }</Text><Image source={require("../../assets/Vector.png")} /></View>
          </View>

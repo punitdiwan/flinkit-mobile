@@ -218,7 +218,7 @@ const Category = () => {
         "https://backend.delivery.maitretech.com/rest/v1/categories",
         {
           headers: {
-            Apikey: apikey,
+            Apikey: apiKey,
           },
         }
       );
