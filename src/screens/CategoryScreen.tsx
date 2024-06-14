@@ -19,10 +19,11 @@ import { RootStackParamList } from "../../App";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { supabase } from "./supabaseClient";
+import { addToCartFun } from "../../lib/cartFun";
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const apikey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
 const CategoryScreen = (category_id: any, { navigate }: any) => {
   interface Products {
     product: {
@@ -58,6 +59,8 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   // );
   // const quantity = getItemQuintity("0");
 
+
+
   const fetchData = async () => {
     console.log("working");
     console.log("category_id:", category_id.route.params.category_id);
@@ -65,14 +68,18 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
       .from("newproducts")
       .select("*")
       .eq("category_id", newId);
-    console.log("resp", resp.data);
+    console.log("resp", resp);
 
     setProducts(resp.data);
   };
   const newId = category_id.route.params.category_id;
+
+
   useEffect(() => {
     fetchData();
   }, [category_id]);
+
+
   const navigation = useNavigation<any>();
   return (
     <>
@@ -172,7 +179,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                             fontSize: 16,
                             color: "#6b6e6a",
                             fontWeight: "600",
-                            fontFamily: "Gilroy-Bold",
+                            // fontFamily: "Gilroy-Bold",
                           }}
                         >
                           {item.product_name}
@@ -218,6 +225,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                   fontWeight: "bold",
                                   color: "white",
                                 }}
+
+                                onPress={() => addToCartFun(item)}
+
                               >
                                 +
                               </Text>

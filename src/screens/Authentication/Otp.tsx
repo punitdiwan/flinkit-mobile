@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useMyContext } from "../../context/Context";
 import { AntDesign } from "@expo/vector-icons";
-import AppLoading from "expo-app-loading";
+// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { supabase, verifyOtp } from "../supabaseClient";
 
@@ -54,15 +54,15 @@ const Otp = (MobileNumber: any) => {
     navigation.navigate("BottomNav");
   };
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
-  }
+   // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
 
   // const { loginToggle } = useMyContext();
 
@@ -86,7 +86,7 @@ const Otp = (MobileNumber: any) => {
             color: "#7C7C7C",
             marginTop: 20,
             marginHorizontal: 30,
-            fontFamily: "Gilroy-Semibold",
+            // fontFamily: "Gilroy-Semibold",
           }}
         >
           Code
@@ -169,7 +169,7 @@ const Otp = (MobileNumber: any) => {
           {/* <TextInput onChangeText={(e) => setpassword(e.target.value)} /> */}
         </View>
         <View style={{ width: "100%", marginTop: 30, marginLeft: 33 }}>
-          <Text style={{ color: "#69AF5D", fontFamily: "Gilroy-Medium" }}>
+          <Text style={{ color: "#69AF5D",  }}>
             Resend code
           </Text>
         </View>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: 30,
     color: "#000",
-    fontFamily: "Gilroy-Semibold",
+    // fontFamily: "Gilroy-Semibold",
   },
   otpView: {
     width: "100%",

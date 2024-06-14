@@ -90,7 +90,7 @@ const BottomNav = () => {
             header: () => <YourCustomHeaderComponent name={"Find Products"} />,
           }}
         />
-        {cartItem.length === 0 ? (
+        {cartItem?.length === 0 ? (
           <Tab.Screen
             name="Cart"
             component={Cart}
@@ -109,7 +109,7 @@ const BottomNav = () => {
             component={Cart}
             options={{
               headerShown: true,
-              tabBarBadge: cartItem.length,
+              // tabBarBadge: cartItem.length,
 
               tabBarIcon: ({ color, size }) => {
                 return <Ionicons4 name="cart-plus" color={color} size={30} />;

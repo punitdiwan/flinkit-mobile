@@ -15,10 +15,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { addFavouriteItem, addToCart, loadCartData } from "../screens/supabaseClient";
+import { useDispatch } from "react-redux";
+import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 
-const HomePageCard = ({ name, data }: any) => {
+const HomePageCard = ({ name, data,cartItem }: any) => {
+  const dispatch = useDispatch();
   const imgUrl =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
+
+    const callAddToCart = async() => {
+       addToCart(3,"orange",50)
+      //  await dispatch(clearCartList());
+      //  const response = await loadCartData();
+      //  await dispatch(addItemInCart(response))
+    }
+
+   
+    
 
   const navigation = useNavigation();
   return (
@@ -38,7 +52,7 @@ const HomePageCard = ({ name, data }: any) => {
             width: "60%",
             color: "#181725",
             fontSize: 22,
-            fontFamily: "Gilroy-Bold",
+            // fontFamily: "Gilroy-Bold",
           }}
         >
           {name}
@@ -48,7 +62,7 @@ const HomePageCard = ({ name, data }: any) => {
             width: "auto",
             color: "#69AF5D",
             fontSize: 15,
-            fontFamily: "Gilroy-Bold",
+            // fontFamily: "Gilroy-Bold",
           }}
         >
           See all
@@ -124,7 +138,7 @@ const HomePageCard = ({ name, data }: any) => {
                   style={{
                     fontSize: 20,
                     fontWeight: "semibold",
-                    fontFamily: "Gilroy-Medium",
+                    // fontFamily: "Gilroy-Medium",
                   }}
                 >
                   {item?.name}
@@ -142,7 +156,7 @@ const HomePageCard = ({ name, data }: any) => {
                 <Text
                   style={{
                     color: "#181725",
-                    fontFamily: "Gilroy-Bold",
+                    // fontFamily: "Gilroy-Bold",
                     fontSize: 18,
                   }}
                 >
@@ -165,6 +179,7 @@ const HomePageCard = ({ name, data }: any) => {
                       fontWeight: "bold",
                       color: "white",
                     }}
+                    onPress={callAddToCart}
                   >
                     +
                   </Text>

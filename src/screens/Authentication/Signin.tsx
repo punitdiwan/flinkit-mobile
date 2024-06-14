@@ -13,29 +13,29 @@ import {
   import { useNavigation } from "@react-navigation/native";
   import { FontAwesome } from '@expo/vector-icons';
   import { AntDesign } from '@expo/vector-icons';
-  import  AppLoading  from 'expo-app-loading';
+  // import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
   
   const Signin = () => {
     const navigation = useNavigation<any>();
-    const loadFonts = async () => {
-      await Font.loadAsync({
-          'Gilroy-Semibold': require('../../../assets/fonts/Gilroy-SemiBold.ttf'),
-        });
+    // const loadFonts = async () => {
+    //   await Font.loadAsync({
+    //       'Gilroy-Semibold': require('../../../assets/fonts/Gilroy-SemiBold.ttf'),
+    //     });
   
-    };
+    // };
     
     const [fontLoaded, setFontLoaded] = useState(false);
 
-    if (!fontLoaded) {
-        return (
-          <AppLoading
-            startAsync={loadFonts}
-            onFinish={() => setFontLoaded(true)}
-            onError={console.warn}
-          />
-        );
-      }
+    // if (!fontLoaded) {
+    //     return (
+    //       <AppLoading
+    //         startAsync={loadFonts}
+    //         onFinish={() => setFontLoaded(true)}
+    //         onError={console.warn}
+    //       />
+    //     );
+    //   }
 
     return (
       <View>

@@ -148,8 +148,11 @@ export const CategoryData = [
     price: 25,
   },
 ];
-const apikey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw";
+
+
+const apiKey=""
+ 
+
 
 type Values = {
   bg: string;
@@ -215,7 +218,7 @@ const Category = () => {
         "https://backend.delivery.maitretech.com/rest/v1/categories",
         {
           headers: {
-            Apikey: apikey,
+            Apikey: apiKey,
           },
         }
       );

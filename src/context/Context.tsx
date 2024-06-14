@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { addToCart, loadCartData } from "../screens/supabaseClient";
 
 interface MyContextData {
   getItemQuintity: (id: string) => number;
@@ -7,6 +8,9 @@ interface MyContextData {
   removeFromcart: (id: string) => void;
   total: (id: string) => void;
   cartItem: [];
+  addingItemInCart:(data:[]) => void;
+  refresh:Boolean;
+  changeRefreshState:() => void;
 }
 
 // Create the context with initial values
@@ -19,25 +23,32 @@ type CartItem = {
 
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItem, setCartItem] = useState<CartItem[]>([]);
+  const [refresh,setRefresh] = useState(false);
 
   function getItemQuintity(id: string) {
     return cartItem.find((item) => item.id === id)?.quantity || 0;
   }
 
   function increaseCardQuantity(id: string) {
-    setCartItem((currentItems) => {
-      if (currentItems.find((item) => item.id === id) == null) {
-        return [...currentItems, { id, quantity: 1 }];
-      } else {
-        return currentItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
+    // setCartItem((currentItems) => {
+    //   if (currentItems.find((item) => item.id === id) == null) {
+    //     return [...currentItems, { id, quantity: 1 }];
+    //   } else {
+    //     return currentItems.map((item) => {
+    //       if (item.id === id) {
+    //         return { ...item, quantity: item.quantity + 1 };
+    //       } else {
+    //         return item;
+    //       }
+    //     });
+    //   }
+    // });
+    
+    addToCart(id);
+    const response = loadCartData();
+    console.log(response);
+    
+    // setCartItem(response);
   }
 
   function decreaseCardQuantity(id: string) {
@@ -61,6 +72,18 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       return currItems.filter((item) => item.id !== id);
     });
   }
+
+  // Add to cart by harsh
+  function addingItemInCart(data){
+    setCartItem(data);
+  }
+
+  function changeRefreshState(){
+    setRefresh(!refresh)
+  }
+
+  // end
+
   return (
     <MyContext.Provider
       value={{
@@ -69,6 +92,9 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         increaseCardQuantity,
         decreaseCardQuantity,
         removeFromcart,
+        addingItemInCart,
+        refresh,
+        changeRefreshState
       }}
     >
       {children}

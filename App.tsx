@@ -26,6 +26,8 @@ import Cart from "./src/screens/Cart";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomNav from "./src/screens/BottomNav";
 import React, { version } from "react";
+import { Provider } from "react-redux";
+import appStore from "./redux/store/appStore";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -60,7 +62,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <MyProvider>
+    <Provider store={appStore}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -148,11 +150,11 @@ export default function App() {
             options={{ title: "ErrorCard" }}
             component={ErrorCard}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Checkout"
             options={{ title: "Checkout" }}
             component={Checkout}
-          />
+          /> */}
           <Stack.Screen
             name="Productdetail"
             options={{ title: "Productdetail" }}
@@ -165,7 +167,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </MyProvider>
+    </Provider>
   );
 }
 

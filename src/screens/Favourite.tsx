@@ -123,24 +123,45 @@
 //         </TouchableOpacity>
 //       </View>
 //     </View>
-//   );
+//   );import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     marginTop: 50,
-//     flex: 1,
-//     padding: 10,
-//     backgroundColor: "#fff",
-//   },
-//   title: {
-//     fontSize: 20,
-//     marginBottom: 2,
-//     textAlign: "center",
-//     fontFamily: "Gilroy-Bold",
-//   },
-//   listContainer: {
-//     flexGrow: 1,
+//     fontSize: 20,import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
+// };
+
+//     flexGrow: 1,import { createClient } from "@supabase/supabase-js";
+// const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+// const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
+// export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+
+// export const getuserbyphone = async (MobileNumber) => {
+//   const response = supabase.rpc("test_get_user_by_phone", {
+//     phone_number: MobileNumber,
+//   });
+//   return await response;
+// };
+
 //   },
 //   favouriteItem: {
 //     display: "flex",
@@ -209,7 +230,7 @@
 
 // export default Favourite;
 // -------------------------------------------------------------------------------------------------------------------
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -219,8 +240,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AppLoading from "expo-app-loading";
+// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, loadFavItem } from "./supabaseClient";
+import { addFavItem } from "../../redux/slices/favItemSlice";
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -233,16 +257,34 @@ const loadFonts = async () => {
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
+  const dispatch = useDispatch();
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setFontLoaded(true)}
-        onError={console.warn}
-      />
-    );
+  const favItemList = useSelector(store => store.fav.favItemList);
+  
+
+  const loadFav = async() => {
+      const response = await loadFavItem();
+      console.log("response",response);
+      
+      dispatch(addFavItem(response));
+      
   }
+
+  useEffect(() => {
+    loadFav();
+  },[])
+  
+  
+
+   // if (!fontLoaded) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadFonts}
+  //       onFinish={() => setFontLoaded(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
+  // }
   const favouriteItems = [
     {
       id: "1",
@@ -281,8 +323,32 @@ const Favourite = () => {
     },
   ];
 
-  const renderItem = ({ item }) => (
-    <View style={{ width: "100%" }}>
+  const addAllFavItemInCart = () => {
+      console.log("add all to cart",favItemList.length);
+      for(let i = 0 ; i < favItemList?.length ; i++){
+        // console.log("loop start");
+        
+        const {productid,name,price} = favItemList[i];
+        addToCart(productid,name,price);
+      }
+      console.log("loop end");
+      
+  }
+
+  const renderItem = ({ item }:any) => (
+    <View style={{ width: "100%"
+    // const supabase_Url = process.env.REACT_APP_SUPABASE_URL;
+    // const supabase_Anon_Key = process.env.REACT_APP_SUPABASE_ANON_KEY;
+    
+    // export const supabase = createClient(supabase_Url, supabase_Anon_Key);
+    
+    // export const getuserbyphone = async (MobileNumber) => {
+    //   const response = supabase.rpc("test_get_user_by_phone", {
+    //     phone_number: MobileNumber,
+    //   });
+    //   return await response;
+    // };
+     }}>
       <View>
         <View
           style={{
@@ -350,7 +416,7 @@ const Favourite = () => {
         }}
       ></Text>
       <FlatList
-        data={favouriteItems}
+        data={favItemList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
@@ -365,7 +431,7 @@ const Favourite = () => {
           }}
           onPress={() => navigation.replace("Onboarding")}
         >
-          <Text style={styles.addToCartButtonText}>Add all to cart</Text>
+          <Text style={styles.addToCartButtonText} onPress={() => addAllFavItemInCart()}>Add all to cart</Text>
         </TouchableOpacity>
       </View>
     </View>

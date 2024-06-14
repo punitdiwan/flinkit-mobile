@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { loadCartData, supabase } from "./supabaseClient";
 import { createClient } from "@supabase/supabase-js";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -29,12 +29,25 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const Home = ({ navigation, route }: HomeProps) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [cartData,setCartData] = useState([]);
+
+  // async function loadCart(){
+  //   console.log("call loaded data");
+    
+  //   const response = await loadCartData();
+  //   console.log("loadCart",response);
+    
+  // }
+  
+  // React.useEffect(() => {
+  //   loadCart();
+  // },[])
 
   return (
     <SafeAreaView>
       <ScrollView>
         <Header navigation={navigation} route={route} />
-        <HomePageCard name={"Exclusive Offer"} data={ProductData} />
+        <HomePageCard name={"Exclusive Offer"} data={ProductData} cartItem={cartData} />
         <HomePageCard name={"Best Selling"} data={ProductData} />
         <TouchableOpacity>
           {/* <Text style={{ fontSize: 40 }} onPress={fetchData}>Fetch Data</Text> */}

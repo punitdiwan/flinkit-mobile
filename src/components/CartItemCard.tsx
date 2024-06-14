@@ -1,29 +1,63 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import MinusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import PlusIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CategoryData } from "./Category";
 import { useMyContext } from "../context/Context";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { addToCart, decreaseItemQuantity, decreaseTheQuantity, deleteCartItem, deleteParticularItemInCart, loadCartData } from "../screens/supabaseClient";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
+import { addToCartFun } from "../../lib/cartFun";
 
 type cardItemsProps = {
   item: {
-    id: string;
-    quantity: number;
+    // id: string;
+    // quantity: number;
+    product_name:string,
+    product_price:number,
+    thumbnail:string,
+    qty:number
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
+  console.log("cart item in cart",item);
+
+  const {product_name,product_price,thumbnail,qty} = item;
+  console.log(product_name,product_price,thumbnail);
+  
+  
+const navigation = useNavigation();
+const dispatch = useDispatch();
+
   const items: any = CategoryData.find((i) => i.id === item.id);
-  const {
-    getItemQuintity,
-    increaseCardQuantity,
-    decreaseCardQuantity,
-    removeFromcart,
-  } = useMyContext();
-  if (item == null) {
-    return null;
+  
+  const removeFromcart = async (id:any) => {
+    // console.log("ready to delete",id)
+    await deleteCartItem(id);
+    await dispatch(clearCartList());
+    const response = await loadCartData();
+    await dispatch(addItemInCart(response))
   }
+
+  const increaseParticularCartItemQuantity = async (item:any) => {
+        // console.log("ready to increase quantity",item?.productid);
+        await addToCartFun(item);
+        await dispatch(clearCartList());
+        const response = await loadCartData();
+        await dispatch(addItemInCart(response));
+  }
+
+const decreaseParticularCartItemQuantity = async(item:any) => {
+  console.log("ready to increase quantity",item?.productid);
+  await decreaseItemQuantity(item?.productid);
+  await dispatch(clearCartList());
+  const response = await loadCartData();
+  await dispatch(addItemInCart(response));
+}
+
   return (
     <View
       style={{
@@ -57,7 +91,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
         }}
       >
         <Image
-          source={{ uri: items?.imgUrl }}
+          source={{ uri: thumbnail}}
           style={{
             width: "100%",
             height: "auto",
@@ -80,7 +114,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
           position: "relative",
         }}
       >
-        <Text style={{ fontSize: 20 }}>{items?.name}</Text>
+        <Text style={{ fontSize: 20 }}>{product_name}</Text>
         <Text
           style={{
             color: "green",
@@ -90,11 +124,11 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             bottom: 10,
           }}
         >
-          ₹{items?.price}
+          ₹{product_price}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
-          onPress={() => removeFromcart(item?.id)}
+          onPress={() => removeFromcart(item?.productid)}
         >
           <Entypo name="cross" size={20} color="#B3B3B3" />
         </TouchableOpacity>
@@ -122,7 +156,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             }}
           >
             <TouchableOpacity
-              onPress={() => decreaseCardQuantity(items?.id)}
+              onPress={() => decreaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,
@@ -137,10 +171,10 @@ const CartItemCard = ({ item }: cardItemsProps) => {
               <Feather name="minus" size={24} color="black" />
             </TouchableOpacity>
             <Text style={{ fontSize: 25, fontWeight: "500" }}>
-              {item.quantity}
+              {qty}
             </Text>
             <TouchableOpacity
-              onPress={() => increaseCardQuantity(items?.id)}
+              onPress={() => increaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,

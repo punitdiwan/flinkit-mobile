@@ -12,7 +12,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import AppLoading from "expo-app-loading";
+// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { channel } from "expo-updates";
 import {

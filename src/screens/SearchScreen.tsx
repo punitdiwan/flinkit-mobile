@@ -15,8 +15,44 @@ import { CategoryData } from "../components/Category";
 import SearchCard from "../components/SearchCard";
 import  Category  from "../components/Category";
 
+const dummySearchItem = [
+  {
+    name:"Mango"
+  },
+  {
+    name:"Apple"
+  },
+  {
+    name:"Detergent"
+  },
+  {
+    name:"Bread"
+  },
+  {
+    name:"chatni"
+  },
+  {
+    name:"Elichi"
+  },
+  {
+    name:"Elichi"
+  },
+  {
+    name:"Elichi"
+  },
+  {
+    name:"Elichi"
+  },
+  {
+    name:"Elichi"
+  }
+]
+
 const SearchScreen = ({navigation}) => {
   const [text, setText] = useState('');
+  const [mapData,setMapData] = useState([]);
+  console.log(mapData);
+  
 
   const handleInputChange = (inputText) => {
     setText(inputText);
@@ -71,11 +107,15 @@ const SearchScreen = ({navigation}) => {
             justifyContent: "center",
             flexWrap: "wrap",
             paddingTop: 10,
+            minHeight:650
           }}
         >
-          {CategoryData?.map((item) => (
+          {/* {CategoryData?.map((item) => (
             <SearchCard key={item.id} item={item} />
-          ))}
+          ))} */}
+          {dummySearchItem?.map((item) => item?.name?.toLowerCase()?.includes(text.toLowerCase()) && <View style={{width:100,height:100,backgroundColor:"red"}}>
+            <Text>{item?.name}</Text>
+          </View>)}
         </View>
         }
       </ScrollView>
