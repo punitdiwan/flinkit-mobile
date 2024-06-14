@@ -27,18 +27,19 @@ type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const Home = ({ navigation, route }: HomeProps) => {
+  const userLocation = route.params?.myLocation;
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [cartData,setCartData] = useState([]);
+  const [cartData, setCartData] = useState([]);
 
   // async function loadCart(){
   //   console.log("call loaded data");
-    
+
   //   const response = await loadCartData();
   //   console.log("loadCart",response);
-    
+
   // }
-  
+
   // React.useEffect(() => {
   //   loadCart();
   // },[])
@@ -46,8 +47,16 @@ const Home = ({ navigation, route }: HomeProps) => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <Header navigation={navigation} route={route} />
-        <HomePageCard name={"Exclusive Offer"} data={ProductData} cartItem={cartData} />
+        <Header
+          navigation={navigation}
+          // route={route}
+          route={userLocation}
+        />
+        <HomePageCard
+          name={"Exclusive Offer"}
+          data={ProductData}
+          cartItem={cartData}
+        />
         <HomePageCard name={"Best Selling"} data={ProductData} />
         <TouchableOpacity>
           {/* <Text style={{ fontSize: 40 }} onPress={fetchData}>Fetch Data</Text> */}

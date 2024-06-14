@@ -11,15 +11,18 @@ import React from "react";
 import Modal from "react-native-modal";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Icon2 from "react-native-vector-icons/AntDesign";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Constants from "expo-constants";
 const Search = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  const GOOGLE_PLACES_API_KEY = "AIzaSyD7ewqZWwuXaGnh7eSQzebePd5uEmlCwKg";
   return (
     <View>
-      <TouchableOpacity style={styles.addNewAddressMain}>
+      {/* <TouchableOpacity style={styles.addNewAddressMain}>
         <View style={styles.addNewAddress}>
           <TextInput
             onPressIn={toggleModal}
@@ -61,7 +64,21 @@ const Search = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-      </View>
+      </View> */}
+      <GooglePlacesAutocomplete
+        placeholder="Search"
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+        }}
+        query={{
+          key: GOOGLE_PLACES_API_KEY,
+          language: "en",
+          components: "country:india",
+        }}
+        currentLocation={true}
+        currentLocationLabel="Current location"
+      />
     </View>
   );
 };
@@ -71,7 +88,6 @@ const styles = StyleSheet.create({
   addNewAddressMain: {
     width: "100%",
   },
-
   addNewAddress: {
     width: "96%",
     height: 70,
@@ -119,5 +135,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 50,
     marginTop: 0,
+  },
+  container: {
+    flex: 1,
+    padding: 10,
+    paddingTop: Constants.statusBarHeight + 10,
+    backgroundColor: "#ecf0f1",
   },
 });

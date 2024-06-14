@@ -49,12 +49,13 @@ const Otp = (MobileNumber: any) => {
       token: token,
       type: "sms",
     });
-    console.log("Otp.tsx, response:", response);
+    // console.log("Otp.tsx, response:", response);
 
-    navigation.navigate("BottomNav");
+    // navigation.navigate("BottomNav");
+    navigation.navigate("Location");
   };
 
-   // if (!fontLoaded) {
+  // if (!fontLoaded) {
   //   return (
   //     <AppLoading
   //       startAsync={loadFonts}
@@ -169,9 +170,7 @@ const Otp = (MobileNumber: any) => {
           {/* <TextInput onChangeText={(e) => setpassword(e.target.value)} /> */}
         </View>
         <View style={{ width: "100%", marginTop: 30, marginLeft: 33 }}>
-          <Text style={{ color: "#69AF5D",  }}>
-            Resend code
-          </Text>
+          <Text style={{ color: "#69AF5D" }}>Resend code</Text>
         </View>
         <View
           style={{

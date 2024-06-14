@@ -20,7 +20,7 @@ import * as Font from "expo-font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { LinearGradient } from "expo-linear-gradient";
-import Carousel2 from "./Carousel2";
+
 // import { Font } from 'expo'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
@@ -31,6 +31,8 @@ const loadFonts = async () => {
   });
 };
 const Header = ({ navigation, route }: HomeProps) => {
+  // const currentLocation = route.params?.currentLocation;
+
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   // const img = {
@@ -52,103 +54,127 @@ const Header = ({ navigation, route }: HomeProps) => {
       <View style={styles.header}>
         <LinearGradient
           colors={["#69AF5D", "#4B933F"]}
-          style={{ borderBottomRightRadius: 15, borderBottomLeftRadius: 15 }}
+          style={{
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+            minHeight: "48%",
+            borderWidth: 1,
+          }}
         >
           <ScrollView>
             <View style={styles.main}>
-              <View>
-                <Text
-                  style={[
-                    styles.headerText,
-                    { fontSize: 14, fontFamily: "Gilroy-Bold" },
-                  ]}
+              <View
+                style={{
+                  borderWidth: 1,
+                  width: "100%",
+                  minHeight: "100%",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  borderColor: "red",
+                }}
+              >
+                <View
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  Delivery in
-                </Text>
-                <Text
-                  style={[
-                    styles.headerText,
-                    { fontSize: 26, fontFamily: "Gilroy-Bold" },
-                  ]}
-                >
-                  10 minutes
-                </Text>
-                <TouchableOpacity>
                   <Text
                     style={[
                       styles.headerText,
-                      {
-                        fontSize: 14,
-                        marginTop: 10,
-                        fontFamily: "Gilroy",
-                        color: "white",
-                      },
+                      { fontSize: 14, fontFamily: "Gilroy-Bold" },
                     ]}
-                    onPress={() => setModalVisible(true)}
                   >
-                    Home - Vijay Nagar, Lalghati, Bhopal-462030{" "}
-                    <Icon
-                      name="chevron-down"
-                      size={15}
-                      color="#ffffff"
-                      onPress={() => setModalVisible(true)}
-                    />
+                    Delivery in
                   </Text>
+                  <Text
+                    style={[
+                      styles.headerText,
+                      { fontSize: 26, fontFamily: "Gilroy-Bold" },
+                    ]}
+                  >
+                    10 minutes
+                  </Text>
+                </View>
+                <TouchableOpacity>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      borderWidth: 1,
+                      width: "100%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        borderWidth: 1,
+                        width: "auto",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.headerText,
+                          {
+                            fontSize: 14,
+
+                            fontFamily: "Gilroy",
+                            color: "white",
+                          },
+                        ]}
+                        onPress={() => setModalVisible(true)}
+                      >
+                        {route}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text>
+                        <Icon
+                          name="chevron-down"
+                          size={15}
+                          color="#ffffff"
+                          onPress={() => setModalVisible(true)}
+                        />
+                      </Text>
+                    </View>
+                  </View>
                 </TouchableOpacity>
-              </View>
-              {/* <View>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Profile", { userId: "123" })
-                  }
+                  onPress={() => navigation.navigate("SearchScreen")}
                   style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: "#ffff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 100,
-                    borderWidth: 3,
-                    borderColor: "#000000",
-                    padding: 10,
+                    backgroundColor: "white",
+                    borderRadius: 15,
                   }}
                 >
-                  <Text>
-                    <Icon name="user" size={30} color="#000000" />
-                  </Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      gap: 20,
+                      padding: 12,
+                    }}
+                  >
+                    <View>
+                      <Icon name="search" size={20} color="gray" />
+                    </View>
+                    <View>
+                      <Text style={{ color: "#0000004d", fontSize: 17 }}>
+                        Search store
+                      </Text>
+                    </View>
+                  </View>
                 </TouchableOpacity>
-              </View> */}
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SearchScreen")}
-              style={{
-                backgroundColor: "white",
-                margin: 20,
-                borderRadius: 15,
-                marginTop: 30,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  padding: 12,
-                }}
-              >
-                <View>
-                  <Icon name="search" size={20} color="gray" />
-                </View>
-                <View>
-                  <Text style={{ color: "#0000004d", fontSize: 17 }}>
-                    Search store
-                  </Text>
-                </View>
               </View>
-            </TouchableOpacity>
+            </View>
           </ScrollView>
         </LinearGradient>
         <Carousel />
@@ -199,6 +225,7 @@ const styles = StyleSheet.create({
   },
   main: {
     marginTop: 50,
+
     display: "flex",
     alignItems: "center",
     flexDirection: "row",

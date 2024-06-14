@@ -59,8 +59,6 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   // );
   // const quantity = getItemQuintity("0");
 
-
-
   const fetchData = async () => {
     console.log("working");
     console.log("category_id:", category_id.route.params.category_id);
@@ -74,11 +72,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   };
   const newId = category_id.route.params.category_id;
 
-
   useEffect(() => {
     fetchData();
   }, [category_id]);
-
 
   const navigation = useNavigation<any>();
   return (
@@ -225,9 +221,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                   fontWeight: "bold",
                                   color: "white",
                                 }}
-
                                 onPress={() => addToCartFun(item)}
-
                               >
                                 +
                               </Text>

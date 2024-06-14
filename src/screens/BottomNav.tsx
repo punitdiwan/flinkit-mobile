@@ -16,9 +16,11 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
 import Filter from "./Filter";
+import { current } from "@reduxjs/toolkit";
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
-const BottomNav = () => {
+const BottomNav = (currentLocation: any) => {
+  const getCurrentLocation = currentLocation.route.params.location;
   const { cartItem } = useMyContext();
   return (
     <>
@@ -68,6 +70,7 @@ const BottomNav = () => {
         <Tab.Screen
           name="Home"
           component={Home}
+          initialParams={{ myLocation: getCurrentLocation }}
           options={{
             headerShown: false,
 

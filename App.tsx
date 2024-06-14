@@ -20,7 +20,7 @@ import CategoryScreen from "./src/screens/CategoryScreen";
 import Product_Details from "./src/screens/Product_Details";
 import Productdetail from "./src/screens/Productdetail";
 import Favourite from "./src/screens/Favourite";
-
+import Location from "./src/screens/Location";
 import Cart from "./src/screens/Cart";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -55,9 +55,10 @@ export type RootStackParamList = {
   Checkout: undefined;
   Productdetail: undefined;
   Favourite: undefined;
+  Location: undefined;
   // Feed: { sort: 'latest' | 'top' } | undefined;
 };
-const Tab = createBottomTabNavigator<RootStackParamList>();
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
@@ -83,6 +84,11 @@ export default function App() {
           <Stack.Screen
             name="Otp"
             component={Otp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Location"
+            component={Location}
             options={{ headerShown: false }}
           />
           <Stack.Screen
