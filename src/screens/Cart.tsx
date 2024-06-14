@@ -24,14 +24,16 @@ const Cart = () => {
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
   const [cartItem,setCartItem] = useState([]);
+ 
+  
   
   const dispatch = useDispatch();
   const cartItemList = useSelector((store) => store?.cart?.cartItemList);
-  console.log("cartItemList",cartItemList);
+  console.log(cartItemList);
   
 
   async function loadedCart(){
-    console.log("running");
+    // console.log("running");
     const response = await loadCartData();
     await dispatch(clearCartList());
     await dispatch(addItemInCart(response))
@@ -40,6 +42,7 @@ const Cart = () => {
 useEffect(() => {
   loadedCart();
 },[])
+
 
 
   return (
@@ -62,7 +65,7 @@ useEffect(() => {
             keyExtractor={(item) => item.id}
           /> */}
           <ScrollView>
-          {cartItemList && cartItemList.map(item => <CartItemCard item={item}/>)}
+          {cartItemList?.length > 0 ? cartItemList?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:500}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
           </ScrollView>
         </View>
       </View>
@@ -144,7 +147,7 @@ useEffect(() => {
                 bottom:0
               }}
             >
-              <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart,Go to Category</Text>
+              <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Go to Category</Text>
               {/* <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart</Text> */}
             </TouchableOpacity>
           )}

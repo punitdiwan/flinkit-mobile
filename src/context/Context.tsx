@@ -74,8 +74,9 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   // Add to cart by harsh
-  function addingItemInCart(data){
-    setCartItem(data);
+  function addingItemInCart(data:any){
+    setCartItem([cartItem,...data])
+    // setCartItem((currItems) => [...currItems, data]);
   }
 
   function changeRefreshState(){
@@ -93,7 +94,6 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         decreaseCardQuantity,
         removeFromcart,
         addingItemInCart,
-        refresh,
         changeRefreshState
       }}
     >

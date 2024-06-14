@@ -7,6 +7,7 @@ const cartSlice = createSlice({
     },
     reducers:{
         addItemInCart:(state,action) => {
+            // console.log("cartSLice",action.payload?.product_name);
             if(state.cartItemList.length == 0){
                 state.cartItemList = action.payload;
             }else{

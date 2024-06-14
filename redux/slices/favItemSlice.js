@@ -8,9 +8,12 @@ const favItemSlice = createSlice({
     reducers:{
         addFavItem : (state,action) => {
             state.favItemList = action.payload;
+        },
+        clearFavItemList:(state) => {
+            state.favItemList.length = 0;
         }
     }
 })
 
-export const {addFavItem} = favItemSlice.actions;
+export const {addFavItem,clearFavItemList} = favItemSlice.actions;
 export default favItemSlice.reducer;

@@ -18,13 +18,16 @@ import { useMyContext } from "../context/Context";
 import { RootStackParamList } from "../../App";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
-import { supabase } from "./supabaseClient";
+import { loadCartData, supabase } from "./supabaseClient";
 import { addToCartFun } from "../../lib/cartFun";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const apikey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
 const CategoryScreen = (category_id: any, { navigate }: any) => {
+  const dispatch = useDispatch();
   interface Products {
     product: {
       product_id: string;
@@ -45,6 +48,11 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const [increaseCardQuantity, setincreaseCardQuantity] = useState<string[]>(
     []
   );
+
+  const cartItemList = useSelector(store => store?.cart?.cartItemList);
+  console.log("screen",cartItemList);
+  
+
   // console.log("category_id:", category_id.route.params.category_id);
   // const id = category_id.route.params.category_id;
   // console.log("newId", newId);
@@ -58,6 +66,17 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   //   }
   // );
   // const quantity = getItemQuintity("0");
+
+  // old addTOCart
+  const addToCart = async (item:any) => {
+      await addToCartFun(item);
+      await dispatch(clearCartList());
+      const response = await loadCartData();
+      await dispatch(addItemInCart(response));
+  }
+
+
+
 
 
 
@@ -226,8 +245,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                   color: "white",
                                 }}
 
-                                onPress={() => addToCartFun(item)}
-
+                                onPress={() => addToCart(item)}
                               >
                                 +
                               </Text>

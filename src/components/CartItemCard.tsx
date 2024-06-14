@@ -6,57 +6,52 @@ import { CategoryData } from "./Category";
 import { useMyContext } from "../context/Context";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { addToCart, decreaseItemQuantity, decreaseTheQuantity, deleteCartItem, deleteParticularItemInCart, loadCartData } from "../screens/supabaseClient";
+import { addToCart, decreaseItemQuantity, deleteCartItem,loadCartData } from "../screens/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
-import { addToCartFun } from "../../lib/cartFun";
+import { addToCartFun, decreaseItemQuantityFun, removeFromcartFun} from "../../lib/cartFun";
 
 type cardItemsProps = {
   item: {
-    // id: string;
-    // quantity: number;
-    product_name:string,
-    product_price:number,
-    thumbnail:string,
-    qty:number
+    product_id: number,
+    product_name: string,
+    product_price: number,
+    thumbnail: string,
+    qty: number
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
-  console.log("cart item in cart",item);
+  const { product_name, product_price, thumbnail, qty, product_id } = item;
 
-  const {product_name,product_price,thumbnail,qty} = item;
-  console.log(product_name,product_price,thumbnail);
-  
-  
-const navigation = useNavigation();
-const dispatch = useDispatch();
 
-  const items: any = CategoryData.find((i) => i.id === item.id);
-  
-  const removeFromcart = async (id:any) => {
-    // console.log("ready to delete",id)
-    await deleteCartItem(id);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+
+  // const items: any = CategoryData.find((i) => i.id === item.id);
+
+
+  const increaseParticularCartItemQuantity = async (item: any) => {
+    await addToCartFun(item);
+    await dispatch(clearCartList());
+    const response = await loadCartData();
+    await dispatch(addItemInCart(response));
+  }
+
+  const decreaseParticularCartItemQuantity = async (item: any) => {
+    await decreaseItemQuantityFun(item?.product_id);
+    await dispatch(clearCartList());
+    const response = await loadCartData();
+    await dispatch(addItemInCart(response));
+  }
+
+  const removeFromcart = async (product_id:any) => {
+    await removeFromcartFun(product_id)
     await dispatch(clearCartList());
     const response = await loadCartData();
     await dispatch(addItemInCart(response))
   }
-
-  const increaseParticularCartItemQuantity = async (item:any) => {
-        // console.log("ready to increase quantity",item?.productid);
-        await addToCartFun(item);
-        await dispatch(clearCartList());
-        const response = await loadCartData();
-        await dispatch(addItemInCart(response));
-  }
-
-const decreaseParticularCartItemQuantity = async(item:any) => {
-  console.log("ready to increase quantity",item?.productid);
-  await decreaseItemQuantity(item?.productid);
-  await dispatch(clearCartList());
-  const response = await loadCartData();
-  await dispatch(addItemInCart(response));
-}
 
   return (
     <View
@@ -91,7 +86,7 @@ const decreaseParticularCartItemQuantity = async(item:any) => {
         }}
       >
         <Image
-          source={{ uri: thumbnail}}
+          source={{ uri: thumbnail }}
           style={{
             width: "100%",
             height: "auto",
@@ -128,7 +123,7 @@ const decreaseParticularCartItemQuantity = async(item:any) => {
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
-          onPress={() => removeFromcart(item?.productid)}
+          onPress={() => removeFromcart(product_id)}
         >
           <Entypo name="cross" size={20} color="#B3B3B3" />
         </TouchableOpacity>

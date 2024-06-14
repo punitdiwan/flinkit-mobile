@@ -1,11 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 // import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
-const Category=["Eggs","Noodles & Pasta","Chips & Crisps","Fast Food"]
+// const Category=["Eggs","Noodles & Pasta","Chips & Crisps","Fast Food"]
 const Brand =["Individidual callection","Cocola","Ifad","Kazi Farmas"]
 
 const loadFonts = async () => {
@@ -21,9 +21,11 @@ const Filter = ({navigation}) => {
   const [isChecked, setChecked] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [categoryName,setCategoryName] = useState("");
+  const [category,setCategory] = useState([]);
   const [brandName,setBrandName] = useState("");
-  // console.log(categoryName);
   // console.log(brandName);
+  console.log("catt",categoryName);
+  
   
   
 
@@ -36,6 +38,29 @@ const Filter = ({navigation}) => {
   //       />
   //     );
   //   }
+
+  const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
+
+  const loadCategory = async () => {
+      const response = await fetch(
+        "https://backend.delivery.maitretech.com/rest/v1/categories",
+        {
+          headers: {
+            Apikey: apiKey,
+          },
+        }
+      );
+      const jsonData = await response.json();
+      console.log("json",jsonData);
+      
+      const arr = jsonData.map(item => item?.category_name)
+      console.log(arr);
+      setCategory(arr);
+  }
+
+  useEffect(() => {
+    loadCategory();
+  },[])
 
   return (
     <SafeAreaView style={{backgroundColor:'white'}}>
@@ -79,13 +104,9 @@ const Filter = ({navigation}) => {
       <View>
         <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15}}>Category</Text>
         {
-          Category?.map((item,index)=>(
+          category?.map((item:any,index:number)=>(
             <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
-              // style={styles.checkbox}
-              // value={isChecked}
-              // onValueChange={setChecked}
-              // color={isChecked ? "#69AF5D" : undefined}
               value={item}
               onValueChange={() => setCategoryName(item)}
               color={categoryName == item ? "#69AF5D":"white"}

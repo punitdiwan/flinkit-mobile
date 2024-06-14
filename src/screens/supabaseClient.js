@@ -53,23 +53,19 @@ export const verifyOtp = async (phone, token) => {
 
 export const addToCart = async (price,product_id,product_imagename,product_name) => {
   try {
-    const user_id = 1;
+    const user_id = 3;
 
     const existingUser = await supabase.from("cart_item").select("*").eq("user_id",user_id);
 
     if(existingUser?.data?.length > 0){
         const existUserProductId = await supabase.from("cart_item").select("*").eq("user_id",user_id).eq("product_id",product_id);
         if(existUserProductId?.data?.length == 0){
-          // console.log("runn1");
           const response = await supabase.from("cart_item").insert({user_id,product_id,product_name,thumbnail:product_imagename,product_price:price,qty:1});
         }else{
-          // console.log("runn2");
           const newData = existUserProductId?.data[0].qty + 1;
-          console.log("new qua",newData);
-          const res = await supabase.from("cart_item").update({qty:newData}).eq("product_id",product_id,"user_id",user_id);
+          const res = await supabase.from("cart_item").update({qty:newData}).eq("product_id",product_id).eq("user_id",user_id);
         }
     }else{
-      // console.log("creating user and add to cart");
       const createUserAndAddProduct = await supabase.from("cart_item").insert({user_id,product_id,product_name,thumbnail:product_imagename,product_price:price,qty:1});
     }
 
@@ -80,33 +76,44 @@ export const addToCart = async (price,product_id,product_imagename,product_name)
 }
 
 
-export const decreaseItemQuantity = async (productid) => {
+export const decreaseItemQuantity = async (product_id) => {
     try {
-      console.log(productid);
-      const response = await supabase.from("cart3").select("*");
-      console.log("res",response);
-      const existingProduct = await supabase.from("cart3").select("*").eq("productid",productid);
-      if(existingProduct?.data?.length == 0){
+      const user_id=3;
+      const response = await supabase.from("cart_item").select("*").eq("user_id",user_id);
+      if(response?.data?.length == 0){
         return;
-      }else if(existingProduct?.data[0].quantity == 1){
-          const response = await supabase.from("cart3").delete().eq("productid",productid);
       }else{
-        const newQuantity = existingProduct?.data[0].quantity-1;
-        const response = await supabase.from("cart3").update({quantity:newQuantity}).eq("productid",productid);
+        const productIsExist = await supabase.from("cart_item").select("*").eq("user_id",user_id).eq("product_id",product_id);
+        if(productIsExist?.data?.length == 0){
+          return ;
+        }else if(productIsExist?.data[0].qty == 1){
+          const response = await supabase.from("cart_item").delete().eq("product_id",product_id).eq("user_id",user_id);
+      }else{
+        const newQuantity = productIsExist?.data[0].qty-1;
+        const response = await supabase.from("cart_item").update({qty:newQuantity}).eq("product_id",product_id).eq("user_id",user_id);
+      }
       }
     } catch (error) {
       console.log(error.message);
     }
 }
 
-export const deleteCartItem = async (productid) => {
+export const deleteCartItem = async (product_id) => {
   try {
-    const response = await supabase.from("cart3").select("*");
-    const existingProductOrNot = await supabase.from("cart3").select("*").eq("productid",productid);
-    if(existingProductOrNot?.data?.length == 0){
+    const user_id = 3;
+    const userExistsOrNot = await supabase.from("cart_item").select("*").eq("user_id",user_id);
+    if(userExistsOrNot?.data?.length == 0){
+      console.log("return user");
       return;
     }else{
-      const response = await supabase.from("cart3").delete().eq("productid",productid);
+      const isProductExistsOrNot = await supabase.from("cart_item").select("*").eq("user_id",user_id).eq("product_id",product_id);
+      if(isProductExistsOrNot?.data?.length == 0){
+        console.log("return product");
+        return;
+      }else{
+        console.log("runn");
+        const response = await supabase.from("cart_item").delete().eq("user_id",user_id).eq("product_id",product_id);
+      }
     }
   } catch (error) {
     console.log(error.message);
@@ -115,8 +122,7 @@ export const deleteCartItem = async (productid) => {
 
 export const loadCartData = async () => {
       try {
-        console.log("calling supase fro cart");
-        const response = await supabase.from("cart_item").select("*").eq("user_id",1);
+        const response = await supabase.from("cart_item").select("*").eq("user_id",3).order("product_id");
         return response?.data;
       } catch (error) {
         console.log(error.message)
@@ -126,24 +132,24 @@ export const loadCartData = async () => {
 // ------------------------------------------------------------------
 
 // Favourite Item
-export const addFavouriteItem = async (id,name,price) => {
+export const addFavouriteItem = async (price,product_id,product_imagename,product_name) => {
   try {
-    console.log(id);
-    const response1 = await supabase.from("fav").select("*");
-    console.log(response1);
-    // console.log("allFavData",response1);
-    // const existingProduct = await supabase.from("fav").select("*").eq("productid",id);
-    // console.log("fav",existingProduct.data);
-    // if(existingProduct?.data?.length == 0){
-    //   console.log("run1");
-    //   const response = await supabase.from("fav").insert({"productid":id,name,image:"https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600",price})
-    //   console.log(response);
-    // }else{
-    //   console.log("run2");
-    //   return ;
-    // }
-    // const response2 = await supabase.from("fav").select("*");
-    // return response2.data;
+    const user_id=3;
+    const userExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
+    if(userExistsOrNot?.data?.length == 0){
+      const response = await supabase.from("favourite_products").insert({user_id,product_id,product_image:product_imagename,product_name,product_price:price});
+      const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
+      return
+    }else {
+      const isProductExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id).eq("product_id",product_id);
+      if(isProductExistsOrNot?.data?.length == 0){
+        const response = await supabase.from("favourite_products").insert({user_id,product_id,product_image:product_imagename,product_name,product_price:price});
+        const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
+        return
+      }else{
+        return;
+      }
+    }
   } catch (error) {
     console.log(error.message)
   }
@@ -151,8 +157,8 @@ export const addFavouriteItem = async (id,name,price) => {
 
 export const loadFavItem = async () => {
   try {
-    const favItemList = await supabase.from("fav").select("*");
-    console.log("fav",favItemList);
+    const user_id=3;
+    const favItemList = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
     return favItemList?.data;
   } catch (error) {
     console.log(error.message);
