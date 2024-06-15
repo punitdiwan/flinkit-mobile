@@ -16,11 +16,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { addFavouriteItem, addToCart, loadCartData } from "../screens/supabaseClient";
-import { useDispatch } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
+import { useMyContext } from "../context/Context";
+// import { useDispatch } from "react-redux";
+// import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 
-const HomePageCard = ({ name, data,cartItem }: any) => {
-  const dispatch = useDispatch();
+const HomePageCard = ({ name, data }: any) => {
+  // const dispatch = useDispatch();
   const imgUrl =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
 
@@ -30,9 +31,6 @@ const HomePageCard = ({ name, data,cartItem }: any) => {
       //  const response = await loadCartData();
       //  await dispatch(addItemInCart(response))
     }
-
-   
-    
 
   const navigation = useNavigation();
   return (

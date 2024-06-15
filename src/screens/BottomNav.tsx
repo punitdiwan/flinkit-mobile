@@ -16,13 +16,15 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
 import Filter from "./Filter";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const BottomNav = () => {
   const { cartItem } = useMyContext();
-  const cartItemList = useSelector(store => store?.cart?.cartItemList);
-  console.log("Nav",cartItemList);
+  console.log(cartItem);
+  
+  // const cartItemList = useSelector(store => store?.cart?.cartItemList);
+  // console.log("Nav",cartItemList);
   
   return (
     <>
@@ -94,7 +96,6 @@ const BottomNav = () => {
             header: () => <YourCustomHeaderComponent name={"Find Products"} />,
           }}
         />
-        {cartItemList?.length === 0 ? (
           <Tab.Screen
             name="Cart"
             component={Cart}
@@ -107,20 +108,20 @@ const BottomNav = () => {
               header: () => <YourCustomHeaderComponent name={"My Cart"} />,
             }}
           />
-        ) : (
+        {/* ) : (
           <Tab.Screen
             name="Cart"
             component={Cart}
             options={{
               headerShown: true,
-              tabBarBadge: cartItemList.length,
+              // tabBarBadge: cartItemList.length,
 
               tabBarIcon: ({ color, size }) => {
                 return <Ionicons4 name="cart-plus" color={color} size={30} />;
               },
             }}
           />
-        )}
+        )} */}
         <Tab.Screen
           name="Favourite"
           component={Favourite}

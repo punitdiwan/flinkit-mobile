@@ -20,14 +20,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { loadCartData, supabase } from "./supabaseClient";
 import { addToCartFun } from "../../lib/cartFun";
-import { useDispatch, useSelector } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
+import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const apikey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
+
 const CategoryScreen = (category_id: any, { navigate }: any) => {
-  const dispatch = useDispatch();
+
   interface Products {
     product: {
       product_id: string;
@@ -37,20 +38,20 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     };
   }
   const ref = useRef<{ product_id: string }>(null);
-  const {
-    getItemQuintity,
-    // increaseCardQuantity,
-    decreaseCardQuantity,
-    removeFromcart,
-  } = useMyContext();
-  const { cartItem } = useMyContext();
+
+  const { cartItem,addingItemInCart,increaseCartQuantity,decreaseCartQuantity } = useMyContext();
   const [products, setProducts] = useState<any>([]);
   const [increaseCardQuantity, setincreaseCardQuantity] = useState<string[]>(
     []
   );
 
-  const cartItemList = useSelector(store => store?.cart?.cartItemList);
-  console.log("screen",cartItemList);
+  console.log("cartItem",cartItem);
+  let itemPresent = ""
+  
+  
+
+  // const cartItemList = useSelector(store => store?.cart?.cartItemList);
+  // console.log("screen",cartItemList);
   
 
   // console.log("category_id:", category_id.route.params.category_id);
@@ -68,12 +69,6 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   // const quantity = getItemQuintity("0");
 
   // old addTOCart
-  const addToCart = async (item:any) => {
-      await addToCartFun(item);
-      await dispatch(clearCartList());
-      const response = await loadCartData();
-      await dispatch(addItemInCart(response));
-  }
 
 
 
@@ -214,7 +209,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "space-around",
+                              justifyContent: "space-between",
                               flexDirection: "row",
                             }}
                           >
@@ -227,7 +222,60 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                             >
                               ₹ {item.price}
                             </Text>
-                            <TouchableOpacity
+
+                            {/* {console.log("yes",(cartItem.filter(itemm => itemm.product_id == item.product_id))[0]?.qty)} */}
+
+                            {cartItem.filter(itemm => itemm.product_id == item.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
+                                <TouchableOpacity style={{
+                                  // backgroundColor:"red",
+                                  width:40,
+                                  height:40,
+                                  display:"flex",
+                                  alignItems:"center",
+                                  justifyContent:"center",
+                                  // borderWidth:1,
+                                  borderColor:"#bab7b6",
+                                  borderRadius:5
+                                }}
+                                onPress={() => decreaseCartQuantity(item?.product_id)}
+                                >
+                                  <Text style={{color:"#bab7b6"}}>
+                                  <Entypo name="minus" size={20}/>
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                  // backgroundColor:"red",
+                                  width:40,
+                                  height:40,
+                                  display:"flex",
+                                  alignItems:"center",
+                                  justifyContent:"center",
+                                  // borderWidth:1,
+                                  borderColor:"#bab7b6",
+                                  borderRadius:5
+                                }}>
+                                  <Text style={{fontSize:20}}>
+                                  {cartItem.filter(itemm => itemm.product_id == item.product_id)?.[0]?.qty}
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                  // backgroundColor:"red",
+                                  width:40,
+                                  height:40,
+                                  display:"flex",
+                                  alignItems:"center",
+                                  justifyContent:"center",
+                                  // borderWidth:1,
+                                  borderColor:"#bab7b6",
+                                  borderRadius:5
+                                }}
+                                onPress={() => increaseCartQuantity(item?.product_id)}
+                                >
+                                  <Text style={{fontSize:20,color:"#69AF5D"}}>
+                                  <Entypo name="plus" size={20}/>
+                                  </Text>
+                                </TouchableOpacity>
+                            </View> :   <TouchableOpacity
                               style={{
                                 width: 40,
                                 height: 40,
@@ -240,16 +288,23 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                             >
                               <Text
                                 style={{
-                                  fontSize: 30,
+                                  fontSize: 25,
                                   fontWeight: "bold",
                                   color: "white",
+                                  // backgroundColor:"red",
+                                  
                                 }}
-
-                                onPress={() => addToCart(item)}
+                                onPress={() => addingItemInCart(item)}
                               >
                                 +
                               </Text>
                             </TouchableOpacity>
+                            
+                            }
+                              
+                          
+
+                          
                           </View>
                           {increaseCardQuantity.length === 0 ? (
                             <></>
@@ -280,9 +335,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                   }}
                                 >
                                   <Text
-                                    onPress={() =>
-                                      decreaseCardQuantity(item.id)
-                                    }
+                                    // onPress={() =>
+                                    //   decreaseCardQuantity(item.id)
+                                    // }
                                     style={{
                                       fontSize: 30,
                                       fontWeight: "500",

@@ -22,36 +22,38 @@ type cardItemsProps = {
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
-  const { product_name, product_price, thumbnail, qty, product_id } = item;
+  const {deleteParticularItemInCart,decreaseCartQuantity,increaseCartQuantity} = useMyContext();
+  
+  const { product_name,price,product_imagename, qty, product_id } = item;
 
 
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
 
   // const items: any = CategoryData.find((i) => i.id === item.id);
 
 
-  const increaseParticularCartItemQuantity = async (item: any) => {
-    await addToCartFun(item);
-    await dispatch(clearCartList());
-    const response = await loadCartData();
-    await dispatch(addItemInCart(response));
-  }
+  // const increaseParticularCartItemQuantity = async (item: any) => {
+  //   await addToCartFun(item);
+  //   await dispatch(clearCartList());
+  //   const response = await loadCartData();
+  //   await dispatch(addItemInCart(response));
+  // }
 
-  const decreaseParticularCartItemQuantity = async (item: any) => {
-    await decreaseItemQuantityFun(item?.product_id);
-    await dispatch(clearCartList());
-    const response = await loadCartData();
-    await dispatch(addItemInCart(response));
-  }
+  // const decreaseParticularCartItemQuantity = async (item: any) => {
+  //   await decreaseItemQuantityFun(item?.product_id);
+  //   await dispatch(clearCartList());
+  //   const response = await loadCartData();
+  //   await dispatch(addItemInCart(response));
+  // }
 
-  const removeFromcart = async (product_id:any) => {
-    await removeFromcartFun(product_id)
-    await dispatch(clearCartList());
-    const response = await loadCartData();
-    await dispatch(addItemInCart(response))
-  }
+  // const removeFromcart = async (product_id:any) => {
+  //   await removeFromcartFun(product_id)
+  //   await dispatch(clearCartList());
+  //   const response = await loadCartData();
+  //   await dispatch(addItemInCart(response))
+  // }
 
   return (
     <View
@@ -86,7 +88,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
         }}
       >
         <Image
-          source={{ uri: thumbnail }}
+          source={{ uri: product_imagename }}
           style={{
             width: "100%",
             height: "auto",
@@ -119,11 +121,11 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             bottom: 10,
           }}
         >
-          ₹{product_price}
+          ₹{price}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
-          onPress={() => removeFromcart(product_id)}
+          onPress={() => deleteParticularItemInCart(item?.product_id)}
         >
           <Entypo name="cross" size={20} color="#B3B3B3" />
         </TouchableOpacity>
@@ -151,7 +153,6 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             }}
           >
             <TouchableOpacity
-              onPress={() => decreaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,
@@ -162,6 +163,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              onPress={() => decreaseCartQuantity(item?.product_id)}
             >
               <Feather name="minus" size={24} color="black" />
             </TouchableOpacity>
@@ -169,7 +171,6 @@ const CartItemCard = ({ item }: cardItemsProps) => {
               {qty}
             </Text>
             <TouchableOpacity
-              onPress={() => increaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,
@@ -180,6 +181,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              onPress={() => increaseCartQuantity(item?.product_id)}
             >
               <Feather name="plus" size={24} color="#69AF5D" />
             </TouchableOpacity>

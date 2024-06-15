@@ -8,9 +8,9 @@ import { RootStackParamList } from "../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { loadCartData } from "./supabaseClient";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
-import { current } from "@reduxjs/toolkit";
+// import { current } from "@reduxjs/toolkit";
 import Checkout from "./Checkout";
 import { Entypo } from '@expo/vector-icons';
 // import { Image } from "react-native-reanimated/lib/typescript/Animated";
@@ -23,25 +23,10 @@ const Cart = () => {
   const navigation = useNavigation<any>();
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
-  const [cartItem,setCartItem] = useState([]);
- 
-  
-  
-  const dispatch = useDispatch();
-  const cartItemList = useSelector((store) => store?.cart?.cartItemList);
-  console.log(cartItemList);
-  
 
-  async function loadedCart(){
-    // console.log("running");
-    const response = await loadCartData();
-    await dispatch(clearCartList());
-    await dispatch(addItemInCart(response))
-  }
-
-useEffect(() => {
-  loadedCart();
-},[])
+  const {cartItem} = useMyContext();
+  console.log(cartItem);
+  
 
 
 
@@ -65,7 +50,7 @@ useEffect(() => {
             keyExtractor={(item) => item.id}
           /> */}
           <ScrollView>
-          {cartItemList?.length > 0 ? cartItemList?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:500}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
+          {cartItem?.length > 0 ? cartItem?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:500}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
           </ScrollView>
         </View>
       </View>
@@ -91,7 +76,7 @@ useEffect(() => {
             justifyContent: "center",
           }}
         >
-           {cartItemList?.length > 0 ?
+           {cartItem?.length > 0 ?
            (<TouchableOpacity
             style={{
               backgroundColor: "#69AF5D",
@@ -126,8 +111,8 @@ useEffect(() => {
               <FontAwesome name="rupee" size={14} color="#ffffff" />
               <Text style={{ fontSize: 14, color: "#ffffff" }}>
                 {
-                  cartItemList?.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue.qty * currentValue.product_price);
+                  cartItem?.reduce((accumulator:any, currentValue:any) => {
+                    return accumulator + (currentValue.qty * currentValue.price);
                   }, 0)
                 }
               </Text>
@@ -185,7 +170,7 @@ useEffect(() => {
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 55, shadowColor: "#edebeb" }}>
              <Text style={{ fontSize: 18, color: "#828181", fontWeight: "500" }}>Total Cost</Text>
              <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹{
-                  cartItemList.reduce((accumulator:any, currentValue:any) => {
+                  cartItem.reduce((accumulator:any, currentValue:any) => {
                     return accumulator + (currentValue?.qty * currentValue?.product_price);
                   }, 0)
                 }</Text><Image source={require("../../assets/Vector.png")} /></View>

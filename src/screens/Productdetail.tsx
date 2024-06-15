@@ -15,8 +15,6 @@ import { Octicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { addFavouriteItem, loadFavItem, supabase } from "./supabaseClient";
 import { CiHeart } from "react-icons/ci";
-import { useDispatch } from "react-redux";
-import { addFavItem, clearFavItemList } from "../../redux/slices/favItemSlice";
 import { addToFavFun } from "../../lib/cartFun";
 
 const loadFonts = async () => {
@@ -29,7 +27,7 @@ const loadFonts = async () => {
 
 const Productdetail = (id: any) => {
   console.log("product_id", id.route.params.id);
- const dispatch = useDispatch();
+//  const dispatch = useDispatch();
 
   const productId = id.route.params.id;
   const navigation = useNavigation();
@@ -85,12 +83,12 @@ const Productdetail = (id: any) => {
     }
   };
 
-  const setFavItem = async (item:any) => {
-     await addToFavFun(item);
-     await dispatch(clearFavItemList());
-     const response = await loadFavItem();
-     await dispatch(addFavItem(response));
-  }
+  // const setFavItem = async (item:any) => {
+  //    await addToFavFun(item);
+  //    await dispatch(clearFavItemList());
+  //    const response = await loadFavItem();
+  //    await dispatch(addFavItem(response));
+  // }
 
   return (
     <>
@@ -134,7 +132,7 @@ const Productdetail = (id: any) => {
                   <Text style={{ fontSize: 24, fontFamily: "Gilroy-Bold" }}>
                     {item.product_name}
                   </Text>
-                  <Text onPress={() => setFavItem(item)}>
+                  <Text> 
                      <Entypo name="heart-outlined" size={24}/>
                   </Text>
                 </View>

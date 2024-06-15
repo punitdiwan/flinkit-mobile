@@ -10,9 +10,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
 import { addToCart, loadFavItem } from "./supabaseClient";
-import { addFavItem } from "../../redux/slices/favItemSlice";
+
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -25,15 +24,15 @@ const loadFonts = async () => {
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
-  const dispatch = useDispatch();
+  const [favItemList,setFavItemList] = useState([]);
+  // const dispatch = useDispatch();
 
-  const favItemList = useSelector(store => store.fav.favItemList);
+  // const favItemList = useSelector(store => store.fav.favItemList);
 
 
   const loadFav = async () => {
     const response = await loadFavItem();
-    console.log("response", response);
-    dispatch(addFavItem(response));
+    setFavItemList(response);
 
   }
 
@@ -52,53 +51,53 @@ const Favourite = () => {
   //     />
   //   );
   // }
-  const favouriteItems = [
-    {
-      id: "1",
-      name: "Sprite Can",
-      price: 39,
-      volume: "325ml,price",
-      img: require("../../assets/sprite.png"),
-    },
-    {
-      id: "2",
-      name: "Diet Coke",
-      price: 39,
-      volume: "355ml,price",
-      img: require("../../assets/dietcoke.png"),
-    },
-    {
-      id: "3",
-      name: "Apple & Grape Juice",
-      price: 39,
-      volume: "2L,price",
-      img: require("../../assets/dietcoke.png"),
-    },
-    {
-      id: "4",
-      name: "Coca Cola Can",
-      price: 39,
-      volume: "325ml,price",
-      img: require("../../assets/cocacola.png"),
-    },
-    {
-      id: "5",
-      name: "Pepsi Can",
-      price: 39,
-      volume: "330ml,price",
-      img: require("../../assets/pepsi.png"),
-    },
-  ];
+  // const favouriteItems = [
+  //   {
+  //     id: "1",
+  //     name: "Sprite Can",
+  //     price: 39,
+  //     volume: "325ml,price",
+  //     img: require("../../assets/sprite.png"),
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Diet Coke",
+  //     price: 39,
+  //     volume: "355ml,price",
+  //     img: require("../../assets/dietcoke.png"),
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Apple & Grape Juice",
+  //     price: 39,
+  //     volume: "2L,price",
+  //     img: require("../../assets/dietcoke.png"),
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Coca Cola Can",
+  //     price: 39,
+  //     volume: "325ml,price",
+  //     img: require("../../assets/cocacola.png"),
+  //   },
+  //   {
+  //     id: "5",
+  //     name: "Pepsi Can",
+  //     price: 39,
+  //     volume: "330ml,price",
+  //     img: require("../../assets/pepsi.png"),
+  //   },
+  // ];
 
-  const addAllFavItemInCart = () => {
-    console.log("add all to cart", favItemList.length);
-    for (let i = 0; i < favItemList?.length; i++) {
-      console.log("loop start");
-      addToCart(favItemList[i]);
-    }
-    console.log("loop end");
+  // const addAllFavItemInCart = () => {
+  //   console.log("add all to cart", favItemList.length);
+  //   for (let i = 0; i < favItemList?.length; i++) {
+  //     console.log("loop start");
+  //     addToCart(favItemList[i]);
+  //   }
+  //   console.log("loop end");
 
-  }
+  // }
 
   const renderItem = ({ item }: any) => (
     <View style={{
@@ -195,7 +194,7 @@ const Favourite = () => {
           }}
           onPress={() => navigation.replace("Onboarding")}
         >
-          <Text style={styles.addToCartButtonText} onPress={() => addAllFavItemInCart()}>Add all to cart</Text>
+          <Text style={styles.addToCartButtonText} >Add all to cart</Text>
         </TouchableOpacity>
       </View>
     </View>

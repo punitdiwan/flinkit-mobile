@@ -1,2 +1,0 @@
-[[{"image": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600", "name": "Apple", "price": 50, "productid": 
-    2, "quantity": 1}, {"image": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600", "name": "Apple", "price": 50, "productid": 3, "quantity": 3}, {"image": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=600", "name": "Apple", "price": 50, "productid": 4, "quantity": 2}]]
