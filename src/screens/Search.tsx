@@ -19,7 +19,7 @@ const Search = () => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const GOOGLE_PLACES_API_KEY = "AIzaSyD7ewqZWwuXaGnh7eSQzebePd5uEmlCwKg";
+  const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
   return (
     <View>
       {/* <TouchableOpacity style={styles.addNewAddressMain}>
