@@ -179,6 +179,7 @@ const Favourite = () => {
         }}
       ></Text>
       <FlatList
+      
         data={favItemList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
