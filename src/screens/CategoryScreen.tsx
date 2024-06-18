@@ -24,7 +24,7 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
-const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
+const apikey = "";
 
 const CategoryScreen = (category_id: any, { navigate }: any) => {
 
@@ -277,7 +277,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                 <TouchableOpacity style={{
                                   // backgroundColor:"red",
                                   width:30,
-                                  height:30,
+                                  height:0,
                                   display:"flex",
                                   alignItems:"center",
                                   justifyContent:"center",

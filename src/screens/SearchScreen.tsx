@@ -18,39 +18,6 @@ import { getAllProducts } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
-const dummySearchItem = [
-  {
-    name:"Mango"
-  },
-  {
-    name:"Apple"
-  },
-  {
-    name:"Detergent"
-  },
-  {
-    name:"Bread"
-  },
-  {
-    name:"chatni"
-  },
-  {
-    name:"Elichi"
-  },
-  {
-    name:"Elichi"
-  },
-  {
-    name:"Elichi"
-  },
-  {
-    name:"Elichi"
-  },
-  {
-    name:"Elichi"
-  }
-]
-
 const SearchScreen = ({navigation}) => {
   const [text, setText] = useState('');
   const [mapData,setMapData] = useState([]);
