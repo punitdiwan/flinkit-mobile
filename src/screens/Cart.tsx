@@ -7,9 +7,8 @@ import { CategoryData } from "../components/Category";
 import { RootStackParamList } from "../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { loadCartData } from "./supabaseClient";
+import { addItemsInOrder, loadCartData } from "./supabaseClient";
 // import { useDispatch, useSelector } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 // import { current } from "@reduxjs/toolkit";
 import Checkout from "./Checkout";
 import { Entypo } from '@expo/vector-icons';
@@ -28,7 +27,11 @@ const Cart = () => {
   console.log(cartItem);
   
 
-
+  const addCartItemOrder = async () => {
+        console.log("callling");
+        addItemsInOrder(cartItem)
+        
+  }
 
   return (
     <View style={{flex:1,backgroundColor:"white"}}>
@@ -171,7 +174,7 @@ const Cart = () => {
              <Text style={{ fontSize: 18, color: "#828181", fontWeight: "500" }}>Total Cost</Text>
              <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹{
                   cartItem.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue?.qty * currentValue?.product_price);
+                    return accumulator + (currentValue?.qty * currentValue?.price);
                   }, 0)
                 }</Text><Image source={require("../../assets/Vector.png")} /></View>
          </View>
@@ -182,6 +185,7 @@ const Cart = () => {
          <View style={{width: "100%", backgroundColor: "white", marginTop: 30, display: "flex", justifyContent: "center", alignContent: "center", alignItems: "center",paddingHorizontal:20}}>
              <TouchableOpacity style={{ backgroundColor: "#69AF5D",width:"100%",paddingVertical: 20,borderRadius:20}} onPress={() => navigation.replace("Orderaccepted")}>
                  <Text style={{textAlign:"center",fontWeight:"bold",fontSize:20,color:"white"}} onPress={() => {
+                  addCartItemOrder()
                   navigation.navigate("Orderaccepted");
                   setIsCheckoutVisible(!isCheckoutVisible)
                   }}>Place Order</Text>

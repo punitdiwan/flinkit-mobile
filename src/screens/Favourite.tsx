@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { addToCart, loadFavItem } from "./supabaseClient";
+import { useMyContext } from "../context/Context";
 
 
 const loadFonts = async () => {
@@ -24,15 +25,15 @@ const loadFonts = async () => {
 const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [favItemList,setFavItemList] = useState([]);
-  // const dispatch = useDispatch();
-
-  // const favItemList = useSelector(store => store.fav.favItemList);
+  const [favItemList, setFavItemList] = useState([]);
+  const { favouriteItem, addFavouriteItemList } = useMyContext();
+  // console.log("favItem",favouriteItem);
 
 
   const loadFav = async () => {
     const response = await loadFavItem();
-    setFavItemList(response);
+    // setFavItemList(response);
+    addFavouriteItemList(response);
 
   }
 
@@ -103,7 +104,11 @@ const Favourite = () => {
     <View style={{
       width: "100%"
     }}>
-      <View>
+      <TouchableOpacity onPress={() =>
+        navigation.navigate("Productdetail", {
+          id: item.product_id,
+        })
+      }>
         <View
           style={{
             display: "flex",
@@ -162,7 +167,7 @@ const Favourite = () => {
             fontWeight: "500",
           }}
         ></Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 
@@ -178,8 +183,8 @@ const Favourite = () => {
         }}
       ></Text>
       <FlatList
-      
-        data={favItemList}
+
+        data={favouriteItem}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}

@@ -13,7 +13,9 @@ interface MyContextData {
   increaseCartQuantity : (data:number) => void;
   refresh: Boolean;
   changeRefreshState: () => void;
-  cartItem: []
+  addFavouriteItemList : (data:[]) => void;
+  cartItem: [];
+  favouriteItem:[];
 }
 
 // Create the context with initial values
@@ -29,7 +31,9 @@ type CartItem = {
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // const [cartItem, setCartItem] = useState<CartItem[]>([]);
   const [cartItem, setCartItem] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [favouriteItem,setFavouriteItem] = useState([]);
+
+
 
   function getItemQuintity(id: string) {
     return cartItem.find((item) => item.id === id)?.quantity || 0;
@@ -159,12 +163,18 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   }
 
+  function addFavouriteItemList(data:any){
+      setFavouriteItem([]);
+      setFavouriteItem([...data]);
+  }
+
   // end
 
   return (
     <MyContext.Provider
       value={{
         cartItem,
+        favouriteItem,
         getItemQuintity,
         increaseCardQuantity,
         decreaseCardQuantity,
@@ -172,7 +182,8 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         addingItemInCart,
         deleteParticularItemInCart,
         decreaseCartQuantity,
-        increaseCartQuantity
+        increaseCartQuantity,
+        addFavouriteItemList
       }}
     >
       {children}

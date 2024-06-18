@@ -164,3 +164,31 @@ export const loadFavItem = async () => {
     console.log(error.message);
   }
 }
+
+// -----------------------------------------------------------------------------------------------------------------------
+// Orders
+
+export const addItemsInOrder = async (cartItemOrder) => {
+    try {
+      console.log("cio",cartItemOrder);
+      const userId = 1;
+      const orders = await supabase.from("orders").select("*").eq("userid",userId);
+      for(let i = 0 ; i < cartItemOrder.length ; i++){
+        const {product_category,product_id,product_name,price,qty,darkroomownerid} = cartItemOrder[i];
+        const totalamt = (cartItemOrder[i]?.price * cartItemOrder[i]?.qty);
+        console.log("OrderItem",product_category,product_id,product_name,price,qty,totalamt);
+        const response = await supabase.from("orders").insert({categoryname:product_category,productid:product_id,productname:product_name,price,quantity:qty,totalamt,userid:userId,darkroom_owner_id:darkroomownerid})
+        console.log(response);
+      }
+
+    } catch (error) {
+      console.log(error.message);
+    }
+}
+
+// ----------------------------------------------------------------------------------
+
+export const getAllProducts = async () => {
+      const response = await supabase.from("newproducts").select("*");
+      return response?.data;
+}

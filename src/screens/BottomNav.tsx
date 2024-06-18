@@ -102,6 +102,8 @@ const BottomNav = () => {
             options={{
               title: "Cart",
               headerShown: true,
+              tabBarBadge: cartItem.length,
+
               tabBarIcon: ({ color, size }) => {
                 return <Feather name="shopping-cart" size={25} color={color} />;
               },
@@ -114,7 +116,7 @@ const BottomNav = () => {
             component={Cart}
             options={{
               headerShown: true,
-              // tabBarBadge: cartItemList.length,
+              tabBarBadge: cartItemList.length,
 
               tabBarIcon: ({ color, size }) => {
                 return <Ionicons4 name="cart-plus" color={color} size={30} />;

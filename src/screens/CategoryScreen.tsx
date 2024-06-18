@@ -24,8 +24,7 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
-const apikey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE";
+const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
 
 const CategoryScreen = (category_id: any, { navigate }: any) => {
 
@@ -87,6 +86,23 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     setProducts(resp.data);
   };
   const newId = category_id.route.params.category_id;
+
+  // const fetchData = async () => {
+  //   console.log("working");
+  //   console.log("category_id:", category_id.route.params.category_id);
+  //   const resp = await fetch(
+  //     `https://backend.delivery.maitretech.com/rest/v1/newproducts`,
+  //     {
+  //       headers: {
+  //         Apikey: apiKey,
+  //       },
+  //     }
+  //   );
+  //   console.log("resp", resp);
+
+  //   setProducts(resp.data);
+  // };
+  // const newId = category_id.route.params.category_id;
 
 
   useEffect(() => {
@@ -228,8 +244,8 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                             {cartItem.filter(itemm => itemm.product_id == item.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
                                 <TouchableOpacity style={{
                                   // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
+                                  width:30,
+                                  height:30,
                                   display:"flex",
                                   alignItems:"center",
                                   justifyContent:"center",
@@ -245,8 +261,8 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{
                                   // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
+                                  width:30,
+                                  height:30,
                                   display:"flex",
                                   alignItems:"center",
                                   justifyContent:"center",
@@ -260,8 +276,8 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{
                                   // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
+                                  width:30,
+                                  height:30,
                                   display:"flex",
                                   alignItems:"center",
                                   justifyContent:"center",
