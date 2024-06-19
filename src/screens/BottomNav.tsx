@@ -16,6 +16,7 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
 import Filter from "./Filter";
+import ShowingFilterData from "./ShowingFilterData";
 // import { useSelector } from "react-redux";
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
@@ -157,6 +158,11 @@ const BottomNav = () => {
           name="Filter"
           component={Filter}
           options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
+        />
+        <Tab.Screen 
+            name="ShowingFilterData"
+            component={ShowingFilterData}
+            options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
         />
       </Tab.Navigator>
     </>

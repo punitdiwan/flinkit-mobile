@@ -192,3 +192,14 @@ export const getAllProducts = async () => {
       const response = await supabase.from("newproducts").select("*");
       return response?.data;
 }
+
+// ----------------------------------------------------------------
+export const getProductsRelatedToCategoryId = async (categoryId) => {
+ try {
+   const response: any = await supabase.from("newproducts").select("*").eq("category_id",categoryId);
+   return response?.data;
+ } catch (error) {
+    console.log(error.message);
+ }
+
+}

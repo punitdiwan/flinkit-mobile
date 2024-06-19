@@ -5,6 +5,8 @@ import { Entypo } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 // import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
+import { getProductsRelatedToCategoryId } from "./supabaseClient";
+import { useNavigation } from "@react-navigation/native";
 // const Category=["Eggs","Noodles & Pasta","Chips & Crisps","Fast Food"]
 const Brand =["Individidual callection","Cocola","Ifad","Kazi Farmas"]
 
@@ -21,13 +23,12 @@ const Filter = ({navigation}) => {
   const [isChecked, setChecked] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [categoryName,setCategoryName] = useState("");
-  const [categoryId,setCategoryId] = useState([]);
+  const [categoryId,setCategoryId] = useState("");
   const [brandName,setBrandName] = useState("");
   const [category,setCategory] = useState([]);
-  console.log(brandName);
-  console.log("catt",categoryName);
+  const [products,setProducts] = useState([]);
   
-  
+  // console.log(category);
   
 
   // if (!fontLoaded) {
@@ -43,40 +44,18 @@ const Filter = ({navigation}) => {
   const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
 
 
-  // const fetchData = async () => {
-  //   console.log("working");
-  //   console.log("category_id:", category_id.route.params.category_id);
-  //   const resp: any = await supabase
-  //     .from("newproducts")
-  //     .select("*")
-  //     .eq("category_id", newId);
-  //   console.log("resp", resp);
+  const fetchData = async (categoryId) => {
+    const data = await getProductsRelatedToCategoryId(categoryId);
+    setProducts(data);
+    let unique_values = products
+    .map((item) => item?.product_brand.toLowerCase())
+    .filter(
+        (value, index, current_value) => current_value.indexOf(value) === index
+    );
+    // console.log("uni",unique_values);
+    
+  };
 
-  //   setProducts(resp.data);
-  // };
-  // const newId = category_id.route.params.category_id;
-
-  // const fetchData = async () => {
-  //   console.log("working");
-  //   console.log("category_id:", category_id.route.params.category_id);
-  //   const resp = await fetch(
-  //     `https://backend.delivery.maitretech.com/rest/v1/newproducts`,
-  //     {
-  //       headers: {
-  //         Apikey: apiKey,
-  //       },
-  //     }
-  //   );
-  //   console.log("resp", resp);
-
-  //   setProducts(resp.data);
-  // };
-  // const newId = category_id.route.params.category_id;
-
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [category_id]);
 
   const loadCategory = async () => {
       const response = await fetch(
@@ -88,22 +67,17 @@ const Filter = ({navigation}) => {
         }
       );
       const jsonData = await response.json();
-      // console.log("json",jsonData);
-      
       const categorynamee = jsonData.map((item:any) => ({id:item?.category_id,name:item?.category_name}));
       setCategory(categorynamee);
-      console.log("category",category);
-      
-
-
-    
-      
   }
 
-  const findBrand = (id) => {
-      console.log(id);
-      
-  }
+  const nav = useNavigation();
+
+  // const applyFilter = (category,id,brand) => {
+  //       console.log(category,id,brand);
+  //       nav.navigate("ShowingFilterData")
+        
+  // }
 
   useEffect(() => {
     loadCategory();
@@ -150,34 +124,15 @@ const Filter = ({navigation}) => {
       
       <View>
         <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15}}>Category</Text>
-        {/* {
-          categoryNameAndId?.map((item:any)=>(
-            <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
-            <Checkbox
-              value={item?.category_name}
-              onValueChange={() => 
-                {
-                  // setCategoryName(item?.category_name);
-                  // console.log("category_name_",item?.category_name);
-                  
-                  
-                }
-                }
-              color={categoryName == item ? "#69AF5D":"white"}
-              style={categoryName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
-            />
-            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
-          </View>
-          ))
-        } */}
         {
           category.map(item => <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
               value={item?.name}
               onValueChange={() => {
                   setCategoryName(item?.name);
-                  findBrand(item?.id)
-
+                  fetchData(item?.id);
+                  setBrandName("");
+                  setCategoryId(item?.id);
               }
               }
               color={categoryName == item?.name ? "#69AF5D":"white"}
@@ -189,23 +144,29 @@ const Filter = ({navigation}) => {
        
       </View>
       <View>
-        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',paddingHorizontal:15,marginTop:15,marginBottom:15}}>Brand</Text>
+        {products?.length > 0 && <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',paddingHorizontal:15,marginTop:15,marginBottom:15}}>Brand</Text>}
         {
-          Brand?.map((item,index)=>(
+          products &&  products?.map((item,index)=>(
             <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
-              value={item}
-              onValueChange={() => setBrandName(item)}
-              color={brandName == item ? "#69AF5D":"white"}
-              style={brandName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
+              value={item?.product_brand}
+              onValueChange={() => setBrandName(item?.product_brand)}
+              color={brandName == item?.product_brand ? "#69AF5D":"white"}
+              style={brandName == item?.product_brand ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
             />
-            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
+            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item?.product_brand}</Text>
           </View>
           ))
         }
        
       </View>
-      <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
+      <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}    onPress={() =>
+                        navigation.navigate("ShowingFilterData", {
+                            id:categoryId,
+                            category:categoryName,
+                            brand:brandName
+                        })
+                      }>
         <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold'}}>Apply Filter</Text>
       </TouchableOpacity>
       </View>
@@ -223,3 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
+// {"category_id": 5, "created_at": "2024-06-05T14:04:09.938313+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "price": 50, "product_brand": " UNIBIC", "product_category": "Dairy & Egg", "product_details": "Base Flavor: Almond, Cashew", "product_discount": "10%", "product_id": 23, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/cookie.jpeg", "product_imgeid": "d187b504-c943-4f8d-86e8-88b64635b67b", "product_name": "Fruit & Nut Cookies", "product_packing_type": "kilogram", "product_total_qty": 150, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T14:04:09.938313+00:00", "uuid": "6c72343b-1fb6-49b0-ba9f-93c4c104fef3", "variant_group_id": null, "visibility": true, "weight": null}
