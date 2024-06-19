@@ -23,14 +23,14 @@ const Cart = () => {
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
 
-  const {cartItem} = useMyContext();
-  console.log(cartItem);
+  const {cartItem,clearCart} = useMyContext();
+
   
 
   const addCartItemOrder = async () => {
         console.log("callling");
-        addItemsInOrder(cartItem)
-        
+        addItemsInOrder(cartItem);
+        clearCart();
   }
 
   return (
@@ -134,6 +134,7 @@ const Cart = () => {
                 flexDirection: "row",
                 bottom:0
               }}
+              onPress={() => navigation.navigate("SearchScreen")}
             >
               <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Go to Category</Text>
               {/* <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart</Text> */}
@@ -187,7 +188,8 @@ const Cart = () => {
                  <Text style={{textAlign:"center",fontWeight:"bold",fontSize:20,color:"white"}} onPress={() => {
                   addCartItemOrder()
                   navigation.navigate("Orderaccepted");
-                  setIsCheckoutVisible(!isCheckoutVisible)
+                  setIsCheckoutVisible(!isCheckoutVisible);
+
                   }}>Place Order</Text>
              </TouchableOpacity>
          </View>

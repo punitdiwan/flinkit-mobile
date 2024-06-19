@@ -16,6 +16,7 @@ interface MyContextData {
   addFavouriteItemList : (data:[]) => void;
   cartItem: [];
   favouriteItem:[];
+  clearCart:() => void;
 }
 
 // Create the context with initial values
@@ -168,6 +169,10 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setFavouriteItem([...data]);
   }
 
+  function clearCart(){
+    setCartItem([]);
+  }
+
   // end
 
   return (
@@ -183,7 +188,8 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         deleteParticularItemInCart,
         decreaseCartQuantity,
         increaseCartQuantity,
-        addFavouriteItemList
+        addFavouriteItemList,
+        clearCart
       }}
     >
       {children}

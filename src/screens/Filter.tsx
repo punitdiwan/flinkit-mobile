@@ -160,7 +160,7 @@ const Filter = ({navigation}) => {
         }
        
       </View>
-      <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}    onPress={() =>
+      {categoryName ? <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}    onPress={() =>
                         navigation.navigate("ShowingFilterData", {
                             id:categoryId,
                             category:categoryName,
@@ -168,7 +168,9 @@ const Filter = ({navigation}) => {
                         })
                       }>
         <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold'}}>Apply Filter</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> : <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#fff',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
+        <Text style={{color:"#69AF5E",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"500"}}>Select Category to Apply filter</Text>
+      </TouchableOpacity>}
       </View>
     </SafeAreaView>
   );
