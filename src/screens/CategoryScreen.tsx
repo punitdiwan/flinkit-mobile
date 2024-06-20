@@ -123,18 +123,16 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
               flexDirection:"row",    
               minHeight: "100%",
               width:"100%",
-              // backgroundColor:"red",
-              // paddingVertical:80,
+              backgroundColor:"white",
               flexWrap:"wrap",
-              // justifyContent:"space-around",
               alignItems:"center",
-              justifyContent:"flex-start",
-              gap:3,
-              paddingHorizontal:4
+              justifyContent:"center",
+              gap:10,
+              paddingTop:10
             }}
           >
             {products.map(item => 
-                <View style={{backgroundColor:"white",width:200,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:250}}>
+                <View style={{backgroundColor:"white",width:180,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:20,height:270,borderColor:"rgb(233,233,233)",borderWidth:1}}>
                   <TouchableOpacity    onPress={() =>
             navigation.navigate("Productdetail", {
               id: item?.product_id,
@@ -145,7 +143,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                 />
                  <Text style={{fontSize:15,fontWeight:"bold"}}>{item?.product_name}</Text>
                     </View>
-                    <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:15,alignItems:"center"}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:15,alignItems:"center"}}>
 
                         <View>
                         <Text style={{fontSize:15,fontWeight:"bold"}}>₹{item?.price}</Text>

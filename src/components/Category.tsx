@@ -167,33 +167,36 @@ const Category = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [myColor, setMyColor] = useState<string>();
   const [myBorder, setBorder] = useState<string>();
+  let index ;
 
   const colorArray = [
-    "    rgba(240, 247, 239, 0.7)",
-    "  rgba(254, 246, 237, 0.8)",
-    "  rgba(253, 232, 228, 0.5)",
-    "  rgba(244, 235, 247, 0.8)",
-    "  rgba(255, 248, 229, 0.6)",
-    "  rgba(237, 247, 252, 0.5)",
-    "  rgba(231, 228, 249, 0.7)",
-    "  rgba(241, 219, 228, 0.5)",
+    "rgb(244,235,247)",
+    "rgb(240,247,239)",
+    "rgb(254,246,237)",
+    "rgb(253,232,229)",
+    "rgb(254,248,229)",
+    "rgb(237,247,252)"
+
   ];
   const borderColorArray = [
-    "    rgba(240, 247, 239, 2)",
-    "  rgba(254, 246, 237, 1)",
-    "  rgba(253, 232, 228, 1)",
-    "  rgba(244, 235, 247, 1)",
-    "  rgba(255, 248, 229, 1)",
-    "  rgba(237, 247, 252, 1)",
-    "  rgba(231, 228, 249, 1)",
-    "  rgba(241, 219, 228, 1)",
+    "rgb(216,186,228)",
+    "rgb(113,200,158)",
+    "rgb(250,190,124)",
+    "rgb(248,176,160)",
+    "rgb(253,235,178)",
+    "rgb(201,231,247)"
   ];
+
+  console.log("color",myColor,"border",myBorder);
+
   function getRandomColor() {
-    let color = Math.floor(Math.random() * 9);
-    console.log(color);
-    setMyColor(colorArray[color]);
-    setBorder(borderColorArray[color]);
-    console.log(myColor);
+    let randomNumber = Math.floor(Math.random() * 6);
+    // setMyColor(colorArray[randomNumber]);
+    // setBorder(borderColorArray[randomNumber]);
+    return randomNumber;
+   
+    
+    
   }
 
   // const{setcategoryname}=useMyContext();
@@ -225,7 +228,7 @@ const Category = () => {
         }
       );
       const data = await resp.json();
-      console.log(data);
+      // console.log(data);
       setCategories(data);
     };
 
@@ -250,16 +253,14 @@ const Category = () => {
               minHeight:670
             }}
           >
-            {categories?.map((item: any, index: any): any => (
+            {categories?.map((item: any,index:any) => {
+              const randomNum = getRandomColor();
+              return(
               <TouchableOpacity
                 onAccessibilityAction={() => setRefreshing(!false)}
                 onPress={() =>
                   setCategoryName(item.category_id, item.category_name)
                 }
-                // onPress={() => {
-                //   // setProductId(item.category_id),
-                //   setProductId(item.category_id) ,showProducts();
-                // }}
                 key={index}
                 style={styles.cardBody}
               >
@@ -267,11 +268,14 @@ const Category = () => {
                   style={[
                     styles.imgBody,
                     {
-                      backgroundColor: `${colorArray[index]}`,
-                      borderColor: `${borderColorArray[index]}`,
+                      // backgroundColor: `${colorArray[index]}`,
+                      // borderColor: `${borderColorArray[index]}`,
+                      backgroundColor:`${colorArray[randomNum]}`,
+                      borderColor:`${borderColorArray[randomNum]}`,
                       borderWidth: 1,
                     },
                   ]}
+                  // style={getRandomColor() ? colorArray[2] : borderColorArray[2]}
                 >
                   <Image
                     style={{ width: "60%", aspectRatio: 1 }}
@@ -283,7 +287,7 @@ const Category = () => {
                         textAlign: "center",
                         fontSize: 16,
                         fontStyle: "normal",
-                        fontWeight: "500",
+                        fontWeight:"bold",
                         fontFamily: "Gilroy-Bold",
                       }}
                     >
@@ -292,7 +296,7 @@ const Category = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-            ))}
+            )})}
           </View>
         </View>
       </ScrollView>
@@ -304,21 +308,21 @@ export default Category;
 
 const styles = StyleSheet.create({
   cardBody: {
-    width: "48%",
-    height: 190,
+    width: "45%",
+    height: 200,
     // backgroundColor: "pink",
     display: "flex",
     alignItems: "center",
     padding: 2,
     overflow: "hidden",
-    borderRadius: 40,
+    // borderRadius: 0,
     // justifyContent:"center"
   },
   imgBody: {
     width: "100%",
     height: "100%",
     // backgroundColor: "#666666",
-    borderRadius: 35,
+    borderRadius: 15,
     padding: 7,
     display: "flex",
     alignItems: "center",

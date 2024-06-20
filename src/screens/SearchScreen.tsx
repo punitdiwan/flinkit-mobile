@@ -67,7 +67,7 @@ const SearchScreen = ({navigation}) => {
               <Icon name="search" size={25} color="rgba(0, 0, 0, 0.459);" />
             </View>
             <TextInput
-              style={{ width: "70%", height: 25, marginRight: 75 }}
+              style={{ width: "70%", height: 25, marginRight: 75,fontWeight:"bold" }}
               placeholder="Search store"
               onChangeText={handleInputChange}
               value={text}
@@ -326,9 +326,9 @@ const styles = StyleSheet.create({
     gap: 15,
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderRadius: 20,
+    borderRadius: 15,
     width: "100%",
-    backgroundColor: "#EEEEEE",
+    backgroundColor: "rgb(242,243,242)",
   },
   body: {
     width: "45%",
