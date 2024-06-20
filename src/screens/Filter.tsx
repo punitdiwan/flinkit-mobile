@@ -46,14 +46,37 @@ const Filter = ({navigation}) => {
 
   const fetchData = async (categoryId) => {
     const data = await getProductsRelatedToCategoryId(categoryId);
-    setProducts(data);
-    let unique_values = products
-    .map((item) => item?.product_brand.toLowerCase())
-    .filter(
-        (value, index, current_value) => current_value.indexOf(value) === index
-    );
-    // console.log("uni",unique_values);
+    // console.log(data);
     
+    // setProducts(data);
+    // let unique_values = products
+    // .map((item) => item?.product_brand.toLowerCase())
+    // .filter(
+    //     (value, index, current_value) => current_value.indexOf(value) === index
+    // );
+    // if(unique_values?.length == 0){
+    //   // setProducts(unique_values);
+    //   console.log("uniq",unique_values);
+    //   unique_values=[]
+      
+    // }else{
+    //   const filterBrand = data.map(item => item?.product_brand);
+    //   // setProducts(filterBrand)
+    //   console.log("filter",filterBrand);
+    //   filterBrand=[]
+      
+    // }
+    const productBrand = new Set();
+    const filterData = data.map(item => item?.product_brand);
+    filterData.forEach(element => {
+      element = element.toLowerCase();
+      productBrand.add(element);
+    });
+    const convertSetObjectToArr = [...productBrand];
+    
+    const firstLetterUpperCase = convertSetObjectToArr.map( a => a.charAt(0).toUpperCase() + a.substr(1) );
+    setProducts(firstLetterUpperCase);
+  
   };
 
 
@@ -101,6 +124,7 @@ const Filter = ({navigation}) => {
           navigation.navigate('SearchScreen');
           setCategoryName("");
           setBrandName("");
+          setProducts([]);
           }}>
 
           <Entypo name="cross" size={24} color="black"/>
@@ -149,12 +173,12 @@ const Filter = ({navigation}) => {
           products &&  products?.map((item,index)=>(
             <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
-              value={item?.product_brand}
-              onValueChange={() => setBrandName(item?.product_brand)}
-              color={brandName == item?.product_brand ? "#69AF5D":"white"}
-              style={brandName == item?.product_brand ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
+              value={item}
+              onValueChange={() => setBrandName(item)}
+              color={brandName == item ? "#69AF5D":"white"}
+              style={brandName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
             />
-            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item?.product_brand}</Text>
+            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
           </View>
           ))
         }

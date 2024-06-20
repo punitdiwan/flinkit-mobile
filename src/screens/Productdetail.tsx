@@ -17,6 +17,8 @@ import { addFavouriteItem, loadFavItem, supabase } from "./supabaseClient";
 import { CiHeart } from "react-icons/ci";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
+import { AirbnbRating, Rating } from "react-native-ratings"
+
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -28,7 +30,7 @@ const loadFonts = async () => {
 
 const Productdetail = (id: any) => {
   console.log("product_id", id.route.params.id);
-//  const dispatch = useDispatch();
+  //  const dispatch = useDispatch();
 
   const productId = id.route.params.id;
   const navigation = useNavigation();
@@ -37,13 +39,13 @@ const Productdetail = (id: any) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [fetchProduct, setFetchProduct] = useState<any>([]);
-  const [isProductPresent,setIsProduct] = useState(false);
+  const [isProductPresent, setIsProduct] = useState(false);
   // const [favouriteItem,setFavouriteItem] = useState([]);
 
   // console.log("pro",favouriteItem);
 
-  
-  
+
+
 
   // if (!fontLoaded) {
   //   return (
@@ -98,38 +100,43 @@ const Productdetail = (id: any) => {
   //    await dispatch(addFavItem(response));
   // }
 
-  const {cartItem,increaseCartQuantity,decreaseCartQuantity,addingItemInCart,addFavouriteItemList,favouriteItem} = useMyContext();
+  const { cartItem, increaseCartQuantity, decreaseCartQuantity, addingItemInCart, addFavouriteItemList, favouriteItem } = useMyContext();
 
-  const addToCart = (item:any) => {
-        addingItemInCart(item);
+  const addToCart = (item: any) => {
+    addingItemInCart(item);
   }
-  
+
   const checkProductPresentInCartOrNot = cartItem?.length > 0 && cartItem?.filter(item => item?.product_id == fetchProduct[0]?.product_id);
   const textData = checkProductPresentInCartOrNot?.length > 0 ? "Go To Basket" : "Add To Cart";
 
-  
+
   const isFavItemOrNot = favouriteItem?.length > 0 && favouriteItem.filter(item => item?.product_id == fetchProduct[0]?.product_id);
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
-  
+
   const addToFav = async (data) => {
-      console.log("fav",data);
-      const {price,product_id,product_imagename,product_name} = data;
-      await addFavouriteItem(price,product_id,product_imagename,product_name);
-      const response = await loadFavItem();
-      addFavouriteItemList(response);
-      
+    console.log("fav", data);
+    const { price, product_id, product_imagename, product_name } = data;
+    await addFavouriteItem(price, product_id, product_imagename, product_name);
+    const response = await loadFavItem();
+    addFavouriteItemList(response);
+
   }
 
-  const loadFav = async() => {
+  const loadFav = async () => {
     const response = await loadFavItem();
     // setFavouriteItem(response);
     addFavouriteItemList(response);
   }
 
+  const ratingCompleted = (rating) => {
+      console.log("r",rating);
+      
+  }
+
   useEffect(() => {
-     loadFav();
-  },[])
-  
+    loadFav();
+  }, [])
+
 
   return (
     <>
@@ -173,94 +180,94 @@ const Productdetail = (id: any) => {
                   <Text style={{ fontSize: 24, fontFamily: "Gilroy-Bold" }}>
                     {item.product_name}
                   </Text>
-                  {isFavItem ? <Text> 
-                     <Entypo name="heart-outlined" size={24} color={"red"} onPress={() => navigation.navigate("Favourite")}/>
-                  </Text> : <Text> 
-                     <Entypo name="heart-outlined" size={24} onPress={() => addToFav(item)}/>
+                  {isFavItem ? <Text>
+                    <Entypo name="heart-outlined" size={24} color={"red"} onPress={() => navigation.navigate("Favourite")} />
+                  </Text> : <Text>
+                    <Entypo name="heart-outlined" size={24} onPress={() => addToFav(item)} />
                   </Text>}
                 </View>
-                  <View style={{width:"100%"}}>
-                    <Text style={{fontSize:15,fontWeight:"500",color:"#b5b2b1"}}>1Kg, price</Text>
-                  </View>
+                <View style={{ width: "100%" }}>
+                  <Text style={{ fontSize: 15, fontWeight: "500", color: "#b5b2b1" }}>1Kg, price</Text>
+                </View>
 
                 <View style={styles.quantityContainer}>
-                   
-                {cartItem.filter(itemm => itemm.product_id == item.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
-                                <TouchableOpacity style={{
-                                  // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
-                                  display:"flex",
-                                  alignItems:"center",
-                                  justifyContent:"center",
-                                  // borderWidth:1,
-                                  borderColor:"#bab7b6",
-                                  borderRadius:5
-                                }}
-                                onPress={() => decreaseCartQuantity(item?.product_id)}
-                                >
-                                  <Text style={{color:"#bab7b6"}}>
-                                  <Entypo name="minus" size={20}/>
-                                  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
-                                  // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
-                                  display:"flex",
-                                  alignItems:"center",
-                                  justifyContent:"center",
-                                  // borderWidth:1,
-                                  borderColor:"#bab7b6",
-                                  borderRadius:5
-                                }}>
-                                  <Text style={{fontSize:20}}>
-                                  {cartItem.filter(itemm => itemm.product_id == item.product_id)?.[0]?.qty}
-                                  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
-                                  // backgroundColor:"red",
-                                  width:40,
-                                  height:40,
-                                  display:"flex",
-                                  alignItems:"center",
-                                  justifyContent:"center",
-                                  // borderWidth:1,
-                                  borderColor:"#bab7b6",
-                                  borderRadius:5
-                                }}
-                                onPress={() => increaseCartQuantity(item?.product_id)}
-                                >
-                                  <Text style={{fontSize:20,color:"#69AF5D"}}>
-                                  <Entypo name="plus" size={20}/>
-                                  </Text>
-                                </TouchableOpacity>
-                            </View> :   <TouchableOpacity
-                              style={{
-                                width: 40,
-                                height: 40,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: "#69AF5D",
-                                borderRadius: 15,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 25,
-                                  fontWeight: "bold",
-                                  color: "white",
-                                  // backgroundColor:"red",
-                                  
-                                }}
-                                onPress={() => addingItemInCart(item)}
-                              >
-                                +
-                              </Text>
-                            </TouchableOpacity>
-                            
-                            }
+
+                  {cartItem.filter(itemm => itemm.product_id == item.product_id).length > 0 ? <View style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 2 }}>
+                    <TouchableOpacity style={{
+                      // backgroundColor:"red",
+                      width: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // borderWidth:1,
+                      borderColor: "#bab7b6",
+                      borderRadius: 5
+                    }}
+                      onPress={() => decreaseCartQuantity(item?.product_id)}
+                    >
+                      <Text style={{ color: "#bab7b6" }}>
+                        <Entypo name="minus" size={20} />
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{
+                      // backgroundColor:"red",
+                      width: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // borderWidth:1,
+                      borderColor: "#bab7b6",
+                      borderRadius: 5
+                    }}>
+                      <Text style={{ fontSize: 20 }}>
+                        {cartItem.filter(itemm => itemm.product_id == item.product_id)?.[0]?.qty}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{
+                      // backgroundColor:"red",
+                      width: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // borderWidth:1,
+                      borderColor: "#bab7b6",
+                      borderRadius: 5
+                    }}
+                      onPress={() => increaseCartQuantity(item?.product_id)}
+                    >
+                      <Text style={{ fontSize: 20, color: "#69AF5D" }}>
+                        <Entypo name="plus" size={20} />
+                      </Text>
+                    </TouchableOpacity>
+                  </View> : <TouchableOpacity
+                    style={{
+                      width: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#69AF5D",
+                      borderRadius: 15,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 25,
+                        fontWeight: "bold",
+                        color: "white",
+                        // backgroundColor:"red",
+
+                      }}
+                      onPress={() => addingItemInCart(item)}
+                    >
+                      +
+                    </Text>
+                  </TouchableOpacity>
+
+                  }
 
                   <View
                     style={{
@@ -327,14 +334,16 @@ const Productdetail = (id: any) => {
                   </Text>
                 )}
 
-                <View style={styles.reviewContainer}>
+                <View style={{ flexDirection: "row", justifyContent: "center", alignContent: "center" }}>
                   <Text style={styles.reviewTitle}>Review</Text>
-                  <View style={styles.starsContainer}>
-                    <Feather name="star" size={18} color="black" />
-                    <Feather name="star" size={18} color="black" />
-                    <Feather name="star" size={18} color="black" />
-                    <Feather name="star" size={18} color="black" />
-                    <Feather name="star" size={18} color="black" />
+                  <View>
+                    {/* <AirbnbRating size={10} reviewSize={0} reviews={[]} /> */}
+                    <Rating
+                      // showRating
+                      onFinishRating={ratingCompleted}
+                      imageSize={25}
+                      style={{ paddingVertical: 0,backgroundColor:"transparent" }}
+                    />
                   </View>
                   <Image
                     source={require("../../assets/Vector.png")}
@@ -345,21 +354,23 @@ const Productdetail = (id: any) => {
                 <TouchableOpacity
                   style={styles.addToCartButton}
                   onPress={() => {
-                    addToCart(item)
-                    if(textData == "Go To Basket"){
+
+                    if (textData == "Go To Basket") {
                       navigation.navigate("Cart")
+                    } else {
+                      addToCart(item)
                     }
                   }}
                 >
                   <Text style={styles.addToCartButtonText}>{textData}</Text>
                 </TouchableOpacity>
-              </View>
+              </View >
             </>
           );
         })}
 
         {/* </ImageBackground> */}
-      </View>
+      </View >
     </>
   );
 };
@@ -405,7 +416,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: "1%",
     // backgroundColor:"red",
-    paddingHorizontal:10
+    paddingHorizontal: 10
   },
 
   quantityText: {
@@ -446,6 +457,7 @@ const styles = StyleSheet.create({
   },
   reviewImage: {
     marginLeft: 10,
+    marginTop:5
   },
   addToCartButton: {
     backgroundColor: "#69AF5D",
@@ -462,6 +474,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  fillView: {
+    position: 'absolute',
+    width: 10,
+    height: 10,
+    top: 20,
+    left: 50,
+    backgroundColor: "yellow"
+  }
 });
 
 export default Productdetail;

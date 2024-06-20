@@ -31,7 +31,11 @@ const Favourite = () => {
 
 
   const loadFav = async () => {
+    console.log("calling laodFav");
+    
     const response = await loadFavItem();
+    console.log("res",response);
+    
     // setFavItemList(response);
     addFavouriteItemList(response);
 
@@ -182,15 +186,16 @@ const Favourite = () => {
           fontWeight: "500",
         }}
       ></Text>
-      <FlatList
+      { favouriteItem.length > 0 ? <FlatList
 
         data={favouriteItem}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
-      />
+      /> : <View style={{paddingTop:300,minHeight:600}}><Text style={{fontSize:15,fontWeight:"500",textAlign:"center"}}>Please add yours{"\n"}Favourite Products</Text></View> }
       <View>
-        <TouchableOpacity
+       
+       {favouriteItem?.length > 0 ? <TouchableOpacity
           style={{
             width: "100%",
             backgroundColor: "#69AF5D",
@@ -200,7 +205,18 @@ const Favourite = () => {
           onPress={() => navigation.replace("Onboarding")}
         >
           <Text style={styles.addToCartButtonText} >Add all to cart</Text>
+        </TouchableOpacity> : <TouchableOpacity
+          style={{
+            width: "100%",
+            backgroundColor: "#69AF5D",
+            paddingVertical: 20,
+            borderRadius: 10,
+          }}
+          onPress={() => navigation.replace("SearchScreen")}
+        >
+          <Text style={styles.addToCartButtonText} >Go to Category</Text>
         </TouchableOpacity>
+}
       </View>
     </View>
   );
@@ -277,7 +293,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   addToCartButtonText: {
-    color: "white",
     textAlign: "center",
     fontSize: 18,
     fontFamily: "Gilroy-Semibold",
@@ -285,6 +300,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    color:"white",
+    fontWeight:"bold"
   },
 });
 

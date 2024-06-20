@@ -35,7 +35,7 @@ const Orderaccepted = ({ navigation }:any) => {
         {/* <Image source={require('../../../flinkit-mobile/assets/done.png')}/> */}
       </View>
 
-      <Text style={styles.text}>Your Order has been accepted.</Text>
+      <Text style={styles.text}>Your Order has been {"\n"} Placed</Text>
       <Text style={{fontSize:16,textAlign:'center',width:'80%',color:'#7C7C7C',marginLeft:33,fontFamily:'Gilroy-Bold',}}>
         Your item has been placed and is on it's way to being processed.</Text>
     

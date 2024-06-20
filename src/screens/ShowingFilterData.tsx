@@ -38,20 +38,18 @@ interface ShowingFilterDataProps {
 const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
   const route = useRoute();
   const {id,category,brand} = route.params;
-  console.log(id,category,brand);
   
   const [products,setProducts] = useState([]);
   const navigation = useNavigation();
   const {cartItem,increaseCartQuantity,decreaseCartQuantity,addingItemInCart} = useMyContext();
 
   const getAllProducts = async (categoryId:any) => {
-    console.log("calling gettt")
        const response = await getProductsRelatedToCategoryId(categoryId);
     //    console.log("showingFilter",response);
     //    console.log("brandd",brand);
     let filterProductsOnBrand = response;
        if(brand){
-         filterProductsOnBrand = await response?.filter(item => item?.product_brand == brand );
+         filterProductsOnBrand = await response?.filter(item => item?.product_brand?.toLowerCase() == brand.toLowerCase() );
        }
        setProducts(filterProductsOnBrand);
   }
@@ -67,7 +65,7 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
             <AntDesign name='arrowleft' size={24} style={{fontWeight:"bold",marginRight:150}} onPress={() => navigation.navigate("Filter")}/>
             <Text style={{fontSize:22,fontWeight:"500"}}>Filter</Text>
           </View>
-         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:15,fontWeight:"bold"}}>"No such Products"</Text></View>: <View
+         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"400",textDecorationLine:"underline"}}>"No such Products"</Text></View>: <View
             style={{
               display: "flex",
               flexDirection: "row",    
