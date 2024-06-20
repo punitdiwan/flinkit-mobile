@@ -333,7 +333,7 @@ const Productdetail = (id: any) => {
                     Potassium 107 mg
                   </Text>
                 )}
-
+           
                 <View style={{ flexDirection: "row", justifyContent: "center", alignContent: "center" }}>
                   <Text style={styles.reviewTitle}>Review</Text>
                   <View>
@@ -433,8 +433,9 @@ const styles = StyleSheet.create({
   reviewContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    // marginBottom: 10,
     width: "100%",
+    marginVertical:2
   },
   reviewTitle: {
     fontSize: 16,
