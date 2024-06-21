@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { getAllTopRatedProducts, loadCartData, supabase } from "./supabaseClient";
@@ -32,23 +33,16 @@ const Home = ({ navigation, route }: HomeProps) => {
   const [cartData,setCartData] = useState([]);
   const [topRatedProducts,setTopRatedProducts] = useState([]);
 
-  // async function loadCart(){
-  //   console.log("call loaded data");
-    
-  //   const response = await loadCartData();
-  //   console.log("loadCart",response);
-    
-  // }
-  
-  // React.useEffect(() => {
-  //   loadCart();
-  // },[])
 
   
   const loadTopRatedProducts = async () => {
     const response = await getAllTopRatedProducts();
-    setTopRatedProducts(response)
+    console.log("useEffect")
+    setTopRatedProducts(response);
+    // console.log(topRatedProducts);
 }
+
+
 
 React.useEffect(() => {
   loadTopRatedProducts();
@@ -58,9 +52,10 @@ React.useEffect(() => {
     <SafeAreaView>
       <ScrollView style={{backgroundColor:"rgb(255,255,255)"}}>
         <Header navigation={navigation} route={route} />
+        
         <HomePageCard name={"Exclusive Offer"} data={topRatedProducts} cartItem={cartData} />
         <HomePageCard name={"Best Selling"} data={topRatedProducts} />
-        <HomePageCard name={"Top Rated"} data={topRatedProducts}/>
+        <HomePageCard name={"Top Rated"} data={topRatedProducts}/> 
       </ScrollView>
     </SafeAreaView>
   );

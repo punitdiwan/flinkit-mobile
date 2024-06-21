@@ -117,7 +117,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const navigation = useNavigation<any>();
    return (
         <>
-         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:15,fontWeight:"bold"}}>"No Products"</Text></View>: <View
+         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <View
             style={{
               display: "flex",
               flexDirection:"row",    

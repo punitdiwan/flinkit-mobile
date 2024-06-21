@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -188,7 +189,7 @@ const Category = () => {
     "rgb(201,231,247)"
   ];
 
-  console.log("color",myColor,"border",myBorder);
+  // console.log("color",myColor,"border",myBorder);
 
   function getRandomColor() {
     let randomNumber = Math.floor(Math.random() * 6);
@@ -238,6 +239,7 @@ const Category = () => {
   useEffect(() => {
     getRandomColor();
   }, [refreshing]);
+  
 
   return (
     <>
@@ -254,7 +256,7 @@ const Category = () => {
               minHeight:670
             }}
           >
-            {categories?.map((item: any,index:any) => {
+            {categories.length > 0 ? categories?.map((item: any,index:any) => {
               const randomNum = getRandomColor();
               return(
               <TouchableOpacity
@@ -297,7 +299,7 @@ const Category = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-            )})}
+            )}): <View style={{width:"100%",justifyContent:"center",alignContent:'center',paddingTop:200}}><ActivityIndicator size={50} color={"rgb(105,175,94)"}/></View>}
           </View>
         </View>
       </ScrollView>

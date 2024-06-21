@@ -27,7 +27,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomNav from "./src/screens/BottomNav";
 import React, { version } from "react";
 import { Provider } from "react-redux";
-import appStore from "./redux/store/appStore";
+import TopRated from "./src/screens/TopRated";
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -164,6 +165,10 @@ export default function App() {
             name="Favourite"
             options={{ title: "Favourite" }}
             component={Favourite}
+          />
+          <Stack.Screen
+            name="TopRated"
+            component={TopRated}
           />
         </Stack.Navigator>
       </NavigationContainer>

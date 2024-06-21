@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
@@ -124,12 +125,7 @@ const Productdetail = (id: any) => {
   return (
     <>
       <View style={styles.container}>
-        {/* <ImageBackground
-        source={require("../../assets/productdetailback.png")}
-        resizeMode="cover"
-        style={styles.imageBackground}
-      > */}
-        {fetchProduct?.map((item: any, index: number) => {
+        {fetchProduct.length > 0 ? fetchProduct?.map((item: any, index: number) => {
           return (
             <>
               <View
@@ -349,9 +345,7 @@ const Productdetail = (id: any) => {
               </View >
             </>
           );
-        })}
-
-        {/* </ImageBackground> */}
+        }) : <View style={{justifyContent:"center",alignItems:'center',paddingTop:300}}><ActivityIndicator size={50} color={"rgb(105,175,94)"}/></View>}
       </View >
     </>
   );

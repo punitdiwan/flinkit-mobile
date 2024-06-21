@@ -31,11 +31,8 @@ const Favourite = () => {
 
 
   const loadFav = async () => {
-    console.log("calling laodFav");
     
     const response = await loadFavItem();
-    console.log("res",response);
-    
     // setFavItemList(response);
     addFavouriteItemList(response);
 

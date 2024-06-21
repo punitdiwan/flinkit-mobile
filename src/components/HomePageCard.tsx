@@ -13,6 +13,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { addFavouriteItem, addToCart, getAllTopRatedProducts, loadCartData } from "../screens/supabaseClient";
@@ -22,12 +23,14 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
 
 const HomePageCard = ({ name, data }: any) => {
+  console.log("data",data);
+  const [count,setCount] = React.useState(0);
+  
   const imgUrl =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/category/cms_images/icon/14_1678949221877.png";
 
 
   const {cartItem,addingItemInCart,increaseCartQuantity,decreaseCartQuantity} = useMyContext();
-
 
   const navigation = useNavigation();
   return (
@@ -63,6 +66,7 @@ const HomePageCard = ({ name, data }: any) => {
               // fontFamily: "Gilroy-Bold",
               fontWeight:"bold"
             }}
+            onPress={() => navigation.navigate("TopRated")}
           >
             See all
           </Text>
@@ -191,7 +195,7 @@ const HomePageCard = ({ name, data }: any) => {
           )
         )} */}
 
-          {data.map(item =>
+          {data?.length > 0 ? data.map(item =>
             <View style={{ backgroundColor: "white", width: 185, marginVertical: 3, paddingVertical: 30, paddingHorizontal: 10, borderRadius: 20, height: 270, borderColor: "rgb(233,233,233)", borderWidth: 1 }}>
               <TouchableOpacity onPress={() =>
                 navigation.navigate("Productdetail", {
@@ -286,7 +290,12 @@ const HomePageCard = ({ name, data }: any) => {
                 </View>
               </TouchableOpacity>
             </View>
-          )}
+          ): <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width:"100%"
+          }}><ActivityIndicator size={"large"} color={"rgb(105,175,94)"}/></View>}
 
 
         </ScrollView>
