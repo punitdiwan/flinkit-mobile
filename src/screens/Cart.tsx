@@ -34,26 +34,21 @@ const Cart = () => {
   }
 
   return (
-    <View style={{flex:1,backgroundColor:"white"}}>
+    <View style={{flex:1,backgroundColor:"rgb(255,255,255)"}}>
       <View
         style={{
           display: "flex",
-          // borderWidth: 1,
-          // paddingVertical: 5,
-          // backgroundColor: "red ",
-          // minHeight:"full"
-          flex:1,
-          
+          flex:1
         }}
       >
-        <View style={{ width: "100%", height: 500 }}>
+        <View style={{ width: "100%",height:650}}>
           {/* <FlatList
             data={cartItemList}
             renderItem={({ item }) => <CartItemCard item={item} />}
             keyExtractor={(item) => item.id}
           /> */}
           <ScrollView>
-          {cartItem?.length > 0 ? cartItem?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:500}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
+          {cartItem?.length > 0 ? cartItem?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:700}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
           </ScrollView>
         </View>
       </View>
@@ -63,12 +58,11 @@ const Cart = () => {
           // borderWidth: 1,
           borderColor: "lightgrey",
           paddingHorizontal: 10,
-          backgroundColor:'#ffffff',
+          backgroundColor:'#fff',
           marginBottom: 10,
-
           display: "flex",
           rowGap: 5,
-          height: 110,
+          height: 30
         }}
       >
         <View
@@ -82,27 +76,27 @@ const Cart = () => {
            {cartItem?.length > 0 ?
            (<TouchableOpacity
             style={{
-              backgroundColor: "#69AF5D",
-              height: 67,
+              backgroundColor: "rgb(105,175,93)",
+              height: 65,
               width: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 20,
+              borderRadius: 15,
               flexDirection: "row",
-              position:"absolute"
+              position:"absolute",
             }}
             onPress={() => setIsCheckoutVisible(!isCheckoutVisible)}
           >
           <View>
-            <Text style={{color:"white",fontWeight:"bold",fontSize:20}}>Go To Checkout:</Text>
+            <Text style={{color:"rgb(252,252,252)",fontWeight:"500",fontSize:20}}>Go To Checkout:</Text>
           </View>
             <View
               style={{
                 height: 37,
                 width: 73,
                 position: "absolute",
-                backgroundColor: "#166432",
+                backgroundColor: "rgb(22,100,50)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -123,7 +117,7 @@ const Cart = () => {
           </TouchableOpacity>) : (
               <TouchableOpacity
               style={{
-                backgroundColor: "#69AF5D",
+                backgroundColor: "rgb(105,175,93)",
                 height: 67,
                 width: "100%",
                 display: "flex",
@@ -145,7 +139,7 @@ const Cart = () => {
 
 
       {isCheckoutVisible ? (
-         <View style={{ backgroundColor: "white", position: "absolute", bottom: 20, height: 650, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
+         <View style={{ backgroundColor: "white", position: "absolute", bottom:20, height: 650, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 100 }}>
              <Text style={{ fontSize: 24, fontWeight: "bold", color: "#1c1c1c" }}>Checkout</Text>
              <Entypo name="cross" size={28} color="black" style={{ position: "absolute", right: 10 }} onPress={() => setIsCheckoutVisible(!isCheckoutVisible)}/>

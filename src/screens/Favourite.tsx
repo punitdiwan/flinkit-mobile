@@ -136,7 +136,7 @@ const Favourite = () => {
             />
           </View>
 
-          <View style={{ width: "40%" }}>
+          <View style={{ width: "40%",marginTop:17 }}>
             <Text style={styles.itemName}>{item?.product_name}</Text>
             <Text style={styles.itemVolume}>{item.volume}</Text>
           </View>
@@ -158,7 +158,7 @@ const Favourite = () => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontWeight: 500 }}>₹{item?.product_price}</Text>
+              <Text style={{ fontWeight:"bold" }}>₹{item?.product_price}</Text>
               <Image source={require("../../assets/Vector.png")} />
             </View>
           </View>
@@ -177,7 +177,7 @@ const Favourite = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favourite</Text>
+      <Text style={styles.title}>Favorurite</Text>
       <Text
         style={{
           width: "100%",
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
-    // fontWeight: 'bold',
+    fontWeight: 'bold',
     fontFamily: "Gilroy-Bold",
   },
   itemPrice: {

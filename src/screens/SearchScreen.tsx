@@ -97,11 +97,9 @@ const SearchScreen = ({navigation}) => {
             flexWrap: "wrap",
             paddingTop: 10,
             minHeight:650,
-            // backgroundColor:"blue"
+            paddingBottom:40
           }}
         >
-          {/* <View style={{width:"100%",backgroundColor:"black",flexDirection:"row",height:"auto"}}> */}
-          {/* <View style={{width:100,height:100,flexDirection:"row",}}> */}
           {filterData.length > 0 ? filterData.map(item => <TouchableOpacity
                       key={item.product_id}
                       style={styles.body}
@@ -115,6 +113,7 @@ const SearchScreen = ({navigation}) => {
                       }
                     >
                       <View key={item.product_id}>
+                        <View>
                         <Image
                           style={{ width: "100%", height: 110 }}
                           resizeMode="contain"
@@ -122,15 +121,19 @@ const SearchScreen = ({navigation}) => {
                         />
                         <Text
                           style={{
-                            margin: 10,
+                            marginTop: 10,
                             fontSize: 16,
                             color: "#6b6e6a",
                             fontWeight: "600",
                             // fontFamily: "Gilroy-Bold",
+                            marginBottom:1
                           }}
                         >
                           {item.product_name}
                         </Text>
+                        <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontWeight:"bold",marginBottom:20}}>325ml,Price</Text>
+                        </View>
+                     
                         <View
                           style={{
                             display: "flex",
@@ -187,7 +190,7 @@ const SearchScreen = ({navigation}) => {
                                   borderColor:"#bab7b6",
                                   borderRadius:5
                                 }}>
-                                  <Text style={{fontSize:20}}>
+                                  <Text style={{fontSize:15,fontWeight:"bold"}}>
                                   {cartItem.filter(itemm => itemm.product_id == item.product_id)?.[0]?.qty}
                                   </Text>
                                 </TouchableOpacity>
@@ -221,7 +224,7 @@ const SearchScreen = ({navigation}) => {
                             >
                               <Text
                                 style={{
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   fontWeight: "bold",
                                   color: "white",
                                   // backgroundColor:"red",
@@ -239,68 +242,6 @@ const SearchScreen = ({navigation}) => {
 
                           
                           </View>
-                          {/* {increaseCardQuantity.length === 0 ? (
-                            <></>
-                          ) : (
-                            <>
-                              <View
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  marginVertical: 10,
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    backgroundColor: "green",
-                                    borderRadius: 5,
-                                    borderColor: "green",
-                                    borderWidth: 1,
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    gap: 10,
-                                    alignItems: "center",
-                                    width: "80%",
-                                    justifyContent: "space-between",
-                                    paddingHorizontal: 10,
-                                    // paddingVertical:10
-                                  }}
-                                >
-                                  <Text
-                                    // onPress={() =>
-                                    //   decreaseCardQuantity(item.id)
-                                    // }
-                                    style={{
-                                      fontSize: 30,
-                                      fontWeight: "500",
-                                      color: "#ffffff",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    -
-                                  </Text>
-                                  <Text
-                                    style={{
-                                      fontSize: 15,
-                                      fontWeight: "500",
-                                      color: "#ffffff",
-                                    }}
-                                  ></Text>
-                                  <Text
-                                    style={{
-                                      fontSize: 30,
-                                      fontWeight: "500",
-                                      color: "#ffffff",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    +
-                                  </Text>
-                                </View>
-                              </View>
-                            </>
-                          )} */}
                         </View>
                       </View>
                     </TouchableOpacity> ) :<View style={{alignItems:"center",paddingTop:200}}><Text style={{fontWeight:"semibold",fontSize:20,fontFamily:"serif",textDecorationLine:"underline"}}>"Product Not Found"</Text></View>}
@@ -332,7 +273,7 @@ const styles = StyleSheet.create({
   },
   body: {
     width: "45%",
-    height: 300,
+    height: 280,
     backgroundColor: "white",
     display: "flex",
     justifyContent: "space-around",

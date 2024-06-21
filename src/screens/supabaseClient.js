@@ -203,3 +203,25 @@ export const getProductsRelatedToCategoryId = async (categoryId) => {
  }
 
 }
+
+// -------------------------------------------------------------
+// storing ratings
+export const addProductRating = async (product,rating) => {
+    try {
+      product[0].product_rating = rating;
+      const getReviwedProducts = await supabase.from("reviwed_products").select("*");
+      const addingReviwedProduct = await supabase.from("reviwed_products").insert(product[0]);
+      console.log(addingReviwedProduct);
+    } catch (error) {
+      console.log(error.message);
+    }
+}
+
+export const getAllTopRatedProducts = async () => {
+  try {
+    const getAllProducts = await supabase.from("reviwed_products").select("*").gte("product_rating",4).limit(10)
+    return getAllProducts.data;
+  } catch (error) {
+    console.log(error.message);
+  }
+}

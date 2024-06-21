@@ -13,7 +13,7 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { addFavouriteItem, loadFavItem, supabase } from "./supabaseClient";
+import { addFavouriteItem, addProductRating, loadFavItem, supabase } from "./supabaseClient";
 import { CiHeart } from "react-icons/ci";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
@@ -40,25 +40,9 @@ const Productdetail = (id: any) => {
   const [quantity, setQuantity] = useState(1);
   const [fetchProduct, setFetchProduct] = useState<any>([]);
   const [isProductPresent, setIsProduct] = useState(false);
-  // const [favouriteItem,setFavouriteItem] = useState([]);
-
-  // console.log("pro",favouriteItem);
-
-
-
-
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
 
   const fetchData = async () => {
-    // console.log("working");
+    console.log("working");
     // console.log("category_id:", id.route.params.id);
     const resp: any = await supabase
       .from("newproducts")
@@ -114,7 +98,7 @@ const Productdetail = (id: any) => {
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
 
   const addToFav = async (data) => {
-    console.log("fav", data);
+    // console.log("fav", data);
     const { price, product_id, product_imagename, product_name } = data;
     await addFavouriteItem(price, product_id, product_imagename, product_name);
     const response = await loadFavItem();
@@ -129,8 +113,7 @@ const Productdetail = (id: any) => {
   }
 
   const ratingCompleted = (rating) => {
-      console.log("r",rating);
-      
+      addProductRating(fetchProduct,rating);
   }
 
   useEffect(() => {
@@ -339,7 +322,6 @@ const Productdetail = (id: any) => {
                   <View>
                     {/* <AirbnbRating size={10} reviewSize={0} reviews={[]} /> */}
                     <Rating
-                      // showRating
                       onFinishRating={ratingCompleted}
                       imageSize={25}
                       style={{ paddingVertical: 0,backgroundColor:"transparent" }}
@@ -462,7 +444,7 @@ const styles = StyleSheet.create({
   },
   addToCartButton: {
     backgroundColor: "#69AF5D",
-    width: 300,
+    width: "100%",
     height: 65,
     justifyContent: "center",
     alignItems: "center",

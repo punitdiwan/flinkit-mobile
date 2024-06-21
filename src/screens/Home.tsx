@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { loadCartData, supabase } from "./supabaseClient";
+import { getAllTopRatedProducts, loadCartData, supabase } from "./supabaseClient";
 import { createClient } from "@supabase/supabase-js";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -30,6 +30,7 @@ const Home = ({ navigation, route }: HomeProps) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [cartData,setCartData] = useState([]);
+  const [topRatedProducts,setTopRatedProducts] = useState([]);
 
   // async function loadCart(){
   //   console.log("call loaded data");
@@ -43,27 +44,23 @@ const Home = ({ navigation, route }: HomeProps) => {
   //   loadCart();
   // },[])
 
+  
+  const loadTopRatedProducts = async () => {
+    const response = await getAllTopRatedProducts();
+    setTopRatedProducts(response)
+}
+
+React.useEffect(() => {
+  loadTopRatedProducts();
+},[])
+
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={{backgroundColor:"rgb(255,255,255)"}}>
         <Header navigation={navigation} route={route} />
-        <HomePageCard name={"Exclusive Offer"} data={ProductData} cartItem={cartData} />
-        <HomePageCard name={"Best Selling"} data={ProductData} />
-        <TouchableOpacity>
-          {/* <Text style={{ fontSize: 40 }} onPress={fetchData}>Fetch Data</Text> */}
-
-          {/* <Category /> */}
-        </TouchableOpacity>
-        {/* {data.length > 0 ? (
-          data.map((item) => (
-            <View key={item.id} style={styles.itemContainer}>
-              <Text>Name: {item.name}</Text>
-              <Text>Age: {item.age}</Text>
-            </View>
-          ))
-        ) : (
-          <Text>No data available</Text>
-        )} */}
+        <HomePageCard name={"Exclusive Offer"} data={topRatedProducts} cartItem={cartData} />
+        <HomePageCard name={"Best Selling"} data={topRatedProducts} />
+        <HomePageCard name={"Top Rated"} data={topRatedProducts}/>
       </ScrollView>
     </SafeAreaView>
   );

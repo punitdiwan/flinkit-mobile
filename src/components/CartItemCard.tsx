@@ -111,23 +111,24 @@ const CartItemCard = ({ item }: cardItemsProps) => {
           position: "relative",
         }}
       >
-        <Text style={{ fontSize: 20 }}>{product_name}</Text>
+        <Text style={{ fontSize: 15,fontWeight:"bold" }}>{product_name}</Text>
         <Text
           style={{
-            color: "green",
-            fontSize: 20,
+            color: "rgb(53,52,64)",
+            fontSize: 15,
             position: "absolute",
             right: 5,
             bottom: 10,
+            fontWeight:"bold"
           }}
         >
-          ₹{price}
+          ₹{price*qty}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
           onPress={() => deleteParticularItemInCart(item?.product_id)}
         >
-          <Entypo name="cross" size={20} color="#B3B3B3" />
+          <Entypo name="cross" size={20} color="rgb(188,188,188)" />
         </TouchableOpacity>
 
         <View
@@ -147,7 +148,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
               width: "100%",
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent:"space-evenly",
               alignItems: "center",
               marginTop: 20,
             }}
@@ -157,7 +158,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
                 width: 46,
                 height: 46,
                 borderWidth: 2,
-                borderColor: "#F0F0F0",
+                borderColor: "rgb(240,240,240)",
                 borderRadius: 20,
                 display: "flex",
                 alignItems: "center",
@@ -165,9 +166,9 @@ const CartItemCard = ({ item }: cardItemsProps) => {
               }}
               onPress={() => decreaseCartQuantity(item?.product_id)}
             >
-              <Feather name="minus" size={24} color="black" />
+              <Feather name="minus" size={24} color="rgb(179,179,179)" />
             </TouchableOpacity>
-            <Text style={{ fontSize: 25, fontWeight: "500" }}>
+            <Text style={{ fontSize: 15,fontWeight:"bold"}}>
               {qty}
             </Text>
             <TouchableOpacity
@@ -175,7 +176,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
                 width: 46,
                 height: 46,
                 borderWidth: 2,
-                borderColor: "#F0F0F0",
+                borderColor: "rgb(236,236,236)",
                 borderRadius: 20,
                 display: "flex",
                 alignItems: "center",

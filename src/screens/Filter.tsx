@@ -143,11 +143,11 @@ const Filter = ({navigation}) => {
           <Text style={{fontSize:20,fontWeight:"bold"}}>Filter</Text>
         </View>
       </View>
-      <View style={{height:"100%",padding:10,backgroundColor:'#EEEEEE',width:'100%',borderRadius:40}}>
+      <View style={{height:"100%",padding:10,backgroundColor:'rgb(242,243,242)',width:'100%',borderRadius:40}}>
 
       
       <View>
-        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15}}>Category</Text>
+        <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15,fontWeight:"semibold"}}>Categories</Text>
         {
           category.map(item => <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
@@ -160,7 +160,7 @@ const Filter = ({navigation}) => {
               }
               }
               color={categoryName == item?.name ? "#69AF5D":"white"}
-              style={categoryName == item?.name ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
+              style={categoryName == item?.name ? {backgroundColor:"#69AF5D",borderRadius:5,width:20,height:20}:{backgroundColor:"white"}}
             />
             <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item?.name}</Text>
           </View> )
@@ -176,7 +176,7 @@ const Filter = ({navigation}) => {
               value={item}
               onValueChange={() => setBrandName(item)}
               color={brandName == item ? "#69AF5D":"white"}
-              style={brandName == item ? {backgroundColor:"#69AF5D"}:{backgroundColor:"white"}}
+              style={brandName == item ? {backgroundColor:"#69AF5D",borderRadius:5,width:20,height:20}:{backgroundColor:"white",borderRadius:5,width:20,height:20}}
             />
             <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
           </View>
@@ -191,7 +191,7 @@ const Filter = ({navigation}) => {
                             brand:brandName
                         })
                       }>
-        <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold'}}>Apply Filter</Text>
+        <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Apply Filter</Text>
       </TouchableOpacity> : <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#fff',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
         <Text style={{color:"#69AF5E",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"500"}}>Select Category to Apply filter</Text>
       </TouchableOpacity>}

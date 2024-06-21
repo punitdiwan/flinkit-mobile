@@ -141,12 +141,13 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                     <View>
                     <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?. product_imagename }}
                 />
-                 <Text style={{fontSize:15,fontWeight:"bold"}}>{item?.product_name}</Text>
+                 <Text style={{fontSize:15,fontWeight:"bold",color:"rgb(38,37,50)"}}>{item?.product_name}</Text>
+                 <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontWeight:"bold"}}>325ml,Price</Text>
                     </View>
                     <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:15,alignItems:"center"}}>
 
                         <View>
-                        <Text style={{fontSize:15,fontWeight:"bold"}}>₹{item?.price}</Text>
+                        <Text style={{fontSize:15,fontWeight:"bold",color:"rgb(38,37,50)"}}>₹{item?.price}</Text>
                         </View>
 
                         {cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
@@ -199,7 +200,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "#69AF5D",
+                    backgroundColor: "rgb(105,175,93)",
                     borderRadius: 15,
                   }}
                 >
@@ -209,6 +210,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                       fontWeight: "bold",
                       color: "white",
                       // backgroundColor:"red",
+                      // backgroundColor:""
                       
                     }}
                     onPress={() => addingItemInCart(item)}
