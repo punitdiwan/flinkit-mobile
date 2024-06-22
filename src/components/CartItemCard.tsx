@@ -8,8 +8,6 @@ import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { addToCart, decreaseItemQuantity, deleteCartItem,loadCartData } from "../screens/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
 import { addToCartFun, decreaseItemQuantityFun, removeFromcartFun} from "../../lib/cartFun";
 
 type cardItemsProps = {

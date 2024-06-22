@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
@@ -149,7 +149,7 @@ const Filter = ({navigation}) => {
       <View>
         <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15,fontWeight:"semibold"}}>Categories</Text>
         {
-          category.map(item => <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
+          category?.length > 0 ? category.map(item => <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
               value={item?.name}
               onValueChange={() => {
@@ -163,7 +163,7 @@ const Filter = ({navigation}) => {
               style={categoryName == item?.name ? {backgroundColor:"#69AF5D",borderRadius:5,width:20,height:20}:{backgroundColor:"white"}}
             />
             <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item?.name}</Text>
-          </View> )
+          </View> ) : <View style={{width:"100%",justifyContent:"center",alignItems:"center",paddingTop:100}}><ActivityIndicator size={50} color={"rgb(105,175,93)"}/></View>
         }
        
       </View>

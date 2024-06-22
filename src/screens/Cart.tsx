@@ -24,6 +24,8 @@ const Cart = () => {
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
 
   const {cartItem,clearCart} = useMyContext();
+  console.log("cartItem",cartItem);
+  
 
   
 
@@ -139,7 +141,7 @@ const Cart = () => {
 
 
       {isCheckoutVisible ? (
-         <View style={{ backgroundColor: "white", position: "absolute", bottom:20, height: 650, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
+         <View style={{ backgroundColor: "white", position: "absolute", bottom:7, height: 600, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 100 }}>
              <Text style={{ fontSize: 24, fontWeight: "bold", color: "#1c1c1c" }}>Checkout</Text>
              <Entypo name="cross" size={28} color="black" style={{ position: "absolute", right: 10 }} onPress={() => setIsCheckoutVisible(!isCheckoutVisible)}/>

@@ -132,18 +132,20 @@ export const loadCartData = async () => {
 // ------------------------------------------------------------------
 
 // Favourite Item
-export const addFavouriteItem = async (price,product_id,product_imagename,product_name) => {
+export const addFavouriteItem = async (price,product_id,product_imagename,product_name,darkroomownerid) => {
+  console.log("price");
   try {
     const user_id=3;
     const userExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
     if(userExistsOrNot?.data?.length == 0){
-      const response = await supabase.from("favourite_products").insert({user_id,product_id,product_image:product_imagename,product_name,product_price:price});
-      const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
+      const response = await supabase.from("favourite_products").insert({user_id,product_id,product_imagename,product_name,price,darkroom_owner_id:darkroomownerid});
+      console.log("resuser",response);
+      // const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
       return
     }else {
       const isProductExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id).eq("product_id",product_id);
       if(isProductExistsOrNot?.data?.length == 0){
-        const response = await supabase.from("favourite_products").insert({user_id,product_id,product_image:product_imagename,product_name,product_price:price});
+        const response = await supabase.from("favourite_products").insert({user_id,product_id,product_imagename,product_name,price,darkroom_owner_id:darkroomownerid});
         const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
         return
       }else{
@@ -153,6 +155,23 @@ export const addFavouriteItem = async (price,product_id,product_imagename,produc
   } catch (error) {
     console.log(error.message)
   }
+}
+
+export const removeItemFromFav = async (product_id) => {
+  console.log("calling remove fav");
+      console.log(product_id);
+      const user_id = 3;
+      try {
+        const response = await supabase.from("favourite_products").select("*").eq("user_id",user_id).eq("product_id",product_id);
+        if(response?.data?.length == 0){
+          return;
+        }else{
+          const response = await supabase.from("favourite_products").delete().eq("user_id",user_id).eq("product_id",product_id);
+          return;
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
 }
 
 export const loadFavItem = async () => {

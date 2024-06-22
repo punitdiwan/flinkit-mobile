@@ -59,7 +59,7 @@ const SearchScreen = ({navigation}) => {
             justifyContent: "center",
             flexDirection:'row',
             gap:10,
-            marginLeft: 20,
+            marginLeft: 20
           }}
         >
           <View style={styles.searchBody}>

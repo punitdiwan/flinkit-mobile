@@ -158,6 +158,7 @@ export const CategoryData = [
 
 
 
+
 type Values = {
   bg: string;
   category_imgpath: string;
@@ -243,18 +244,21 @@ const Category = () => {
 
   return (
     <>
-      <ScrollView>
-        <View style={{ padding: 10 }}>
+      <ScrollView style={{minHeight:"100%"}}>
+        <View style={{width:"100%",backgroundColor:"white",justifyContent:"center",alignItems:"center",minHeight:"100%",paddingVertical:10,marginLeft:16}}>
           <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight:670
-            }}
+           style={{
+            display: "flex",
+            flexDirection:"row",    
+            minHeight: "100%",
+            width:"100%",
+            backgroundColor:"white",
+            flexWrap:"wrap",
+            alignItems:"center",
+            gap:10,
+            paddingTop:10,
+            justifyContent:'flex-start'
+          }}
           >
             {categories.length > 0 ? categories?.map((item: any,index:any) => {
               const randomNum = getRandomColor();

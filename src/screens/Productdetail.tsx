@@ -14,7 +14,7 @@ import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { addFavouriteItem, addProductRating, loadFavItem, supabase } from "./supabaseClient";
+import { addFavouriteItem, addProductRating, loadFavItem,supabase,removeItemFromFav } from "./supabaseClient";
 import { CiHeart } from "react-icons/ci";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
@@ -41,6 +41,7 @@ const Productdetail = (id: any) => {
   const [quantity, setQuantity] = useState(1);
   const [fetchProduct, setFetchProduct] = useState<any>([]);
   const [isProductPresent, setIsProduct] = useState(false);
+  const [heartIconColor,setHeartIconColor] = useState("black");
 
   const fetchData = async () => {
     console.log("working");
@@ -97,19 +98,29 @@ const Productdetail = (id: any) => {
 
   const isFavItemOrNot = favouriteItem?.length > 0 && favouriteItem.filter(item => item?.product_id == fetchProduct[0]?.product_id);
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
+  
 
   const addToFav = async (data) => {
-    // console.log("fav", data);
-    const { price, product_id, product_imagename, product_name } = data;
-    await addFavouriteItem(price, product_id, product_imagename, product_name);
+    console.log("fav");
+    const { price, product_id, product_imagename, product_name,darkroomownerid } = data;
+    await addFavouriteItem(price, product_id, product_imagename, product_name,darkroomownerid);
     const response = await loadFavItem();
     addFavouriteItemList(response);
+    setHeartIconColor("red")
 
+  }
+
+  const removeFromFav = async (data) => {
+    const {product_id} = data;
+    console.log(product_id);
+    removeItemFromFav(product_id)
+    const response = await loadFavItem();
+    addFavouriteItemList(response);
+    setHeartIconColor("black")
   }
 
   const loadFav = async () => {
     const response = await loadFavItem();
-    // setFavouriteItem(response);
     addFavouriteItemList(response);
   }
 
@@ -160,9 +171,11 @@ const Productdetail = (id: any) => {
                     {item.product_name}
                   </Text>
                   {isFavItem ? <Text>
-                    <Entypo name="heart-outlined" size={24} color={"red"} onPress={() => navigation.navigate("Favourite")} />
+                    <Entypo name="heart-outlined" size={24} color={"red"} onPress={() => {
+                      navigation.navigate("Favourite")
+                    }} />
                   </Text> : <Text>
-                    <Entypo name="heart-outlined" size={24} onPress={() => addToFav(item)} />
+                    <Entypo name="heart-outlined" color={"black"} size={24} onPress={() => addToFav(item)} />
                   </Text>}
                 </View>
                 <View style={{ width: "100%" }}>

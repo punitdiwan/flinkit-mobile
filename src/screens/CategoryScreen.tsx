@@ -117,6 +117,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const navigation = useNavigation<any>();
    return (
         <>
+        <View style={{paddingLeft:20,backgroundColor:"white"}}>
          {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <View
             style={{
               display: "flex",
@@ -126,7 +127,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
               backgroundColor:"white",
               flexWrap:"wrap",
               alignItems:"center",
-              justifyContent:"center",
+              justifyContent:"flex-start",
               gap:10,
               paddingTop:10
             }}
@@ -228,6 +229,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
 
           </View>
 }
+</View>
         </>
       );
 };

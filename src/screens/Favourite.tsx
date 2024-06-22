@@ -26,80 +26,26 @@ const Favourite = () => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
   const [favItemList, setFavItemList] = useState([]);
-  const { favouriteItem, addFavouriteItemList } = useMyContext();
+  const { favouriteItem, addFavouriteItemList,addingItemInCart,addAllFavItemInCart} = useMyContext();
   // console.log("favItem",favouriteItem);
 
 
   const loadFav = async () => {
-    
     const response = await loadFavItem();
     // setFavItemList(response);
     addFavouriteItemList(response);
-
   }
 
   useEffect(() => {
     loadFav();
   }, [])
 
-
-
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
-  // const favouriteItems = [
-  //   {
-  //     id: "1",
-  //     name: "Sprite Can",
-  //     price: 39,
-  //     volume: "325ml,price",
-  //     img: require("../../assets/sprite.png"),
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Diet Coke",
-  //     price: 39,
-  //     volume: "355ml,price",
-  //     img: require("../../assets/dietcoke.png"),
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Apple & Grape Juice",
-  //     price: 39,
-  //     volume: "2L,price",
-  //     img: require("../../assets/dietcoke.png"),
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Coca Cola Can",
-  //     price: 39,
-  //     volume: "325ml,price",
-  //     img: require("../../assets/cocacola.png"),
-  //   },
-  //   {
-  //     id: "5",
-  //     name: "Pepsi Can",
-  //     price: 39,
-  //     volume: "330ml,price",
-  //     img: require("../../assets/pepsi.png"),
-  //   },
-  // ];
-
-  // const addAllFavItemInCart = () => {
-  //   console.log("add all to cart", favItemList.length);
-  //   for (let i = 0; i < favItemList?.length; i++) {
-  //     console.log("loop start");
-  //     addToCart(favItemList[i]);
-  //   }
-  //   console.log("loop end");
-
-  // }
+  const addingAllFavItemInCart =  async () => {
+    let i = 0;
+      for(i = 0 ; i < favouriteItem?.length ; i++){
+        addAllFavItemInCart(favouriteItem[i]);
+      }
+    }
 
   const renderItem = ({ item }: any) => (
     <View style={{
@@ -123,7 +69,7 @@ const Favourite = () => {
         >
           <View style={{ width: "15%" }}>
             <Image
-              source={{ uri: item?.product_image }}
+              source={{ uri: item?.product_imagename }}
               style={{
                 width: "100%",
                 height: "auto",
@@ -155,7 +101,7 @@ const Favourite = () => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontWeight:"bold" }}>₹{item?.product_price}</Text>
+              <Text style={{ fontWeight:"bold" }}>₹{item?.price}</Text>
               <Image source={require("../../assets/Vector.png")} />
             </View>
           </View>
@@ -199,7 +145,7 @@ const Favourite = () => {
             paddingVertical: 20,
             borderRadius: 10,
           }}
-          onPress={() => navigation.replace("Onboarding")}
+          onPress={() => addingAllFavItemInCart()}
         >
           <Text style={styles.addToCartButtonText} >Add all to cart</Text>
         </TouchableOpacity> : <TouchableOpacity
@@ -303,3 +249,6 @@ const styles = StyleSheet.create({
 });
 
 export default Favourite;
+
+
+
