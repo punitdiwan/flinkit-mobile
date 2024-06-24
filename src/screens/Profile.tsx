@@ -34,13 +34,13 @@ const loadFonts = async () => {
 const arr = [
   {
     id: "1",
-    name: "orders",
+    name: "Orders",
     img: require("../../assets/Orders icon.png"),
     navigate: "Orderaccepted",
   },
   {
     id: "2",
-    name: "my details",
+    name: "Your Profile",
     img: require("../../assets/My Details icon.png"),
   },
   {
@@ -138,12 +138,13 @@ const Profile = ({ navigation, route }: ProfileProps) => {
           </View>
         </View>
         <View style={{ width: "100%", height: "auto", padding: 5 }}>
-          {arr?.map((item) => (
+          {arr?.map((item) =>{
+            return (
             <TouchableOpacity
               key={item.id}
               style={{
                 width: "100%",
-                height: 50,
+                height: 60,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
@@ -151,12 +152,13 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 paddingHorizontal: 10,
                 borderBottomWidth: 0.5,
                 borderColor: "#E2E2E2",
+                // paddingVertical:10
               }}
-              onPress={() => navigation.navigate(`${item.navigate}`)}
+              onPress={() => navigation.navigate(`${item?.name}`)}
             >
-              <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+              <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
                 <Image source={item.img} />
-                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf" }}>
+                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf",fontWeight:"bold" }}>
                   {item.name}
                 </Text>
               </View>
@@ -164,7 +166,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 <Image source={require("../../assets/Vector.png")} />
               </View>
             </TouchableOpacity>
-          ))}
+          )})}
         </View>
         <View
           style={{
@@ -173,18 +175,21 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             alignItems: "center",
             justifyContent: "center",
             height: 150,
+            paddingHorizontal:20,
+            position:"absolute",
+            bottom:0
           }}
         >
           <TouchableOpacity
             style={{
-              width: 300,
+              width: "100%",
               height: 65,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               paddingHorizontal: 20,
-              backgroundColor: "#F2F3F2",
-              borderRadius: 20,
+              backgroundColor: "rgb(242,243,242)",
+              borderRadius: 10,
               position: "relative",
               fontFamily: "Gilroy-Semibold",
             }}

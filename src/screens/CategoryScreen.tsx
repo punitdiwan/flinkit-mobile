@@ -113,6 +113,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     fetchData();
   }, [category_id]);
 
+  useEffect(() => {
+  
+  },[])
 
   const navigation = useNavigation<any>();
    return (

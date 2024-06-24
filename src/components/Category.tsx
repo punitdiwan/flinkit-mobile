@@ -159,6 +159,7 @@ export const CategoryData = [
 
 
 
+
 type Values = {
   bg: string;
   category_imgpath: string;

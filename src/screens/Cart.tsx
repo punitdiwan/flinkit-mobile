@@ -25,9 +25,6 @@ const Cart = () => {
 
   const {cartItem,clearCart} = useMyContext();
   console.log("cartItem",cartItem);
-  
-
-  
 
   const addCartItemOrder = async () => {
         console.log("callling");

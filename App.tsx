@@ -28,6 +28,9 @@ import BottomNav from "./src/screens/BottomNav";
 import React, { version } from "react";
 import { Provider } from "react-redux";
 import TopRated from "./src/screens/TopRated";
+import About from "./src/screens/About";
+import Help from "./src/screens/Help";
+import YourProfile from "./src/screens/YourProfile";
 
 
 export type RootStackParamList = {
@@ -170,6 +173,20 @@ export default function App() {
             name="TopRated"
             component={TopRated}
           />
+          <Stack.Screen
+            name="About"
+            component={About}
+          />
+          <Stack.Screen
+            name="Help"
+            component={Help}
+          />
+         <Stack.Screen
+            name="YourProfile"
+            component={YourProfile}
+            options={{ title: 'Your Profile' }}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </MyProvider>
