@@ -31,6 +31,9 @@ import TopRated from "./src/screens/TopRated";
 import About from "./src/screens/About";
 import Help from "./src/screens/Help";
 import YourProfile from "./src/screens/YourProfile";
+import SelectLocation from "./src/screens/SelectLocation";
+import Order from "./src/screens/Order";
+import TrackOrder from "./src/screens/TrackOrder";
 
 
 export type RootStackParamList = {
@@ -184,9 +187,21 @@ export default function App() {
          <Stack.Screen
             name="YourProfile"
             component={YourProfile}
-            options={{ title: 'Your Profile' }}
+            // options={{ title: 'Your Profile' }}
           />
-
+          <Stack.Screen
+          name="SelectLocation"
+            component={SelectLocation}
+            options={{title:"Location"}}
+          />
+          <Stack.Screen 
+            name="Order"
+            component={Order}
+          />
+          <Stack.Screen
+            name="TrackOrder"
+            component={TrackOrder}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </MyProvider>

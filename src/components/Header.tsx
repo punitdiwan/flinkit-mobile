@@ -30,6 +30,7 @@ const loadFonts = async () => {
     "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
   });
 };
+
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);

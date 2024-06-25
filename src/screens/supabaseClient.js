@@ -193,16 +193,25 @@ export const addItemsInOrder = async (cartItemOrder) => {
       const userId = 1;
       const orders = await supabase.from("orders").select("*").eq("userid",userId);
       for(let i = 0 ; i < cartItemOrder.length ; i++){
-        const {product_category,product_id,product_name,price,qty,darkroomownerid} = cartItemOrder[i];
+        const {product_category,product_id,product_name,price,qty,darkroomownerid,product_imagename} = cartItemOrder[i];
         const totalamt = (cartItemOrder[i]?.price * cartItemOrder[i]?.qty);
         console.log("OrderItem",product_category,product_id,product_name,price,qty,totalamt);
-        const response = await supabase.from("orders").insert({categoryname:product_category,productid:product_id,productname:product_name,price,quantity:qty,totalamt,userid:userId,darkroom_owner_id:darkroomownerid})
+        const response = await supabase.from("orders").insert({categoryname:product_category,productid:product_id,productname:product_name,price,quantity:qty,totalamt,userid:userId,darkroom_owner_id:darkroomownerid,product_image:product_imagename})
         console.log(response);
       }
 
     } catch (error) {
       console.log(error.message);
     }
+}
+
+export const loadOrders = async () => {
+  try {
+    const response  = await supabase.from("orders").select("*");
+    return response?.data;
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 // ----------------------------------------------------------------------------------
