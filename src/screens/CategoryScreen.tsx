@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -28,10 +30,137 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
 
 
+const dummyProduct = [
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  }
+]
+
+
+const dummyProduct2 = [
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  },
+  {
+    "category_id": 5, "created_at": "2024-06-05T12:36:31.930773+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "packing_weight": null, "price": 50, "product_brand": "Britannia", "product_category": "Dairy & Egg", "product_details": "Buy Britannia Healthy Slice Bread 450 g Online at Best Prices in India", "product_discount": "20%", "product_id": 3, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/breads.png", "product_imgeid": "97d3f35a-93a7-48ca-91e5-c3d03f2b8bc1", "product_name": "Britannia Healthy Slice Bread", "product_packing_type": "kilogram", "product_total_qty": 400, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-05T12:36:31.930773+00:00", "uuid": "6dcc532a-08c4-4939-9624-887b82a384df", "variant_group_id": null, "visibility": true, "weight": null
+  }
+]
+
 
 
 const CategoryScreen = (category_id: any, { navigate }: any) => {
-
+  console.log("rendering");
   interface Products {
     product: {
       product_id: string;
@@ -47,11 +176,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const [increaseCardQuantity, setincreaseCardQuantity] = useState<string[]>(
     []
   );
-
-  console.log("cartItem",cartItem);
-  let itemPresent = ""
-  
-  
+  const [product,setProduct] = useState(dummyProduct);
+  console.log("product",product?.length);
+  const [isLoading,setIsLoading] = useState(false);
 
   // const cartItemList = useSelector(store => store?.cart?.cartItemList);
   // console.log("screen",cartItemList);
@@ -79,49 +206,70 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
 
 
   const fetchData = async () => {
-    console.log("working");
+      const newId = category_id.route.params.category_id;
     console.log("category_id:", category_id.route.params.category_id);
     const resp: any = await supabase
       .from("newproducts")
       .select("*")
-      .eq("category_id", newId);
+      .eq("category_id", newId).limit(1);
     console.log("resp", resp);
 
     setProducts(resp.data);
   };
-  const newId = category_id.route.params.category_id;
 
-  // const fetchData = async () => {
-  //   console.log("working");
-  //   console.log("category_id:", category_id.route.params.category_id);
-  //   const resp = await fetch(
-  //     `https://backend.delivery.maitretech.com/rest/v1/newproducts`,
-  //     {
-  //       headers: {
-  //         Apikey: apiKey,
-  //       },
-  //     }
-  //   );
-  //   console.log("resp", resp);
+  // const setProductToScreen = () => {
+  //   console.log("set Product To screen");
+    
+  //     setProduct([...dummyProduct]);
+  // }
 
-  //   setProducts(resp.data);
-  // };
-  // const newId = category_id.route.params.category_id;
+  // useEffect(() => {
+  //   setProductToScreen();
+  // },[])
 
 
   useEffect(() => {
     fetchData();
   }, [category_id]);
 
+
   useEffect(() => {
-  
-  },[])
+    console.log("Updated product:", product.length);
+    // setProduct([]);
+    // setProduct(product)
+  }, [product]); // This will log whenever product state changes
+
+  const loadMoreProduct = () => {
+    // setIsLoading(!isLoading)
+    console.log("more product load");
+    console.log("dummyProduct2:", dummyProduct2); // Check dummyProduct2 contents
+    const updateProduct = [...product, ...dummyProduct2];
+    // updateProduct?.map(item => setProduct([...product,item]))
+    setProduct(updateProduct);
+    console.log("product length",product.length);
+    return
+    // setIsLoading(!isLoading)
+  };
+
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}:any) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+  };
 
   const navigation = useNavigation<any>();
    return (
         <>
         <View style={{paddingLeft:20,backgroundColor:"white"}}>
-         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <View
+         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <ScrollView   onScroll={({nativeEvent}) => {
+              if (isCloseToBottom(nativeEvent) && !isLoading) {
+                setIsLoading(true)
+                loadMoreProduct();
+                setIsLoading(false)
+              }
+            }}
+            scrollEventThrottle={200} ><View
             style={{
               display: "flex",
               flexDirection:"row",    
@@ -135,8 +283,8 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
               paddingTop:10
             }}
           >
-            {products.map(item => 
-                <View style={{backgroundColor:"white",width:180,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:20,height:270,borderColor:"rgb(233,233,233)",borderWidth:1}}>
+            {isLoading == false ? product.map((item,index)=> 
+                <View key={index} style={{backgroundColor:"white",width:180,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:20,height:270,borderColor:"rgb(233,233,233)",borderWidth:1}}>
                   <TouchableOpacity    onPress={() =>
             navigation.navigate("Productdetail", {
               id: item?.product_id,
@@ -228,9 +376,13 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                     </View>
                 </TouchableOpacity>
                 </View>
-            )}
+            ): <ActivityIndicator size={24} color={"black"}/>}
 
           </View>
+          <View style={{width:"100%",justifyContent:"center",alignItems:"center",height:60,bottom:0,position:"absolute",backgroundColor:"white"}}>
+          <ActivityIndicator size={40}/>
+          </View>
+          </ScrollView>
 }
 </View>
         </>

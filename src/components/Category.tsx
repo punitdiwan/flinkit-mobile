@@ -154,13 +154,6 @@ export const CategoryData = [
 // const apiKey=""
 
 
-
-
-
-
-
-
-
 type Values = {
   bg: string;
   category_imgpath: string;
