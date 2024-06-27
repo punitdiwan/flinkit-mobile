@@ -211,7 +211,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     const resp: any = await supabase
       .from("newproducts")
       .select("*")
-      .eq("category_id", newId).limit(1);
+      .eq("category_id", newId);
     console.log("resp", resp);
 
     setProducts(resp.data);
@@ -261,7 +261,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const navigation = useNavigation<any>();
    return (
         <>
-        <View style={{paddingLeft:20,backgroundColor:"white"}}>
+        <View style={{paddingLeft:20,backgroundColor:"white",minHeight:"100%"}}>
          {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <ScrollView   onScroll={({nativeEvent}) => {
               if (isCloseToBottom(nativeEvent) && !isLoading) {
                 setIsLoading(true)
@@ -283,7 +283,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
               paddingTop:10
             }}
           >
-            {isLoading == false ? product.map((item,index)=> 
+            {isLoading == false ? products.map((item,index)=> 
                 <View key={index} style={{backgroundColor:"white",width:180,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:20,height:270,borderColor:"rgb(233,233,233)",borderWidth:1}}>
                   <TouchableOpacity    onPress={() =>
             navigation.navigate("Productdetail", {
@@ -379,9 +379,9 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
             ): <ActivityIndicator size={24} color={"black"}/>}
 
           </View>
-          <View style={{width:"100%",justifyContent:"center",alignItems:"center",height:60,bottom:0,position:"absolute",backgroundColor:"white"}}>
+          {/* <View style={{width:"100%",justifyContent:"center",alignItems:"center",height:60,bottom:0,position:"absolute",backgroundColor:"white"}}>
           <ActivityIndicator size={40}/>
-          </View>
+          </View> */}
           </ScrollView>
 }
 </View>

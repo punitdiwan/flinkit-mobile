@@ -197,6 +197,7 @@ export default function App() {
           <Stack.Screen 
             name="Order"
             component={Order}
+            options={{headerShown:false}}
           />
           <Stack.Screen
             name="TrackOrder"

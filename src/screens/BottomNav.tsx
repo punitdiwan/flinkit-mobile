@@ -165,6 +165,7 @@ const BottomNav = () => {
             options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
         />
       </Tab.Navigator>
+      
     </>
   );
 };

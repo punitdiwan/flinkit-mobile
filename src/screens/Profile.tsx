@@ -19,8 +19,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { clearCartList } from "../../redux/slices/cartSlice";
 // import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -78,19 +76,8 @@ const ProfileImag =
   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const Profile = ({ navigation, route }: ProfileProps) => {
   const [fontLoaded, setFontLoaded] = useState(false);
-  
+  const [showOrderPage,setShowOrderPage] = useState(false);
 
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
-
-  // const {logoutToggle}=useMyContext();
 
   return (
     <SafeAreaView>

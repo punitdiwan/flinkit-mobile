@@ -182,7 +182,6 @@ const Cart = () => {
                   addCartItemOrder()
                   navigation.navigate("Orderaccepted");
                   setIsCheckoutVisible(!isCheckoutVisible);
-
                   }}>Place Order</Text>
              </TouchableOpacity>
          </View>
