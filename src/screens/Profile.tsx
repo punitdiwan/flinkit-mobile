@@ -177,8 +177,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
               paddingHorizontal: 20,
               backgroundColor: "rgb(242,243,242)",
               borderRadius: 10,
-              position: "relative",
-              fontFamily: "Gilroy-Semibold",
+              position: "relative"
             }}
             onPress={() => {
               // dispatch(clearCartList());
@@ -186,7 +185,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
              
             }}
           >
-            <Text style={{ color: "#69AF5D", fontSize: 18 }}>Log Out</Text>
+            <Text style={{ color: "#69AF5D", fontSize: 18,fontWeight:"semibold" }}>Log Out</Text>
             <Feather
               style={{ position: "absolute", left: 30 }}
               name="log-out"

@@ -22,14 +22,32 @@ const Cart = () => {
   const navigation = useNavigation<any>();
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
+  const [totalAmount,setTotalAmount] = useState(0);
 
   const {cartItem,clearCart} = useMyContext();
   console.log("cartItem",cartItem);
 
+
+  function generateRandomCode() {
+    const length = 8;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Define the characters to use
+    let result = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+  
+    return result;
+  }
+
   const addCartItemOrder = async () => {
-        console.log("callling");
-        addItemsInOrder(cartItem);
-        clearCart();
+    const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
+      return accumulator + (currentValue.qty * currentValue.price);
+    }, 0)
+    const orderId =  generateRandomCode();
+    addItemsInOrder(orderId,totalAmount,cartItem);
+    clearCart();
   }
 
   return (

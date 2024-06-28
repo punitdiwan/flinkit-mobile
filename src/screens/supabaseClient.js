@@ -187,18 +187,21 @@ export const loadFavItem = async () => {
 // -----------------------------------------------------------------------------------------------------------------------
 // Orders
 
-export const addItemsInOrder = async (cartItemOrder) => {
+export const addItemsInOrder = async (orderId,totalAmount,cartItemOrder) => {
     try {
-      console.log("cio",cartItemOrder);
+      console.log("cio",cartItemOrder.length,orderId);
       const userId = 1;
-      const orders = await supabase.from("orders").select("*").eq("userid",userId);
-      for(let i = 0 ; i < cartItemOrder.length ; i++){
-        const {product_category,product_id,product_name,price,qty,darkroomownerid,product_imagename} = cartItemOrder[i];
-        const totalamt = (cartItemOrder[i]?.price * cartItemOrder[i]?.qty);
-        console.log("OrderItem",product_category,product_id,product_name,price,qty,totalamt);
-        const response = await supabase.from("orders").insert({categoryname:product_category,productid:product_id,productname:product_name,price,quantity:qty,totalamt,userid:userId,darkroom_owner_id:darkroomownerid,product_image:product_imagename})
-        console.log(response);
-      }
+      // const orders = await supabase.from("orders").select("*").eq("userid",userId);
+      // for(let i = 0 ; i < cartItemOrder.length ; i++){
+      //   const {product_category,product_id,product_name,price,qty,darkroomownerid,product_imagename} = cartItemOrder[i];
+      //   const totalamt = (cartItemOrder[i]?.price * cartItemOrder[i]?.qty);
+      //   console.log("OrderItem",product_category,product_id,product_name,price,qty,totalamt);
+      //   const response = await supabase.from("orders").insert({categoryname:product_category,productid:product_id,productname:product_name,price,quantity:qty,totalamt,userid:userId,darkroom_owner_id:darkroomownerid,product_image:product_imagename})
+      //   console.log(response);
+      // }
+
+      const response = await supabase.from("orders").insert({orderid:orderId,userid:userId,orderstatus:"pending",orderitems:cartItemOrder,totalamt:totalAmount});
+      console.log(response);
 
     } catch (error) {
       console.log(error.message);
@@ -249,6 +252,17 @@ export const getAllTopRatedProducts = async () => {
   try {
     const getAllProducts = await supabase.from("reviwed_products").select("*").gte("product_rating",4).limit(10)
     return getAllProducts.data;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+// getAllOrderItemRelatedToOneUser
+export const getAllOrderItems = async () => {
+  try {
+    const userId = 1;
+    const response = await supabase.from("orders").select("*").eq("userid",userId);
+    return response.data;
   } catch (error) {
     console.log(error.message);
   }
