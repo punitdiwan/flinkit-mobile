@@ -16,7 +16,7 @@ import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete"
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 
-const googleApiKey="AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
+const googleApiKey="";
 
 const SelectLocation = () => {
     const [location,setLocation] = useState("");
