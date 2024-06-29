@@ -187,7 +187,7 @@ export const loadFavItem = async () => {
 // -----------------------------------------------------------------------------------------------------------------------
 // Orders
 
-export const addItemsInOrder = async (orderId,totalAmount,cartItemOrder) => {
+export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,cartItemOrder) => {
     try {
       console.log("cio",cartItemOrder.length,orderId);
       const userId = 1;
@@ -200,9 +200,8 @@ export const addItemsInOrder = async (orderId,totalAmount,cartItemOrder) => {
       //   console.log(response);
       // }
 
-      const response = await supabase.from("orders").insert({orderid:orderId,userid:userId,orderstatus:"pending",orderitems:cartItemOrder,totalamt:totalAmount});
+      const response = await supabase.from("orders").insert({orderid:orderId,userid:userId,orderstatus:"pending",orderitems:cartItemOrder,totalamt:totalAmount,darkroom_owner_id:darkroomownerid});
       console.log(response);
-
     } catch (error) {
       console.log(error.message);
     }
@@ -262,8 +261,16 @@ export const getAllOrderItems = async () => {
   try {
     const userId = 1;
     const response = await supabase.from("orders").select("*").eq("userid",userId);
-    return response.data;
+    // console.log("orderItemsArray",response?.data[0]?.orderitems);
+    // console.log("orderitems",response);
+    return response?.data
   } catch (error) {
     console.log(error.message);
   }
 }
+
+
+
+
+
+

@@ -45,9 +45,13 @@ const Cart = () => {
     const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
       return accumulator + (currentValue.qty * currentValue.price);
     }, 0)
+    const darkroomownerid = cartItem[0].darkroomownerid;
+    // console.log("dark",darkroomownerid);
+    
     const orderId =  generateRandomCode();
-    addItemsInOrder(orderId,totalAmount,cartItem);
-    clearCart();
+    // console.log("orderItems",cartItem);
+    addItemsInOrder(orderId,totalAmount,darkroomownerid,cartItem);
+    // clearCart();
   }
 
   return (
