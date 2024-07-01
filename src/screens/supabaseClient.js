@@ -187,7 +187,7 @@ export const loadFavItem = async () => {
 // -----------------------------------------------------------------------------------------------------------------------
 // Orders
 
-export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,cartItemOrder) => {
+export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,dateoforder,cartItemOrder) => {
     try {
       console.log("cio",cartItemOrder.length,orderId);
       const userId = 1;
@@ -200,7 +200,7 @@ export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,cartIt
       //   console.log(response);
       // }
 
-      const response = await supabase.from("orders").insert({orderid:orderId,userid:userId,orderstatus:"pending",orderitems:cartItemOrder,totalamt:totalAmount,darkroom_owner_id:darkroomownerid});
+      const response = await supabase.from("orders").insert({orderid:orderId,userid:userId,orderstatus:"pending",orderitems:cartItemOrder,totalamt:totalAmount,darkroom_owner_id:darkroomownerid,dateoforder});
       console.log(response);
     } catch (error) {
       console.log(error.message);
@@ -209,7 +209,7 @@ export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,cartIt
 
 export const loadOrders = async () => {
   try {
-    const response  = await supabase.from("orders").select("*");
+    const response  = await supabase.from("orders").select("*").eq("userid",1);
     return response?.data;
   } catch (error) {
     console.log(error.message);

@@ -32,7 +32,7 @@ const loadFonts = async () => {
 const arr = [
   {
     id: "1",
-    name: "Order",
+    name: "Orders",
     img: require("../../assets/Orders icon.png"),
     navigate: "Orderaccepted",
   },

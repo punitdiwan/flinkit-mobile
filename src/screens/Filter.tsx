@@ -162,7 +162,7 @@ const Filter = ({navigation}) => {
               color={categoryName == item?.name ? "#69AF5D":"white"}
               style={categoryName == item?.name ? {backgroundColor:"#69AF5D",borderRadius:5,width:20,height:20}:{backgroundColor:"white"}}
             />
-            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item?.name}</Text>
+            <Text style={{fontFamily:'Gilroy-Medium',fontSize:14}}>{item?.name}</Text>
           </View> ) : <View style={{width:"100%",justifyContent:"center",alignItems:"center",paddingTop:100}}><ActivityIndicator size={50} color={"rgb(105,175,93)"}/></View>
         }
        
@@ -178,7 +178,7 @@ const Filter = ({navigation}) => {
               color={brandName == item ? "#69AF5D":"white"}
               style={brandName == item ? {backgroundColor:"#69AF5D",borderRadius:5,width:20,height:20}:{backgroundColor:"white",borderRadius:5,width:20,height:20}}
             />
-            <Text style={{fontFamily:'Gilroy-Medium',fontSize:16}}>{item}</Text>
+            <Text style={{fontFamily:'Gilroy-Medium',fontSize:14}}>{item}</Text>
           </View>
           ))
         }
@@ -192,8 +192,8 @@ const Filter = ({navigation}) => {
                         })
                       }>
         <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Apply Filter</Text>
-      </TouchableOpacity> : <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#fff',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
-        <Text style={{color:"#69AF5E",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"500"}}>Select Category to Apply filter</Text>
+      </TouchableOpacity> : <TouchableOpacity style={{width:"100%",height:68,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
+        <Text style={{color:"#69AF5E",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Select Category to Apply filter</Text>
       </TouchableOpacity>}
       </View>
     </SafeAreaView>

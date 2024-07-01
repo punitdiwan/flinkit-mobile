@@ -10,25 +10,31 @@ import {
   SafeAreaView,
 } from "react-native";
 import { getAllOrderItems, loadOrders } from "./supabaseClient";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-const Order = () => {
+const Order = (orderdetails: any) => {
+  const [orderDetailsData, setOrderDetailsData] = useState([]);
+  console.log("orderdetails", orderDetailsData[0]?.orderitems);
+
+  // extract data from route
+  const orderDetails = orderdetails?.route?.params?.item;
+  // setOrderDetailsData(orderDetails)
+
   const fillAnimation = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
 
   const [showMore, setShowMore] = useState(false);
   const [order, setOrder] = useState([]);
   const [orderList, setOrderList] = useState([]);
-  const [orderStatus, setOrderStatus] = useState("")
-  const [firstProductName,setFirstProductName] = useState("");
+  const [orderStatus, setOrderStatus] = useState("");
+  const [firstProductName, setFirstProductName] = useState("");
 
-  console.log("orderrr",order);
-  
+  console.log("orderrr", order);
 
   // useEffect(() => {
   //   animateFill();
@@ -86,18 +92,12 @@ const Order = () => {
   }
 
   const loadOrdersData = async () => {
-    const response = await getAllOrderItems();
-    console.log("responseOrder", response);
-    setOrder(response[0]);
-    setOrderList(response[0]?.orderitems);
-    setOrderStatus(response[0].orderstatus);
-    setFirstProductName("Hello");
-    handlePercentage(response[0]?.orderstatus);
+    setOrderDetailsData([orderDetails]);
   };
 
   useEffect(() => {
     loadOrdersData();
-    //  handlePercentage(orderStatus)
+    handlePercentage(orderStatus);
   }, []);
 
   return (
@@ -164,9 +164,9 @@ const Order = () => {
           ) : (
             <View style={styles.content}>
               <Text style={styles.title}>
-                {order?.orderstatus == "pending"
+                {orderDetailsData[0]?.orderstatus == "pending"
                   ? "Packing your order..."
-                  : order?.orderstatus}
+                  : orderDetailsData[0]?.orderStatus}
               </Text>
               <View style={{ paddingTop: 5 }}>
                 <Text style={{ fontWeight: "semibold" }}>
@@ -431,7 +431,7 @@ const Order = () => {
                   </View>
                   <View style={{ paddingTop: 15 }}>
                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-                      Order Number : {order?.orderid}
+                      Order Number : {orderDetailsData[0]?.orderid}
                     </Text>
                   </View>
 
@@ -451,46 +451,48 @@ const Order = () => {
                     </View>
                     <View>
                       <Text style={{ fontWeight: "bold" }}>
-                        {firstProductName ? order?.orderitems[0]?.product_name : ""}
+                        {orderDetailsData[0]?.orderitems[0]?.product_name}
                       </Text>
-                      <TouchableOpacity
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          gap: 5,
-                        }}
-                        onPress={() => setShowMore(!showMore)}
-                      >
-                        {showMore ? (
-                          <>
-                            <Text
-                              style={{ fontWeight: "semibold", fontSize: 13 }}
-                            >
-                              Show less
-                            </Text>
-                            <Image
-                              source={require("../../assets/arrowbottom.png")}
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <Text
-                              style={{ fontWeight: "semibold", fontSize: 13 }}
-                            >
-                              Show more
-                            </Text>
-                            <Image
-                              source={require("../../assets/arrowbottom.png")}
-                            />
-                          </>
-                        )}
-                      </TouchableOpacity>
+                      {orderDetailsData[0]?.orderitems?.length > 1 && (
+                        <TouchableOpacity
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                          onPress={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? (
+                            <>
+                              <Text
+                                style={{ fontWeight: "semibold", fontSize: 13 }}
+                              >
+                                Show less
+                              </Text>
+                              <Image
+                                source={require("../../assets/arrowbottom.png")}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <Text
+                                style={{ fontWeight: "semibold", fontSize: 13 }}
+                              >
+                                Show more
+                              </Text>
+                              <Image
+                                source={require("../../assets/arrowbottom.png")}
+                              />
+                            </>
+                          )}
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
 
                   {order &&
                     showMore &&
-                    orderList?.map((item, index) => {
+                    orderDetailsData[0]?.orderitems?.map((item, index) => {
                       return (
                         <View
                           key={index}
@@ -537,7 +539,7 @@ const Order = () => {
                     Total
                   </Text>
                   <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                    {order?.totalamt}
+                    {orderDetailsData[0]?.totalamt}
                   </Text>
                 </View>
               </View>
@@ -564,7 +566,7 @@ const Order = () => {
                   onPress={() => navigation.navigate("Home")}
                 >
                   <Text
-                    style={{ fontWeight: "bold", color: "white", fontSize: 20 }}
+                    style={{ fontWeight: "bold", color: "white", fontSize: 14 }}
                   >
                     Back to Home
                   </Text>

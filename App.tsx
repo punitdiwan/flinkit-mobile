@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet} from "react-native";
 import { Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -34,7 +34,7 @@ import YourProfile from "./src/screens/YourProfile";
 import SelectLocation from "./src/screens/SelectLocation";
 import Order from "./src/screens/Order";
 import TrackOrder from "./src/screens/TrackOrder";
-
+import Orders from "./src/screens/Orders";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -172,37 +172,32 @@ export default function App() {
             options={{ title: "Favourite" }}
             component={Favourite}
           />
+          <Stack.Screen name="TopRated" component={TopRated} />
+          <Stack.Screen name="About" component={About} />
+          <Stack.Screen name="Help" component={Help} />
           <Stack.Screen
-            name="TopRated"
-            component={TopRated}
-          />
-          <Stack.Screen
-            name="About"
-            component={About}
-          />
-          <Stack.Screen
-            name="Help"
-            component={Help}
-          />
-         <Stack.Screen
             name="YourProfile"
             component={YourProfile}
             // options={{ title: 'Your Profile' }}
           />
           <Stack.Screen
-          name="SelectLocation"
+            name="SelectLocation"
             component={SelectLocation}
-            options={{title:"Location"}}
-          />
-          <Stack.Screen 
-            name="Order"
-            component={Order}
-            options={{headerShown:false}}
+            options={{ title: "Location" }}
           />
           <Stack.Screen
-            name="TrackOrder"
-            component={TrackOrder}
+            name="Order"
+            component={Order}
+            options={{ headerShown: false }}
           />
+          <Stack.Screen name="TrackOrder" component={TrackOrder} />
+          <Stack.Screen
+             name="Orders"
+             component={Orders}
+             options={{title:"Order History"}}
+
+          />
+     
         </Stack.Navigator>
       </NavigationContainer>
     </MyProvider>

@@ -41,17 +41,33 @@ const Cart = () => {
     return result;
   }
 
+  const getMonthName = (index) => {
+    const arrOfMonth = ['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sep','Oct','Nov','Dec']
+    return(arrOfMonth[index])
+  }
+
+  const getCurrDate = () => {
+     const currentDate = new Date();
+    const date = currentDate.getDate();
+    const monthNum = currentDate.getMonth();
+    const monthName = getMonthName(monthNum);
+    const year = currentDate.getFullYear();
+    const fullDate =`${date} ${monthName} ${year}`;
+    return fullDate;
+  }
+
   const addCartItemOrder = async () => {
     const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
       return accumulator + (currentValue.qty * currentValue.price);
     }, 0)
+
+   const dateoforder = getCurrDate();
+
     const darkroomownerid = cartItem[0].darkroomownerid;
-    // console.log("dark",darkroomownerid);
     
     const orderId =  generateRandomCode();
-    // console.log("orderItems",cartItem);
-    addItemsInOrder(orderId,totalAmount,darkroomownerid,cartItem);
-    // clearCart();
+    addItemsInOrder(orderId,totalAmount,darkroomownerid,dateoforder,cartItem);
+    clearCart();
   }
 
   return (
