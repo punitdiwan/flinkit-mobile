@@ -119,6 +119,8 @@ const SearchScreen = ({navigation}) => {
                           resizeMode="contain"
                           source={{ uri: item.product_imagename }}
                         />
+                        <View style={{height:58
+                        }}>
                         <Text
                           style={{
                             marginTop: 10,
@@ -131,6 +133,7 @@ const SearchScreen = ({navigation}) => {
                         >
                           {item.product_name}
                         </Text>
+                        </View>
                         <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontWeight:"bold",marginBottom:20}}>325ml,Price</Text>
                         </View>
                      

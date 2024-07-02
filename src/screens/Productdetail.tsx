@@ -167,7 +167,7 @@ const Productdetail = (id: any) => {
                     marginVertical: 5,
                   }}
                 >
-                  <Text style={{ fontSize: 24, fontFamily: "Gilroy-Bold" }}>
+                  <Text style={{ fontSize:16,width:300,fontFamily: "Gilroy-Bold",fontWeight:"600" }}>
                     {item.product_name}
                   </Text>
                   {isFavItem ? <Text>
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
   },
   addToCartButtonText: {
     color: "white",
-    fontSize: 24,
+    fontSize:18,
     fontWeight: "bold",
   },
   fillView: {

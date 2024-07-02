@@ -81,15 +81,17 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
             }}
           >
             {products.map(item => 
-                <View style={{backgroundColor:"white",width:200,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:250}}>
+                <View style={{backgroundColor:"white",width:200,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:260,borderWidth:1,borderColor:"rgb(233,233,233)"}}>
                   <TouchableOpacity onPress={() => navigation.navigate("Productdetail", {id: item?.product_id})
           } >
                     <View>
                     <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?. product_imagename }}
                 />
+                <View style={{height:40}}>
                  <Text style={{fontSize:15,fontWeight:"bold"}}>{item?.product_name}</Text>
+                 </View>
                     </View>
-                    <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:15,alignItems:"center"}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:15,alignItems:"center"}}>
 
                         <View>
                         <Text style={{fontSize:15,fontWeight:"bold"}}>₹{item?.price}</Text>

@@ -249,7 +249,7 @@ const Orders = () => {
                         }}
                       />
                     </View>
-                    <View>
+                    <View style={{width:200,height:40}}>
                       <Text style={{ fontWeight:"500", color: "black" }}>
                         {item?.orderitems[0]?.product_name}
                       </Text>

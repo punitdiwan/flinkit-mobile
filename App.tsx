@@ -35,6 +35,7 @@ import SelectLocation from "./src/screens/SelectLocation";
 import Order from "./src/screens/Order";
 import TrackOrder from "./src/screens/TrackOrder";
 import Orders from "./src/screens/Orders";
+import UploadImage from "./src/screens/UploadImage";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -196,6 +197,11 @@ export default function App() {
              component={Orders}
              options={{title:"Order History"}}
 
+          />
+
+          <Stack.Screen
+           name="UploadImage"
+           component={UploadImage}
           />
      
         </Stack.Navigator>
