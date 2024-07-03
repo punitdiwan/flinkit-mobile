@@ -179,7 +179,7 @@ export default function App() {
           <Stack.Screen
             name="YourProfile"
             component={YourProfile}
-            // options={{ title: 'Your Profile' }}
+            options={{ title: 'Profile' }}
           />
           <Stack.Screen
             name="SelectLocation"

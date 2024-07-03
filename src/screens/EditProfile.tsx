@@ -7,7 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 
 
 
-const YourProfile = () => {
+const EditProfile = () => {
   const [name, setName] = useState("Harsh Sharma");
   const [number, setNumber] = useState("8457689765");
   const [email, setEmail] = useState("");

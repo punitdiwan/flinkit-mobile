@@ -99,11 +99,14 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             gap: 10,
           }}
         >
+          <View style={{width:63.5,height:63.5,justifyContent:"center",alignItems:"center",paddingTop:2,paddingBottom:2,paddingHorizontal:2}}>
           <Image
-            source={{ uri: ProfileImag }}
+            source={require("../../assets/person.png")}
             resizeMode="cover"
-            style={{ width: 64, height: 64, borderRadius: 27 }}
+            style={{ width: 63, height: 63, borderRadius:100}}
           />
+          </View>
+
           <View>
             <View
               style={{
@@ -114,13 +117,13 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 width: 150,
               }}
             >
-              <Text style={{ fontSize: 20, fontFamily: "Gilroy-Bold" }}>
-                Test Test
+              <Text style={{ fontSize: 20,fontWeight:"bold" }}>
+                User Name
               </Text>
               <Feather name="edit-2" size={20} color="#69AF5D" />
             </View>
-            <Text style={{ color: "#7C7C7C", fontSize: 16 }}>
-              test@gmail.com
+            <Text style={{ color: "rgb(214,214,214)", fontSize: 16 }}>
+              user@gmail.com
             </Text>
           </View>
         </View>

@@ -41,7 +41,7 @@ const Orderaccepted = ({ navigation }:any) => {
     
 
       <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 70, marginLeft: 20, }}>
-        <TouchableOpacity onPress={() => navigation.replace("ErrorCard")} style={styles.otpBtn}>
+        <TouchableOpacity onPress={() => navigation.navigate("Orders")} style={styles.otpBtn}>
           <Text style={{ color: '#ffffff', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600',fontWeight:"bold" }}>Track Order</Text>
         </TouchableOpacity>
       </View>

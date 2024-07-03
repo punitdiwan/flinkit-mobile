@@ -17,9 +17,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
+// Order details page
+
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
-  console.log("orderdetails", orderDetailsData[0]?.orderitems);
+  console.log("orderdetailsTrack", orderDetailsData[0]);
 
   // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
@@ -33,8 +35,6 @@ const Order = (orderdetails: any) => {
   const [orderList, setOrderList] = useState([]);
   const [orderStatus, setOrderStatus] = useState("");
   const [firstProductName, setFirstProductName] = useState("");
-
-  console.log("orderrr", order);
 
   // useEffect(() => {
   //   animateFill();
@@ -62,12 +62,12 @@ const Order = (orderdetails: any) => {
   const handlePercentage = (orderStatus) => {
     console.log("handle Percenatege", orderStatus);
 
-    if (orderStatus?.toLocaleLowerCase() == "pending") {
+    if (orderStatus?.toLowerCase() == "pending") {
       setPercentage(25);
-    } else if (orderStatus == "Confirmed") {
+    } else if (orderStatus?.toLowerCase() == "confirmed") {
       setPercentage(50);
-    } else if (percentage < 75) {
-      setPercentage(percentage + 25);
+    } else if (orderStatus?.toLowerCase() == "delivered") {
+      setPercentage(100);
     } else if (percentage > 75 && percentage < 100) {
       setPercentage(percentage + 25);
     } else {
@@ -93,11 +93,12 @@ const Order = (orderdetails: any) => {
 
   const loadOrdersData = async () => {
     setOrderDetailsData([orderDetails]);
+    
   };
 
   useEffect(() => {
     loadOrdersData();
-    handlePercentage(orderStatus);
+    handlePercentage(orderDetails?.orderstatus);
   }, []);
 
   return (
@@ -164,9 +165,9 @@ const Order = (orderdetails: any) => {
           ) : (
             <View style={styles.content}>
               <Text style={styles.title}>
-                {orderDetailsData[0]?.orderstatus == "pending"
+                {orderDetails?.orderstatus == "pending"
                   ? "Packing your order..."
-                  : orderDetailsData[0]?.orderStatus}
+                  : orderDetails?.orderstatus}
               </Text>
               <View style={{ paddingTop: 5 }}>
                 <Text style={{ fontWeight: "semibold" }}>

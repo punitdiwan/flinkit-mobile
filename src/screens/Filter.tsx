@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
@@ -101,6 +101,15 @@ const Filter = ({navigation}) => {
   //       nav.navigate("ShowingFilterData")
         
   // }
+// handling Aert
+  const handleMsgAlert = (title: any, message: any) => {
+    Alert.alert(
+      title,
+      message,
+      [{ text: "OK", onPress: () => console.log("Press ok") }],
+      { cancelable: true }
+    );
+  };
 
   useEffect(() => {
     loadCategory();
@@ -184,16 +193,19 @@ const Filter = ({navigation}) => {
         }
        
       </View>
-      {categoryName ? <TouchableOpacity style={{width:"100%",height:68,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}    onPress={() =>
+      {<TouchableOpacity style={{width:"100%",height:60,backgroundColor:'#69AF5E',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:10,marginTop:130}}    onPress={() =>{
+                      if(categoryName){
                         navigation.navigate("ShowingFilterData", {
-                            id:categoryId,
-                            category:categoryName,
-                            brand:brandName
-                        })
-                      }>
-        <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Apply Filter</Text>
-      </TouchableOpacity> : <TouchableOpacity style={{width:"100%",height:68,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:19,marginTop:130}}>
-        <Text style={{color:"#69AF5E",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Select Category to Apply filter</Text>
+                          id:categoryId,
+                          category:categoryName,
+                          brand:brandName
+                      })
+                      }else{
+                        handleMsgAlert("Invalid","Please select category before apply filter")
+                      }
+                      
+                      }}>
+        <Text style={{color:"#ffffff",fontSize:17,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Apply Filter</Text>
       </TouchableOpacity>}
       </View>
     </SafeAreaView>

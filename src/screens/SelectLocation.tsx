@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
+
 const SelectLocation = () => {
     const [location,setLocation] = useState("");
     const navigation = useNavigation();
