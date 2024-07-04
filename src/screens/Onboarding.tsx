@@ -34,18 +34,24 @@ const Onboarding = () => {
         <View style={styles.container}>
             <ImageBackground source={require("../../assets/homeImage.png")} resizeMode="cover" style={styles.image}>
                 <LinearGradient colors={['#0A40', '#0A4500', '#0A4500']}style={ styles.containerStyle}>
-                    <View>
-                        <Text style={[styles.text]}>Welcome            to Santheyyy</Text>
+
+                    <View style={{justifyContent:"center",flexDirection:"row",alignItems:"center"}}>
+                    <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"auto"}}>
+                        <Text style={{textAlign:"center",color:"white",fontSize:50,fontFamily:"Gilroy-Semibold"}}>Welcome{"\n"}to Santheyyy</Text>
                     </View>
-                    <View style={{ width:'100%', marginBottom:65, marginLeft: 50, }}>
-                        <Text style={{ color: '#FCFCFC', fontSize: 15,fontFamily:'Gilroy-Semibold' }}>
+                    </View>
+
+                    <View style={{ width:'100%', marginBottom:65}}>
+                        <View style={{width:"100%",height:23}}>
+                        <Text style={{ color: '#AAAAAA', fontSize: 16,fontFamily:'Gilroy-Semibold',textAlign:"center",fontWeight:"bold"}}>
                             Get your groceries in as fast as 15 mins
                         </Text>
+                        </View>
                     </View>
                   
                     <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 50, marginLeft: 20, }}>
                         <TouchableOpacity onPress={() => navigation.replace("Signin")} style={styles.otpBtn}>
-                            <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: '600',fontFamily:'Gilroy-Semibold' }}>Get Started</Text>
+                            <Text style={{ color: '#ffffff', fontSize:18, fontWeight:"bold",fontFamily:'Gilroy-Semibold' }}>Get Started</Text>
                         </TouchableOpacity>
                     </View>
                 </LinearGradient>
@@ -75,22 +81,23 @@ const styles = StyleSheet.create({
 
     },
     otpBtn: {
-        width: 300,
-        height: 65,
-        backgroundColor: "#69AF5D",
+        width: 353,
+        height: 68,
+        backgroundColor: "rgb(105,175,94)",
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
         marginRight: 37,
-        marginBottom:950
+        marginBottom:700,
+        elevation:10
     },
     containerStyle :{
         backgroundColor: 'linear-gradient(to bottom, rgb((8,56,1)), rgb((10,69,0))), url(${backgroundImage})', // rgba(144, 238, 144, 0.7) is light green
         // backgroundSize: 'cover',
         // backgroundPosition: 'center',
         color: 'white', // Ensure text is readable on the gradient background
-        marginTop:700
+        marginTop:750
     }
 
 });

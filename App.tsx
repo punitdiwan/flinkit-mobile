@@ -36,6 +36,7 @@ import Order from "./src/screens/Order";
 import TrackOrder from "./src/screens/TrackOrder";
 import Orders from "./src/screens/Orders";
 import UploadImage from "./src/screens/UploadImage";
+import EditProfile from "./src/screens/EditProfile";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -173,7 +174,7 @@ export default function App() {
             options={{ title: "Favourite" }}
             component={Favourite}
           />
-          <Stack.Screen name="TopRated" component={TopRated} />
+          <Stack.Screen name="TopRated" component={TopRated} options={{title:"Top Rated"}} />
           <Stack.Screen name="About" component={About} />
           <Stack.Screen name="Help" component={Help} />
           <Stack.Screen
@@ -204,6 +205,12 @@ export default function App() {
            component={UploadImage}
           />
      
+          <Stack.Screen 
+            name="EditProfile"
+            component={EditProfile}
+            options={{title:"Edit Profile"}}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </MyProvider>

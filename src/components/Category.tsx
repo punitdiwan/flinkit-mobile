@@ -18,6 +18,7 @@ import CategoryScreen from "../screens/CategoryScreen";
 import BottomNav from "../screens/BottomNav";
 // import { fetchData } from "../screens/supabaseClient";
 const Stack = createNativeStackNavigator<RootStackParamList>();
+import { imageUrl } from "../../lib/constant";
 
 export const CategoryData = [
   {
@@ -159,6 +160,7 @@ export const CategoryData = [
 
 
 
+
 type Values = {
   bg: string;
   category_imgpath: string;
@@ -231,7 +233,7 @@ const Category = () => {
         }
       );
       const data = await resp.json();
-      // console.log(data);
+      data?.reverse();
       setCategories(data);
     };
 
@@ -262,6 +264,8 @@ const Category = () => {
           >
             {categories.length > 0 ? categories?.map((item: any,index:any) => {
               const randomNum = getRandomColor();
+              console.log("category",item?.category_imgpath);
+              
               return(
               <TouchableOpacity
                 onAccessibilityAction={() => setRefreshing(!false)}
@@ -286,7 +290,7 @@ const Category = () => {
                 >
                   <Image
                     style={{ width: "60%", aspectRatio: 1 }}
-                    source={{ uri: item.category_imgpath }}
+                    source={{ uri: `${imageUrl + item?.category_imgpath}`}}
                   />
                   <View>
                     <Text

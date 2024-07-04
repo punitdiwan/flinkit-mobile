@@ -120,7 +120,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
               <Text style={{ fontSize: 20,fontWeight:"bold" }}>
                 User Name
               </Text>
-              <Feather name="edit-2" size={20} color="#69AF5D" />
+              <Feather name="edit-2" size={20} color="#69AF5D" onPress={() => navigation.navigate("EditProfile")}/>
             </View>
             <Text style={{ color: "rgb(214,214,214)", fontSize: 16 }}>
               user@gmail.com

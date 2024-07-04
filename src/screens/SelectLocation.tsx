@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   KeyboardAvoidingView,
@@ -15,23 +15,40 @@ import {
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
+
+
+
 
 // const googleApiKey="";
 
 
 
 
+
 const SelectLocation = () => {
+    const focus = useIsFocused();
+
+    const [refresh,setRefresh] = useState(true);
+
     const [location,setLocation] = useState("");
     const navigation = useNavigation();
+
     const handleSubmit = () => {
         if(!location){
             alert("Please select your location");
             // showAlert();
         }else{
-             navigation.navigate("BottomNav");
+          ref.current?.setAddressText('');
+          navigation.navigate("BottomNav");
         }
     }
+
+    const ref = useRef();
+
+    // useEffect(() => {
+    //   ref.current?.setAddressText('Some Text');
+    // }, []);
 
     return (
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -40,7 +57,7 @@ const SelectLocation = () => {
               
               {/* <TextInput placeholder="Username" style={styles.textInput} />*/}
               <View style={{marginBottom:10}}>
-            <Image source={require("../../assets/location.png")} style={{height:200,width:"100%",backfaceVisibility:"hidden"}}/>
+            <Image source={require("../../assets/location.png")} style={{height:100,width:"100%",backfaceVisibility:"hidden"}}/>
         </View>
         <Text style={{fontWeight:"bold",color:"rgb(140,140,140)"}}>Your Location</Text>
 
@@ -49,8 +66,10 @@ const SelectLocation = () => {
           style={styles.container}>
            
               <GooglePlacesAutocomplete
+                ref={ref}
+                autoFocus={true}
                 placeholder='Search your location'
-                debounce={300}
+                debounce={100}
                 query={{
                     key:googleApiKey,
                     language: 'en',
@@ -94,7 +113,9 @@ const styles = StyleSheet.create({
     textInput: {
       height: 40,
       borderColor: '#000000',
-      marginBottom: 36,
+      // marginBottom: 36,
+      // backgroundColor:"red",
+      // width:"100%"
     },
     btnContainer: {
       backgroundColor: 'white',

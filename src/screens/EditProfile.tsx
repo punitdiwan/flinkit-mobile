@@ -14,7 +14,7 @@ const EditProfile = () => {
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("mypassword");
   const [hidePassword, setHidePassword] = useState(true);
-  const [updateProfile, setUpdateProfile] = useState(false);
+  const [updateProfile, setUpdateProfile] = useState(true);
   const [image, setImage] = useState(null);
 
   const togglePasswordVisibility = () => {
@@ -133,6 +133,7 @@ const EditProfile = () => {
               value={name}
               onChangeText={(text) => setName(text)}
               editable={updateProfile}
+              autoFocus={true}
             />
           </View>
         </View>
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default YourProfile;
+export default EditProfile;
 
 const style = StyleSheet.create({
   container: {
