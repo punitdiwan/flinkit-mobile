@@ -238,6 +238,7 @@ export const getProductsRelatedToCategoryId = async (categoryId) => {
 // storing ratings
 export const addProductRating = async (product,rating) => {
     try {
+      console.log("productSupabase",product);
       product[0].product_rating = rating;
       const getReviwedProducts = await supabase.from("reviwed_products").select("*");
       const addingReviwedProduct = await supabase.from("reviwed_products").insert(product[0]);

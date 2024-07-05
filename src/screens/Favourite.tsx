@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as Font from "expo-font";
 import { addToCart, loadFavItem } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
+import { useIsFocused } from "@react-navigation/native";
 
 
 const loadFonts = async () => {
@@ -23,6 +24,8 @@ const loadFonts = async () => {
 };
 
 const Favourite = () => {
+  const focus = useIsFocused();
+
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
   const [favItemList, setFavItemList] = useState([]);
@@ -38,7 +41,7 @@ const Favourite = () => {
 
   useEffect(() => {
     loadFav();
-  }, [])
+  }, [focus])
 
   const addingAllFavItemInCart =  async () => {
     let i = 0;
@@ -48,7 +51,7 @@ const Favourite = () => {
     }
 
   const renderItem = ({ item }: any) => (
-    <View style={{
+    <View key={item?.product_id} style={{
       width: "100%"
     }}>
       <TouchableOpacity onPress={() =>

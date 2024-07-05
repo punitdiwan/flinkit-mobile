@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import React,{useEffect, useState} from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -17,9 +18,12 @@ import  Category  from "../components/Category";
 import { getAllProducts } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
+import { useIsFocused } from "@react-navigation/native";
+// import { StatusBar } from "expo-status-bar";
 
 const SearchScreen = ({navigation}) => {
+  const focus = useIsFocused();
+
   const [text, setText] = useState('');
   const [mapData,setMapData] = useState([]);
   const [dummyData,setDummyData] = useState([]);
@@ -44,12 +48,13 @@ const SearchScreen = ({navigation}) => {
 
   useEffect(() => {
     getProducts(); 
-    
-  },[])
+    setText("");
+  },[focus])
 
   return (
+    <>
+    <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} />
     <View>
-
       <ScrollView style={{ backgroundColor: "#ffffff" }} showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -256,6 +261,7 @@ const SearchScreen = ({navigation}) => {
         }
       </ScrollView>
     </View>
+    </>
   );
 };
 

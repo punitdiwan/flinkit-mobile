@@ -52,7 +52,7 @@ React.useEffect(() => {
 
   return (
     <>
-    <StatusBar backgroundColor="#fff" barStyle={"dark-content"} translucent={true}/>
+    <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} translucent={true}/>
     <SafeAreaView>
       <ScrollView style={{backgroundColor:"rgb(255,255,255)"}} showsVerticalScrollIndicator={false}>
         <Header navigation={navigation} route={route} />

@@ -196,7 +196,7 @@ const HomePageCard = ({ name, data }: any) => {
         )} */}
 
           {data?.length > 0 ? data.map(item =>
-            <View style={{ backgroundColor: "white", width: 185, marginVertical: 3, paddingVertical: 30, paddingHorizontal: 10, borderRadius: 20, height: 270, borderColor: "rgb(233,233,233)", borderWidth: 1 }}>
+            <View key={item?.product_id} style={{ backgroundColor: "white", width: 185, marginVertical: 3, paddingVertical: 30, paddingHorizontal: 10, borderRadius: 20, height: 270, borderColor: "rgb(233,233,233)", borderWidth: 1 }}>
               <TouchableOpacity onPress={() =>
                 navigation.navigate("Productdetail", {
                   id: item?.product_id,

@@ -24,11 +24,11 @@ import {
 } from "../supabaseClient";
 
 type Props = {};
-const loadFonts = async () => {
-  await Font.loadAsync({
-    "Gilroy-Semibold": require("../../../assets/fonts/Gilroy-SemiBold.ttf"),
-  });
-};
+// const loadFonts = async () => {
+//   await Font.loadAsync({
+//     "Gilroy-Semibold": require("../../../assets/fonts/Gilroy-SemiBold.ttf"),
+//   });
+// };
 
 const Login = (props: Props) => {
   const navigation = useNavigation<any>();

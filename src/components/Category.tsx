@@ -159,6 +159,7 @@ export const CategoryData = [
 
 
 
+
 type Values = {
   bg: string;
   category_imgpath: string;
@@ -244,31 +245,7 @@ const Category = () => {
   }, [refreshing]);
   
 
-  const handleRemoveBackground = async () => {
-    const apiKey = "njv7RHG7MqkW3iqVX9wgPLxm";
-    const apiUrl = "https://api.remove.bg/v1.0/removebg";
-
-    const formData = new FormData();
-    formData.append("image_file", image, image.name);
-    formData.append("size", 'auto');
-
-    try {
-        const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'X-Api-Key': apiKey
-            },
-            body: formData
-        });
-
-        const data = await res.blob();
-        const imageUrl = URL.createObjectURL(data);
-        // setBgRemove(imageUrl);
-    } catch (error) {
-        console.log(error);
-    }
-};
-
+ 
 
   return (
     <>

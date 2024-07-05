@@ -71,17 +71,17 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
               flexDirection: "row",    
               minHeight: "100%",
               width:"100%",
-              backgroundColor:"#f2f0f0",
-              paddingVertical:5,
+              backgroundColor:"#fff",
+              paddingVertical:15,
               flexWrap:"wrap",
-              justifyContent:"space-around",
+              justifyContent:"flex-start",
               alignItems:"center",
-              paddingHorizontal:3
-            
+              paddingHorizontal:3,
+              gap:5
             }}
           >
             {products.map(item => 
-                <View style={{backgroundColor:"white",width:200,marginVertical:3,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:260,borderWidth:1,borderColor:"rgb(233,233,233)"}}>
+                <View style={{backgroundColor:"white",width:200,marginVertical:1,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:260,borderWidth:1,borderColor:"rgb(233,233,233)",elevation:1}}>
                   <TouchableOpacity onPress={() => navigation.navigate("Productdetail", {id: item?.product_id})
           } >
                     <View>
