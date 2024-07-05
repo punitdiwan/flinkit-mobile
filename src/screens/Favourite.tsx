@@ -130,7 +130,7 @@ const Favourite = () => {
         }}
       ></Text>
       { favouriteItem.length > 0 ? <FlatList
-
+        showsVerticalScrollIndicator={false}
         data={favouriteItem}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -167,7 +167,7 @@ const Favourite = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    // marginTop: 50,
     flex: 1,
     padding: 10,
     backgroundColor: "#fff",

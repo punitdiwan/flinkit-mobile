@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -78,6 +79,19 @@ const Profile = ({ navigation, route }: ProfileProps) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [showOrderPage,setShowOrderPage] = useState(false);
 
+  const removeLoggedInDataFromStorage = async () => {
+    try {
+      const response = await AsyncStorage.setItem("isLoggedIn","false");
+      console.log("response",response);
+      const currState = await AsyncStorage.getItem("isLoggedIn");
+      if(currState == "false"){
+        navigation.replace("Onboarding");
+      }
+      
+    } catch (error) {
+      console.log("error",error)
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -182,9 +196,10 @@ const Profile = ({ navigation, route }: ProfileProps) => {
               borderRadius: 10,
               position: "relative"
             }}
-            onPress={() => {
+            onPress={async () => {
               // dispatch(clearCartList());
-              navigation.replace("Onboarding");
+              await removeLoggedInDataFromStorage();
+              // navigation.replace("Onboarding");
              
             }}
           >

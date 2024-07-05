@@ -23,6 +23,7 @@ import * as React from "react";
 import { loadCartData, supabase } from "./supabaseClient";
 import { addToCartFun } from "../../lib/cartFun";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -160,7 +161,7 @@ const dummyProduct2 = [
 
 
 const CategoryScreen = (category_id: any, { navigate }: any) => {
-  console.log("rendering");
+  // console.log("rendering");
   interface Products {
     product: {
       product_id: string;
@@ -177,7 +178,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     []
   );
   const [product,setProduct] = useState(dummyProduct);
-  console.log("product",product?.length);
+  // console.log("product",product?.length);
   const [isLoading,setIsLoading] = useState(false);
 
   // const cartItemList = useSelector(store => store?.cart?.cartItemList);
@@ -212,7 +213,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
       .from("newproducts")
       .select("*")
       .eq("category_id", newId);
-    console.log("resp", resp);
+    // console.log("resp", resp);
 
     setProducts(resp.data);
   };
@@ -234,7 +235,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
 
 
   useEffect(() => {
-    console.log("Updated product:", product.length);
+    // console.log("Updated product:", product.length);
     // setProduct([]);
     // setProduct(product)
   }, [product]); // This will log whenever product state changes
@@ -261,6 +262,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
   const navigation = useNavigation<any>();
    return (
         <>
+        <StatusBar backgroundColor="white"/>
         <View style={{paddingLeft:20,backgroundColor:"white",minHeight:"100%"}}>
          {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"semibold",textDecorationLine:"underline"}}>"No Products"</Text></View>: <ScrollView   onScroll={({nativeEvent}) => {
               if (isCloseToBottom(nativeEvent) && !isLoading) {

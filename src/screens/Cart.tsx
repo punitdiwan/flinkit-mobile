@@ -84,7 +84,7 @@ const Cart = () => {
             renderItem={({ item }) => <CartItemCard item={item} />}
             keyExtractor={(item) => item.id}
           /> */}
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
           {cartItem?.length > 0 ? cartItem?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:700}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
           </ScrollView>
         </View>

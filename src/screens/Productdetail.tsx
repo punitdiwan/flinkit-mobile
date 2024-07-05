@@ -19,6 +19,7 @@ import { CiHeart } from "react-icons/ci";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
 import { AirbnbRating, Rating } from "react-native-ratings"
+import { StatusBar } from "expo-status-bar";
 
 
 const loadFonts = async () => {
@@ -135,6 +136,7 @@ const Productdetail = (id: any) => {
 
   return (
     <>
+    <StatusBar backgroundColor="white"/>
       <View style={styles.container}>
         {fetchProduct.length > 0 ? fetchProduct?.map((item: any, index: number) => {
           return (
@@ -167,7 +169,7 @@ const Productdetail = (id: any) => {
                     marginVertical: 5,
                   }}
                 >
-                  <Text style={{ fontSize:16,width:300,fontFamily: "Gilroy-Bold",fontWeight:"600" }}>
+                  <Text style={{ fontSize:16,width:300,fontFamily: "Gilroy-Bold",fontWeight:"bold" }}>
                     {item.product_name}
                   </Text>
                   {isFavItem ? <Text>
@@ -380,14 +382,15 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   image: {
-    marginTop: 30,
+    // marginTop: 30,
     width: "100%",
-    height: "auto",
+    height:"auto",
     aspectRatio: 1,
   },
   detailsContainer: {
     padding: 20,
     alignItems: "center",
+    backgroundColor:"rgb(255,255,255)"
   },
   productName: {
     fontSize: 24,
@@ -457,7 +460,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     marginTop: 35,
-    marginBottom: 30,
+    marginBottom: 50,
   },
   addToCartButtonText: {
     color: "white",

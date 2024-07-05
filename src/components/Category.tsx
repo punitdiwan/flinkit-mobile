@@ -19,6 +19,7 @@ import BottomNav from "../screens/BottomNav";
 // import { fetchData } from "../screens/supabaseClient";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 import { imageUrl } from "../../lib/constant";
+import { StatusBar } from "expo-status-bar";
 
 export const CategoryData = [
   {
@@ -158,9 +159,6 @@ export const CategoryData = [
 
 
 
-
-
-
 type Values = {
   bg: string;
   category_imgpath: string;
@@ -235,6 +233,8 @@ const Category = () => {
       const data = await resp.json();
       data?.reverse();
       setCategories(data);
+      console.log("category",data);
+      
     };
 
     fetchData();
@@ -244,9 +244,36 @@ const Category = () => {
   }, [refreshing]);
   
 
+  const handleRemoveBackground = async () => {
+    const apiKey = "njv7RHG7MqkW3iqVX9wgPLxm";
+    const apiUrl = "https://api.remove.bg/v1.0/removebg";
+
+    const formData = new FormData();
+    formData.append("image_file", image, image.name);
+    formData.append("size", 'auto');
+
+    try {
+        const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'X-Api-Key': apiKey
+            },
+            body: formData
+        });
+
+        const data = await res.blob();
+        const imageUrl = URL.createObjectURL(data);
+        // setBgRemove(imageUrl);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
   return (
     <>
-      <ScrollView style={{minHeight:"100%"}}>
+    <StatusBar backgroundColor="#fff"/>
+      <ScrollView style={{minHeight:"100%"}} showsVerticalScrollIndicator={false}>
         <View style={{width:"100%",backgroundColor:"white",justifyContent:"center",alignItems:"center",minHeight:"100%",paddingVertical:10,marginLeft:16}}>
           <View
            style={{

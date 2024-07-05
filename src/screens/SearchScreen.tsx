@@ -17,6 +17,7 @@ import  Category  from "../components/Category";
 import { getAllProducts } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 const SearchScreen = ({navigation}) => {
   const [text, setText] = useState('');
@@ -48,7 +49,8 @@ const SearchScreen = ({navigation}) => {
 
   return (
     <View>
-      <ScrollView style={{ backgroundColor: "#ffffff" }}>
+
+      <ScrollView style={{ backgroundColor: "#ffffff" }} showsVerticalScrollIndicator={false}>
         <View
           style={{
             padding: 10,

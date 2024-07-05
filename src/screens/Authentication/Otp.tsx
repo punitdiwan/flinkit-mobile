@@ -15,6 +15,8 @@ import { AntDesign } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { supabase, verifyOtp } from "../supabaseClient";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 type Props = {};
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -51,9 +53,15 @@ const Otp = (MobileNumber: any) => {
     });
     console.log("Otp.tsx, response:", response);
 
+    // set data in async storage
+    AsyncStorage.setItem("isLoggedIn","true");
+
     // navigation.navigate("BottomNav");
-    navigation.navigate("SelectLocation")
+    navigation.navigate("SelectLocation");
+   
+    
   };
+  
 
    // if (!fontLoaded) {
   //   return (

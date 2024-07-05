@@ -18,6 +18,8 @@ import Header from "../components/Header";
 import { ProductData } from "../Date";
 import { Ionicons } from "@expo/vector-icons";
 import Category from "../components/Category";
+import { StatusBar } from "react-native";
+// import { StatusBar } from "expo-status-bar";
 
 // const SUPABASE_URL = 'http://192.168.1.40:8000'
 // const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE';
@@ -37,7 +39,7 @@ const Home = ({ navigation, route }: HomeProps) => {
   
   const loadTopRatedProducts = async () => {
     const response = await getAllTopRatedProducts();
-    console.log("useEffect")
+    // console.log("useEffect")
     setTopRatedProducts(response);
     // console.log(topRatedProducts);
 }
@@ -49,8 +51,10 @@ React.useEffect(() => {
 },[])
 
   return (
+    <>
+    <StatusBar backgroundColor="#fff" barStyle={"dark-content"} translucent={true}/>
     <SafeAreaView>
-      <ScrollView style={{backgroundColor:"rgb(255,255,255)"}}>
+      <ScrollView style={{backgroundColor:"rgb(255,255,255)"}} showsVerticalScrollIndicator={false}>
         <Header navigation={navigation} route={route} />
         
         <HomePageCard name={"Exclusive Offer"} data={topRatedProducts} cartItem={cartData} />
@@ -58,6 +62,7 @@ React.useEffect(() => {
         <HomePageCard name={"Top Rated"} data={topRatedProducts}/> 
       </ScrollView>
     </SafeAreaView>
+    </>
   );
 };
 

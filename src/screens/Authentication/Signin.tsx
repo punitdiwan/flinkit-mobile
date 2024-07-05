@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
+    StatusBar,
     
   } from "react-native";
   import React from "react";
@@ -38,6 +39,7 @@ import * as Font from 'expo-font';
     //   }
 
     return (
+      <>
       <View>
         <ImageBackground
           source={require("../../../assets/Masksignin.png")}
@@ -120,6 +122,7 @@ import * as Font from 'expo-font';
           </TouchableOpacity>
         </View> */}
       </View>
+      </>
     );
   };
   

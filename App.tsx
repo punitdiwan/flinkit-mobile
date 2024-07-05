@@ -25,7 +25,7 @@ import Cart from "./src/screens/Cart";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomNav from "./src/screens/BottomNav";
-import React, { version } from "react";
+import React, { useEffect, useState, version } from "react";
 import { Provider } from "react-redux";
 import TopRated from "./src/screens/TopRated";
 import About from "./src/screens/About";
@@ -37,6 +37,8 @@ import TrackOrder from "./src/screens/TrackOrder";
 import Orders from "./src/screens/Orders";
 import UploadImage from "./src/screens/UploadImage";
 import EditProfile from "./src/screens/EditProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -70,6 +72,7 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+
   return (
     <MyProvider>
       <NavigationContainer>
@@ -212,6 +215,7 @@ export default function App() {
           />
 
         </Stack.Navigator>
+        {/* <StatusBar backgroundColor="rgb(105,175,94)"/> */}
       </NavigationContainer>
     </MyProvider>
   );

@@ -1,9 +1,10 @@
-import React,{useState} from 'react';
-import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React,{useEffect, useLayoutEffect, useState} from 'react';
+import { ImageBackground, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 // import  AppLoading  from 'expo-app-loading';
 import * as Font from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const image = { url: 'C:/Users/HP/Desktop/Madhukant/flinkit-mobile/assets/homeImage.png' };
@@ -30,8 +31,27 @@ const Onboarding = () => {
     //     );
     //   }
 
+    const checkIsLoggedIn = async () => {
+       const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+       console.log("isLoggedInState",isLoggedIn);
+       if(isLoggedIn === "true"){
+          navigation.navigate("BottomNav");
+       }else{
+        navigation.navigate("Onboarding");
+       }
+    }
+
+    useEffect(() => {
+        checkIsLoggedIn();
+    },[])
+
+    // useLayoutEffect(() => {
+    //     checkIsLoggedIn();
+    // },[])
+
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor={"black"}/>
             <ImageBackground source={require("../../assets/homeImage.png")} resizeMode="cover" style={styles.image}>
                 <LinearGradient colors={['#0A40', '#0A4500', '#0A4500']}style={ styles.containerStyle}>
 
@@ -97,7 +117,7 @@ const styles = StyleSheet.create({
         // backgroundSize: 'cover',
         // backgroundPosition: 'center',
         color: 'white', // Ensure text is readable on the gradient background
-        marginTop:750
+        marginTop:700
     }
 
 });
