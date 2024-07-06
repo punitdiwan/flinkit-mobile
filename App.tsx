@@ -95,7 +95,7 @@ export default function App() {
           <Stack.Screen
             name="Otp"
             component={Otp}
-            options={{ headerShown: false }}
+            options={{ headerShown: false}}
           />
           <Stack.Screen
             name="Maillogin"

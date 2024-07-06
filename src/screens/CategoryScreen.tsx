@@ -247,7 +247,6 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
     const updateProduct = [...product, ...dummyProduct2];
     // updateProduct?.map(item => setProduct([...product,item]))
     setProduct(updateProduct);
-    console.log("product length",product.length);
     return
     // setIsLoading(!isLoading)
   };

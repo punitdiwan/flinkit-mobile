@@ -44,10 +44,10 @@ import * as Font from 'expo-font';
         <ImageBackground
           source={require("../../../assets/Masksignin.png")}
           resizeMode="cover"
-          style={{ height: 395 }}
+          style={{width:"100%",height:400}}
         ></ImageBackground>
-        <Text style={{ width: 250, fontSize: 25,marginLeft:20,fontFamily:'Gilroy-Semibold' }}>
-          Get your groceries with necter
+        <Text style={{ width: 250, fontSize: 25,marginLeft:20,fontFamily:'Gilroy-Semibold',marginBottom:15 }}>
+          Get your groceries with Santheyyy
         </Text>
         <View
           style={{
