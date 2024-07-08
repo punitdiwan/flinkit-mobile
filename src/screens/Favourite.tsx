@@ -181,8 +181,7 @@ const styles = StyleSheet.create({
     fontFamily: "Gilroy-Bold",
     paddingVertical: 10,
     marginTop: 10,
-    marginBottom: 20,
-    fontWeight: "bold"
+    marginBottom: 20
   },
   listContainer: {
     flexGrow: 1,

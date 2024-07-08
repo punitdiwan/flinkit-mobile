@@ -12,8 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
-// import AppLoading from "expo-app-loading";
-import * as Font from "expo-font";
+
 import {
   addFavouriteItem,
   addProductRating,
@@ -21,23 +20,17 @@ import {
   supabase,
   removeItemFromFav,
 } from "./supabaseClient";
-import { CiHeart } from "react-icons/ci";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { StatusBar } from "expo-status-bar";
 
-const loadFonts = async () => {
-  await Font.loadAsync({
-    "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
-    "Gilroy-Medium": require("../../assets/fonts/Gilroy-Medium.ttf"),
-    "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
-  });
-};
+import Swiper from "react-native-swiper";
+
+
 
 const Productdetail = (id: any) => {
   console.log("product_id", id.route.params.id);
-  //  const dispatch = useDispatch();
 
   const productId = id.route.params.id;
   const navigation = useNavigation();
@@ -63,7 +56,10 @@ const Productdetail = (id: any) => {
 
   useEffect(() => {
     fetchData();
+ 
   }, [productId]);
+
+
 
   const toggleDetails = () => {
     setDetailsExpanded(!detailsExpanded);
@@ -161,6 +157,8 @@ const Productdetail = (id: any) => {
     loadFav();
   }, []);
 
+  
+
   return (
     <>
       <StatusBar backgroundColor="white" />
@@ -179,10 +177,24 @@ const Productdetail = (id: any) => {
                     elevation:10
                   }}
                 >
+                  <Swiper activeDotColor="rgb(105,175,94)" activeDotStyle={{width:30}} dotColor="rgb(181,178,177)">
                   <Image
-                    source={{ uri: item.product_imagename }}
+                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
                     style={styles.image}
                   />
+                  <Image
+                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
+                    style={styles.image}
+                  />
+                  <Image
+                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
+                    style={styles.image}
+                  />
+                  <Image
+                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
+                    style={styles.image}
+                  />
+                  </Swiper>
                 </View>
 
                 <View style={styles.detailsContainer}>
@@ -198,10 +210,9 @@ const Productdetail = (id: any) => {
                   >
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 24,
                         width: 300,
-                        fontFamily: "Gilroy-Bold",
-                        fontWeight: "bold",
+                        fontFamily: "Gilroy-Bold"
                       }}
                     >
                       {item.product_name}
@@ -231,7 +242,7 @@ const Productdetail = (id: any) => {
                   <View style={{ width: "100%" }}>
                     <Text
                       style={{
-                        fontSize: 15,
+                        fontSize: 1,
                         fontWeight: "500",
                         color: "#b5b2b1",
                       }}
@@ -463,8 +474,9 @@ const Productdetail = (id: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    gap:5
+    // flex: 1,
+    gap:5,
+    minHeight:"100%"
   },
   imageBackground: {
     width: "100%",
@@ -482,7 +494,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
     aspectRatio: 1,
-    borderRadius:10,
+    // borderRadius:,
     paddingVertical:2,
     paddingHorizontal:2
   },

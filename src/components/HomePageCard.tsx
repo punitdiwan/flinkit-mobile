@@ -52,8 +52,7 @@ const HomePageCard = ({ name, data }: any) => {
               width: "60%",
               color: "#181725",
               fontSize: 22,
-              // fontFamily: "Gilroy-Bold",
-              fontWeight:"bold"
+              fontFamily: "Gilroy-Bold"
             }}
           >
             {name}
@@ -63,8 +62,7 @@ const HomePageCard = ({ name, data }: any) => {
               width: "auto",
               color: "#69AF5D",
               fontSize: 15,
-              // fontFamily: "Gilroy-Bold",
-              fontWeight:"bold"
+              fontFamily: "Gilroy-Bold",
             }}
             onPress={() => navigation.navigate("TopRated")}
           >

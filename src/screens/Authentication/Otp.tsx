@@ -68,7 +68,7 @@ const Otp = (MobileNumber: any) => {
       </View>
 
       <View style={{ marginLeft: 20, marginTop: 60 }}>
-        <Text style={{ fontWeight: "500", fontSize: 26 }}>
+        <Text style={{ fontWeight: "500", fontSize: 26,fontFamily:"Gilroy-Semibold" }}>
           Enter your 6-digit code
         </Text>
         <Text

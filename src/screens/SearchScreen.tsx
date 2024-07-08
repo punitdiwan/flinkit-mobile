@@ -132,16 +132,15 @@ const SearchScreen = ({navigation}) => {
                           style={{
                             marginTop: 10,
                             fontSize: 16,
-                            color: "#6b6e6a",
-                            fontWeight: "600",
-                            // fontFamily: "Gilroy-Bold",
-                            marginBottom:1
+                            color: "#000",
+                            marginBottom:1,
+                            fontFamily:"Gilroy-Bold"
                           }}
                         >
                           {item.product_name}
                         </Text>
                         </View>
-                        <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontWeight:"bold",marginBottom:20}}>325ml,Price</Text>
+                        <Text style={{fontSize:14,paddingTop:5,color:"rgb(205,205,205)",fontFamily:"Gilroy-Semibold",marginBottom:20}}>325ml,Price</Text>
                         </View>
                      
                         <View
@@ -161,9 +160,9 @@ const SearchScreen = ({navigation}) => {
                           >
                             <Text
                               style={{
-                                fontSize: 15,
+                                fontSize: 18,
                                 color: "#000000",
-                                fontWeight: "600",
+                               fontFamily:"Gilroy-Semibold"
                               }}
                             >
                               ₹ {item.price}

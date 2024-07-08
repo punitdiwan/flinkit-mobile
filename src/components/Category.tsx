@@ -159,6 +159,7 @@ export const CategoryData = [
 
 
 
+
 type Values = {
   bg: string;
   category_imgpath: string;
@@ -301,7 +302,6 @@ const Category = () => {
                         textAlign: "center",
                         fontSize: 16,
                         fontStyle: "normal",
-                        fontWeight:"bold",
                         fontFamily: "Gilroy-Bold",
                       }}
                     >

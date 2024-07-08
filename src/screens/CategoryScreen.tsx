@@ -294,16 +294,16 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
                     <View>
                     <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?. product_imagename }}
                 />
-                <View style={{height:22}}>
-                    <Text style={{fontSize:15,fontWeight:"bold",color:"rgb(38,37,50)"}}>{item?.product_name}</Text>
+                <View style={{height:20}}>
+                    <Text style={{fontSize:16,fontFamily:"Gilroy-Bold",color:"rgb(38,37,50)"}}>{item?.product_name}</Text>
                 </View>
                
-                 <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontWeight:"bold"}}>325ml,Price</Text>
+                 <Text style={{paddingTop:5,color:"rgb(205,205,205)",fontFamily:"Gilroy-Semibold",fontSize:14}}>325ml,Price</Text>
                     </View>
                     <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:15,alignItems:"center"}}>
 
                         <View>
-                        <Text style={{fontSize:15,fontWeight:"bold",color:"rgb(38,37,50)"}}>₹{item?.price}</Text>
+                        <Text style={{fontSize:18,fontFamily:"Gilroy-Semibold",color:"rgb(38,37,50)"}}>₹{item?.price}</Text>
                         </View>
 
                         {cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>

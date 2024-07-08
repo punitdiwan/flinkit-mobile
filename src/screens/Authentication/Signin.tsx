@@ -9,34 +9,33 @@ import {
     StatusBar,
     
   } from "react-native";
-  import React from "react";
+  import React, { useEffect } from "react";
   import {useState} from "react";
   import { useNavigation } from "@react-navigation/native";
   import { FontAwesome } from '@expo/vector-icons';
   import { AntDesign } from '@expo/vector-icons';
-  // import  AppLoading  from 'expo-app-loading';
+  
+  import * as SplashScreen  from 'expo-splash-screen';
 import * as Font from 'expo-font';
   
   const Signin = () => {
     const navigation = useNavigation<any>();
-    // const loadFonts = async () => {
-    //   await Font.loadAsync({
-    //       'Gilroy-Semibold': require('../../../assets/fonts/Gilroy-SemiBold.ttf'),
-    //     });
-  
-    // };
-    
-    const [fontLoaded, setFontLoaded] = useState(false);
 
-    // if (!fontLoaded) {
-    //     return (
-    //       <AppLoading
-    //         startAsync={loadFonts}
-    //         onFinish={() => setFontLoaded(true)}
-    //         onError={console.warn}
-    //       />
-    //     );
-    //   }
+    useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'Gilroy-Semibold': require('../../../assets/fonts/Gilroy-SemiBold.ttf'),
+          'Gilroy-Medium': require('../../../assets/fonts/Gilroy-Medium.ttf'),
+          'Gilroy-Bold': require('../../../assets/fonts/Gilroy-Bold.ttf'),
+        });
+        // Font loading is completed, hide SplashScreen
+        SplashScreen.hide();
+      }
+  
+      // Load fonts and hide SplashScreen when fonts are loaded
+      loadFonts();
+    }, []); 
+
 
     return (
       <>
@@ -46,7 +45,7 @@ import * as Font from 'expo-font';
           resizeMode="cover"
           style={{width:"100%",height:400}}
         ></ImageBackground>
-        <Text style={{ width: 250, fontSize: 25,marginLeft:20,fontFamily:'Gilroy-Semibold',marginBottom:15 }}>
+        <Text style={{ width: 250, fontSize: 25,marginLeft:20,marginBottom:15,fontFamily:"Gilroy-Semibold"}}>
           Get your groceries with Santheyyy
         </Text>
         <View
