@@ -35,59 +35,8 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItem, setCartItem] = useState([]);
   const [favouriteItem,setFavouriteItem] = useState([]);
 
-
-
-  function getItemQuintity(id: string) {
-    return cartItem.find((item) => item.id === id)?.quantity || 0;
-  }
-
-  function increaseCardQuantity(id: string) {
-    // setCartItem((currentItems) => {
-    //   if (currentItems.find((item) => item.id === id) == null) {
-    //     return [...currentItems, { id, quantity: 1 }];
-    //   } else {
-    //     return currentItems.map((item) => {
-    //       if (item.id === id) {
-    //         return { ...item, quantity: item.quantity + 1 };
-    //       } else {
-    //         return item;
-    //       }
-    //     });
-    //   }
-    // });
-
-    addToCart(id);
-    const response = loadCartData();
-    console.log(response);
-
-    // setCartItem(response);
-  }
-
-  function decreaseCardQuantity(id: string) {
-    setCartItem((currentItems) => {
-      if (currentItems.find((item) => item.id === id)?.quantity === 1) {
-        return currentItems.filter((item) => item.id !== id);
-      } else {
-        return currentItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
-  }
-
-  function removeFromcart(id: string) {
-    setCartItem((currItems) => {
-      return currItems.filter((item) => item.id !== id);
-    });
-  }
-
   // Add to cart by harsh
   function addingItemInCart(data: any) {
-    console.log("loop",data);
     
     if (cartItem?.length == 0) {
       const itemObj = new Object(data);
@@ -101,7 +50,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         findingProductInCartItem[0].qty = findingProductInCartItem[0].qty + 1;
         removeFindProduct.push(...findingProductInCartItem);
         setCartItem([...removeFindProduct]);
-        // console.log("cartItem3",cartItem);
+
       } else {
         const newObj = new Object(data);
         newObj.qty = 1;
@@ -174,14 +123,11 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   function addAllFavItemInCart(data){
+    console.log("dataa",data);
+    
       const findProductIsExistOrNot = cartItem.filter(item => item?.product_id == data?.product_id);
       console.log(findProductIsExistOrNot.length > 0 ? "true" : "false");
       if(findProductIsExistOrNot.length > 0){
-        // const obj = new Object(data);
-        // obj.qty = findProductIsExistOrNot[0].qty + 1;
-        // const updatedCart = cartItem.filter(item => item?.product_id !== data?.product_id);
-        // updatedCart.push(obj);
-        // setCartItem(updatedCart);
         return
       }else{
         const obj = new Object(data);
@@ -201,10 +147,6 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       value={{
         cartItem,
         favouriteItem,
-        getItemQuintity,
-        increaseCardQuantity,
-        decreaseCardQuantity,
-        removeFromcart,
         addingItemInCart,
         deleteParticularItemInCart,
         decreaseCartQuantity,

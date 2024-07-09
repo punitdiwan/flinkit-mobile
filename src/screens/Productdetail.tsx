@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
@@ -26,6 +27,7 @@ import { AirbnbRating, Rating } from "react-native-ratings";
 import { StatusBar } from "expo-status-bar";
 
 import Swiper from "react-native-swiper";
+import { imageUrl } from "../../lib/constant";
 
 
 
@@ -115,18 +117,18 @@ const Productdetail = (id: any) => {
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
 
   const addToFav = async (data) => {
-    console.log("fav");
+    console.log("fav",data.imagename);
     const {
       price,
       product_id,
-      product_imagename,
+      imagename,
       product_name,
       darkroomownerid,
     } = data;
     await addFavouriteItem(
       price,
       product_id,
-      product_imagename,
+      imagename,
       product_name,
       darkroomownerid
     );
@@ -162,9 +164,12 @@ const Productdetail = (id: any) => {
   return (
     <>
       <StatusBar backgroundColor="white" />
+      {/* <ScrollView style={{height:"auto"}}> */}
       <View style={styles.container}>
         {fetchProduct.length > 0 ? (
           fetchProduct?.map((item: any, index: number) => {
+            console.log("ProductDetailPage",item?.imagename);
+            
             return (
               <>
                 <View
@@ -174,28 +179,17 @@ const Productdetail = (id: any) => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    elevation:10
+                    elevation:2
                   }}
                 >
                   <Swiper activeDotColor="rgb(105,175,94)" activeDotStyle={{width:30}} dotColor="rgb(181,178,177)">
-                  <Image
-                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
-                    style={styles.image}
-                  />
-                  <Image
-                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
-                    style={styles.image}
-                  />
-                  <Image
-                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
-                    style={styles.image}
-                  />
-                  <Image
-                    source={{uri:"https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=600"}}
-                    style={styles.image}
-                  />
+                  {item?.imagename.map(item => <Image source={{uri:`${imageUrl}${item?.name}`}}  style={{width:"100%",height:"100%"}}/>)}
                   </Swiper>
                 </View>
+{/* 
+                <Image
+                    source={{ uri: `${imageUrl+item?.imagename?.name}` }}
+                  /> */}
 
                 <View style={styles.detailsContainer}>
                   <View
@@ -468,6 +462,7 @@ const Productdetail = (id: any) => {
           </View>
         )}
       </View>
+      {/* </ScrollView> */}
     </>
   );
 };
@@ -476,7 +471,7 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     gap:5,
-    minHeight:"100%"
+    height:"100%"
   },
   imageBackground: {
     width: "100%",
@@ -554,6 +549,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     width: "100%",
     textAlign: "left",
+    height:32
   },
   starsContainer: {
     flexDirection: "row",

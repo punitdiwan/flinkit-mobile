@@ -26,6 +26,7 @@ import { useMyContext } from '../context/Context';
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import Header from '../components/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { imageUrl } from '../../lib/constant';
 
 
 interface ShowingFilterDataProps {
@@ -40,6 +41,8 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
   const {id,category,brand} = route.params;
   
   const [products,setProducts] = useState([]);
+  console.log("showingProducts",products);
+  
   const navigation = useNavigation();
   const {cartItem,increaseCartQuantity,decreaseCartQuantity,addingItemInCart} = useMyContext();
 
@@ -85,7 +88,7 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
                   <TouchableOpacity onPress={() => navigation.navigate("Productdetail", {id: item?.product_id})
           } >
                     <View>
-                    <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?. product_imagename }}
+                    <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
                 />
                 <View style={{height:40}}>
                  <Text style={{fontSize:15,fontWeight:"bold"}}>{item?.product_name}</Text>

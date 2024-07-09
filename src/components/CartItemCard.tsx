@@ -9,6 +9,7 @@ import { Entypo } from "@expo/vector-icons";
 import { addToCart, decreaseItemQuantity, deleteCartItem,loadCartData } from "../screens/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
 import { addToCartFun, decreaseItemQuantityFun, removeFromcartFun} from "../../lib/cartFun";
+import { imageUrl } from "../../lib/constant";
 
 type cardItemsProps = {
   item: {
@@ -22,36 +23,11 @@ type cardItemsProps = {
 const CartItemCard = ({ item }: cardItemsProps) => {
   const {deleteParticularItemInCart,decreaseCartQuantity,increaseCartQuantity} = useMyContext();
   
-  const { product_name,price,product_imagename, qty, product_id } = item;
+  const { product_name,price,imagename, qty, product_id } = item;
+  
 
 
   const navigation = useNavigation();
-  // const dispatch = useDispatch();
-
-
-  // const items: any = CategoryData.find((i) => i.id === item.id);
-
-
-  // const increaseParticularCartItemQuantity = async (item: any) => {
-  //   await addToCartFun(item);
-  //   await dispatch(clearCartList());
-  //   const response = await loadCartData();
-  //   await dispatch(addItemInCart(response));
-  // }
-
-  // const decreaseParticularCartItemQuantity = async (item: any) => {
-  //   await decreaseItemQuantityFun(item?.product_id);
-  //   await dispatch(clearCartList());
-  //   const response = await loadCartData();
-  //   await dispatch(addItemInCart(response));
-  // }
-
-  // const removeFromcart = async (product_id:any) => {
-  //   await removeFromcartFun(product_id)
-  //   await dispatch(clearCartList());
-  //   const response = await loadCartData();
-  //   await dispatch(addItemInCart(response))
-  // }
 
   return (
     <View
@@ -86,7 +62,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
         }}
       >
         <Image
-          source={{ uri: product_imagename }}
+          source={{ uri: `${imageUrl}${imagename[0]?.name}` }}
           style={{
             width: "100%",
             height: "auto",

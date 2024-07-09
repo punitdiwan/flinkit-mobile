@@ -24,6 +24,7 @@ import { loadCartData, supabase } from "./supabaseClient";
 import { addToCartFun } from "../../lib/cartFun";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { imageUrl } from "../../lib/constant";
 
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -292,7 +293,7 @@ const CategoryScreen = (category_id: any, { navigate }: any) => {
             })
           }>
                     <View>
-                    <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?. product_imagename }}
+                    <Image  style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: `${imageUrl}${item?.imagename[0]?.name}`}}
                 />
                 <View style={{height:20}}>
                     <Text style={{fontSize:16,fontFamily:"Gilroy-Bold",color:"rgb(38,37,50)"}}>{item?.product_name}</Text>

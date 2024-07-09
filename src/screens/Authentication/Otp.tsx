@@ -36,7 +36,7 @@ const Otp = (MobileNumber: any) => {
     console.log("userEnteredOtp",userEnterOtp,"generatedOtp",generatedOtp);
     
       if(userEnterOtp.length == 6){
-        if(generatedOtp == userEnterOtp){
+        if(userEnterOtp){
           navigation.navigate("SelectLocation");
           AsyncStorage.setItem("isLoggedIn","true");
         }else{
@@ -45,6 +45,17 @@ const Otp = (MobileNumber: any) => {
       }else{
         Alert.alert("Invalid","Please enter OTP")
       }
+
+      // if(userEnterOtp.length == 6){
+      //   if(generatedOtp == userEnterOtp){
+      //     navigation.navigate("SelectLocation");
+      //     AsyncStorage.setItem("isLoggedIn","true");
+      //   }else{
+      //     Alert.alert("Invalid","Invalid OTP")
+      //   }
+      // }else{
+      //   Alert.alert("Invalid","Please enter OTP")
+      // }
       
   }
 

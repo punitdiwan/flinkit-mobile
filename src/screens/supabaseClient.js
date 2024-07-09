@@ -238,10 +238,12 @@ export const getProductsRelatedToCategoryId = async (categoryId) => {
 // storing ratings
 export const addProductRating = async (product,rating) => {
     try {
-      console.log("productSupabase",product);
+      // const {product_name,product_category,imagename,price} = product[0];
       product[0].product_rating = rating;
+      console.log("product",product[0]);
+      const {category_id,darkroomownerid,imagename,packing_weight,price,product_brand,product_category,product_name,product_rating} = product[0]
       const getReviwedProducts = await supabase.from("reviwed_products").select("*");
-      const addingReviwedProduct = await supabase.from("reviwed_products").insert(product[0]);
+      const addingReviwedProduct = await supabase.from("reviwed_products").insert({product_id:pr});
       console.log(addingReviwedProduct);
     } catch (error) {
       console.log(error.message);

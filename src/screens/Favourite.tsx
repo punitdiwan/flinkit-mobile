@@ -13,6 +13,7 @@ import * as Font from "expo-font";
 import { addToCart, loadFavItem } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { useIsFocused } from "@react-navigation/native";
+import { imageUrl } from "../../lib/constant";
 
 
 const loadFonts = async () => {
@@ -72,7 +73,7 @@ const Favourite = () => {
         >
           <View style={{ width: "15%" }}>
             <Image
-              source={{ uri: item?.product_imagename }}
+              source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
               style={{
                 width: "100%",
                 height: "auto",

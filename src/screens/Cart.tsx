@@ -25,7 +25,7 @@ const Cart = () => {
   const [totalAmount,setTotalAmount] = useState(0);
 
   const {cartItem,clearCart} = useMyContext();
-  console.log("cartItem",cartItem);
+  // console.log("cartItemm",cartItem);
 
 
   function generateRandomCode() {

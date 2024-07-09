@@ -99,6 +99,7 @@ export default SelectLocation;
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      // backgroundColor:"red"
     },
     inner: {
       paddingHorizontal: 24,

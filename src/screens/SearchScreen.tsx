@@ -19,6 +19,7 @@ import { getAllProducts } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import { imageUrl } from "../../lib/constant";
 // import { StatusBar } from "expo-status-bar";
 
 const SearchScreen = ({navigation}) => {
@@ -39,7 +40,7 @@ const SearchScreen = ({navigation}) => {
   };
 
   const filterData = dummyData?.filter((item) => item?.product_name?.toLowerCase()?.includes(text.toLowerCase()));
-  console.log(filterData);
+  console.log("filterData",filterData);
   
   const getProducts = async () => {
     const productData:any = await getAllProducts();
@@ -107,7 +108,8 @@ const SearchScreen = ({navigation}) => {
             paddingBottom:40
           }}
         >
-          {filterData.length > 0 ? filterData.map(item => <TouchableOpacity
+          {filterData.length > 0 ? filterData.map(item => 
+          <TouchableOpacity
                       key={item.product_id}
                       style={styles.body}
                       // onPress={() =>
@@ -124,7 +126,7 @@ const SearchScreen = ({navigation}) => {
                         <Image
                           style={{ width: "100%", height: 110 }}
                           resizeMode="contain"
-                          source={{ uri: item.product_imagename }}
+                          source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
                         />
                         <View style={{height:58
                         }}>
