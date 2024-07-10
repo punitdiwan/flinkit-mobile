@@ -5,9 +5,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { loadCartData, supabase } from "./supabaseClient";
+import { getAllTopRatedProducts, loadCartData, supabase } from "./supabaseClient";
 import { createClient } from "@supabase/supabase-js";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -17,6 +18,8 @@ import Header from "../components/Header";
 import { ProductData } from "../Date";
 import { Ionicons } from "@expo/vector-icons";
 import Category from "../components/Category";
+import { StatusBar } from "react-native";
+// import { StatusBar } from "expo-status-bar";
 
 // const SUPABASE_URL = 'http://192.168.1.40:8000'
 // const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE';
@@ -30,42 +33,36 @@ const Home = ({ navigation, route }: HomeProps) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [cartData,setCartData] = useState([]);
+  const [topRatedProducts,setTopRatedProducts] = useState([]);
 
-  // async function loadCart(){
-  //   console.log("call loaded data");
-    
-  //   const response = await loadCartData();
-  //   console.log("loadCart",response);
-    
-  // }
+
   
-  // React.useEffect(() => {
-  //   loadCart();
-  // },[])
+  const loadTopRatedProducts = async () => {
+    const response = await getAllTopRatedProducts();
+    // console.log("useEffect")
+    setTopRatedProducts(response);
+    // console.log(topRatedProducts);
+}
+
+
+
+React.useEffect(() => {
+  loadTopRatedProducts();
+},[])
 
   return (
+    <>
+    <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} translucent={true}/>
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={{backgroundColor:"rgb(255,255,255)"}} showsVerticalScrollIndicator={false}>
         <Header navigation={navigation} route={route} />
-        <HomePageCard name={"Exclusive Offer"} data={ProductData} cartItem={cartData} />
-        <HomePageCard name={"Best Selling"} data={ProductData} />
-        <TouchableOpacity>
-          {/* <Text style={{ fontSize: 40 }} onPress={fetchData}>Fetch Data</Text> */}
-
-          {/* <Category /> */}
-        </TouchableOpacity>
-        {/* {data.length > 0 ? (
-          data.map((item) => (
-            <View key={item.id} style={styles.itemContainer}>
-              <Text>Name: {item.name}</Text>
-              <Text>Age: {item.age}</Text>
-            </View>
-          ))
-        ) : (
-          <Text>No data available</Text>
-        )} */}
+        
+        <HomePageCard name={"Exclusive Offer"} data={topRatedProducts} cartItem={cartData} />
+        <HomePageCard name={"Best Selling"} data={topRatedProducts} />
+        <HomePageCard name={"Top Rated"} data={topRatedProducts}/> 
       </ScrollView>
     </SafeAreaView>
+    </>
   );
 };
 

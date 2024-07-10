@@ -35,13 +35,13 @@ const Orderaccepted = ({ navigation }:any) => {
         {/* <Image source={require('../../../flinkit-mobile/assets/done.png')}/> */}
       </View>
 
-      <Text style={styles.text}>Your Order has been accepted.</Text>
+      <Text style={styles.text}>Your Order has been {"\n"} Placed</Text>
       <Text style={{fontSize:16,textAlign:'center',width:'80%',color:'#7C7C7C',marginLeft:33,fontFamily:'Gilroy-Bold',}}>
         Your item has been placed and is on it's way to being processed.</Text>
     
 
       <View style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 70, marginLeft: 20, }}>
-        <TouchableOpacity onPress={() => navigation.replace("ErrorCard")} style={styles.otpBtn}>
+        <TouchableOpacity onPress={() => navigation.navigate("Orders")} style={styles.otpBtn}>
           <Text style={{ color: '#ffffff', fontSize: 18,fontFamily:'Gilroy-Bold', fontWeight: '600',fontWeight:"bold" }}>Track Order</Text>
         </TouchableOpacity>
       </View>

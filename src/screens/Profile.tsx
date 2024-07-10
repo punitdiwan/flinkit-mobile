@@ -19,8 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 // import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { clearCartList } from "../../redux/slices/cartSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -34,13 +33,13 @@ const loadFonts = async () => {
 const arr = [
   {
     id: "1",
-    name: "orders",
+    name: "Orders",
     img: require("../../assets/Orders icon.png"),
     navigate: "Orderaccepted",
   },
   {
     id: "2",
-    name: "my details",
+    name: "YourProfile",
     img: require("../../assets/My Details icon.png"),
   },
   {
@@ -78,23 +77,21 @@ const ProfileImag =
   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const Profile = ({ navigation, route }: ProfileProps) => {
   const [fontLoaded, setFontLoaded] = useState(false);
-  const dispatch = useDispatch();
+  const [showOrderPage,setShowOrderPage] = useState(false);
 
-  const cartData = useSelector((store) => store.cart.cartItemList);
-  console.log(cartData);
-  
-
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
-
-  // const {logoutToggle}=useMyContext();
+  const removeLoggedInDataFromStorage = async () => {
+    try {
+      const response = await AsyncStorage.setItem("isLoggedIn","false");
+      console.log("response",response);
+      const currState = await AsyncStorage.getItem("isLoggedIn");
+      if(currState == "false"){
+        navigation.replace("Onboarding");
+      }
+      
+    } catch (error) {
+      console.log("error",error)
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -116,11 +113,14 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             gap: 10,
           }}
         >
+          <View style={{width:63.5,height:63.5,justifyContent:"center",alignItems:"center",paddingTop:2,paddingBottom:2,paddingHorizontal:2}}>
           <Image
-            source={{ uri: ProfileImag }}
+            source={require("../../assets/person.png")}
             resizeMode="cover"
-            style={{ width: 64, height: 64, borderRadius: 27 }}
+            style={{ width: 63, height: 63, borderRadius:100}}
           />
+          </View>
+
           <View>
             <View
               style={{
@@ -131,23 +131,24 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 width: 150,
               }}
             >
-              <Text style={{ fontSize: 20, fontFamily: "Gilroy-Bold" }}>
-                Test Test
+              <Text style={{ fontSize: 20,fontWeight:"bold" }}>
+                User Name
               </Text>
-              <Feather name="edit-2" size={20} color="#69AF5D" />
+              <Feather name="edit-2" size={20} color="#69AF5D" onPress={() => navigation.navigate("EditProfile")}/>
             </View>
-            <Text style={{ color: "#7C7C7C", fontSize: 16 }}>
-              test@gmail.com
+            <Text style={{ color: "rgb(214,214,214)", fontSize: 16 }}>
+              user@gmail.com
             </Text>
           </View>
         </View>
         <View style={{ width: "100%", height: "auto", padding: 5 }}>
-          {arr?.map((item) => (
+          {arr?.map((item) =>{
+            return (
             <TouchableOpacity
               key={item.id}
               style={{
                 width: "100%",
-                height: 50,
+                height: 60,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
@@ -155,12 +156,13 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 paddingHorizontal: 10,
                 borderBottomWidth: 0.5,
                 borderColor: "#E2E2E2",
+                // paddingVertical:10
               }}
-              onPress={() => navigation.navigate(`${item.navigate}`)}
+              onPress={() => navigation.navigate(`${item?.name}`)}
             >
-              <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+              <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
                 <Image source={item.img} />
-                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf" }}>
+                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf",fontWeight:"bold" }}>
                   {item.name}
                 </Text>
               </View>
@@ -168,7 +170,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 <Image source={require("../../assets/Vector.png")} />
               </View>
             </TouchableOpacity>
-          ))}
+          )})}
         </View>
         <View
           style={{
@@ -177,28 +179,31 @@ const Profile = ({ navigation, route }: ProfileProps) => {
             alignItems: "center",
             justifyContent: "center",
             height: 150,
+            paddingHorizontal:20,
+            position:"absolute",
+            bottom:0
           }}
         >
           <TouchableOpacity
             style={{
-              width: 300,
+              width: "100%",
               height: 65,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               paddingHorizontal: 20,
-              backgroundColor: "#F2F3F2",
-              borderRadius: 20,
-              position: "relative",
-              fontFamily: "Gilroy-Semibold",
+              backgroundColor: "rgb(242,243,242)",
+              borderRadius: 10,
+              position: "relative"
             }}
-            onPress={() => {
+            onPress={async () => {
               // dispatch(clearCartList());
-              navigation.replace("Onboarding");
+              await removeLoggedInDataFromStorage();
+              // navigation.replace("Onboarding");
              
             }}
           >
-            <Text style={{ color: "#69AF5D", fontSize: 18 }}>Log Out</Text>
+            <Text style={{ color: "#69AF5D", fontSize: 18,fontWeight:"semibold" }}>Log Out</Text>
             <Feather
               style={{ position: "absolute", left: 30 }}
               name="log-out"

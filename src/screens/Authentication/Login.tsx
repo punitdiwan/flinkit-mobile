@@ -12,8 +12,6 @@ import * as React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-// import AppLoading from "expo-app-loading";
-import * as Font from "expo-font";
 import { channel } from "expo-updates";
 import {
   getuserbyphone,
@@ -23,12 +21,11 @@ import {
   supabase,
 } from "../supabaseClient";
 
+import * as SplashScreen  from 'expo-splash-screen';
+import * as Font from 'expo-font';
+
 type Props = {};
-const loadFonts = async () => {
-  await Font.loadAsync({
-    "Gilroy-Semibold": require("../../../assets/fonts/Gilroy-SemiBold.ttf"),
-  });
-};
+
 
 const Login = (props: Props) => {
   const navigation = useNavigation<any>();
@@ -71,15 +68,22 @@ const Login = (props: Props) => {
     }
   };
 
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
+
+  React.useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'Gilroy-Semibold': require('../../../assets/fonts/Gilroy-SemiBold.ttf'),
+        'Gilroy-Medium': require('../../../assets/fonts/Gilroy-Medium.ttf'),
+        'Gilroy-Bold': require('../../../assets/fonts/Gilroy-Bold.ttf'),
+      });
+      // Font loading is completed, hide SplashScreen
+      SplashScreen.hide();
+    }
+
+    // Load fonts and hide SplashScreen when fonts are loaded
+    loadFonts();
+  }, []); 
+
 
   return (
     <View style={styles.container}>

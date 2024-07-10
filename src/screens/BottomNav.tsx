@@ -16,10 +16,17 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import YourCustomHeaderComponent from "../components/YourCustomHeaderComponent";
 import Filter from "./Filter";
+import ShowingFilterData from "./ShowingFilterData";
+// import { useSelector } from "react-redux";
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const BottomNav = () => {
   const { cartItem } = useMyContext();
+  console.log(cartItem);
+  
+  // const cartItemList = useSelector(store => store?.cart?.cartItemList);
+  // console.log("Nav",cartItemList);
+  
   return (
     <>
       <Tab.Navigator
@@ -90,33 +97,35 @@ const BottomNav = () => {
             header: () => <YourCustomHeaderComponent name={"Find Products"} />,
           }}
         />
-        {cartItem?.length === 0 ? (
           <Tab.Screen
             name="Cart"
             component={Cart}
             options={{
               title: "Cart",
               headerShown: true,
+              tabBarBadge: cartItem.length,
+
               tabBarIcon: ({ color, size }) => {
                 return <Feather name="shopping-cart" size={25} color={color} />;
               },
+              
               header: () => <YourCustomHeaderComponent name={"My Cart"} />,
             }}
           />
-        ) : (
+        {/* ) : (
           <Tab.Screen
             name="Cart"
             component={Cart}
             options={{
               headerShown: true,
-              // tabBarBadge: cartItem.length,
+              tabBarBadge: cartItemList.length,
 
               tabBarIcon: ({ color, size }) => {
                 return <Ionicons4 name="cart-plus" color={color} size={30} />;
               },
             }}
           />
-        )}
+        )} */}
         <Tab.Screen
           name="Favourite"
           component={Favourite}
@@ -151,7 +160,13 @@ const BottomNav = () => {
           component={Filter}
           options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
         />
+        <Tab.Screen 
+            name="ShowingFilterData"
+            component={ShowingFilterData}
+            options={{ tabBarItemStyle: { display: "none" }, headerShown: false }}
+        />
       </Tab.Navigator>
+      
     </>
   );
 };

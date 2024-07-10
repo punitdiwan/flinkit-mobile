@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ import CategoryScreen from "../screens/CategoryScreen";
 import BottomNav from "../screens/BottomNav";
 // import { fetchData } from "../screens/supabaseClient";
 const Stack = createNativeStackNavigator<RootStackParamList>();
+import { imageUrl } from "../../lib/constant";
+import { StatusBar } from "expo-status-bar";
 
 export const CategoryData = [
   {
@@ -150,8 +153,8 @@ export const CategoryData = [
 ];
 
 
-const apiKey=""
- 
+// const apiKey=""
+
 
 
 type Values = {
@@ -165,33 +168,36 @@ const Category = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [myColor, setMyColor] = useState<string>();
   const [myBorder, setBorder] = useState<string>();
+  let index ;
 
   const colorArray = [
-    "    rgba(240, 247, 239, 0.7)",
-    "  rgba(254, 246, 237, 0.8)",
-    "  rgba(253, 232, 228, 0.5)",
-    "  rgba(244, 235, 247, 0.8)",
-    "  rgba(255, 248, 229, 0.6)",
-    "  rgba(237, 247, 252, 0.5)",
-    "  rgba(231, 228, 249, 0.7)",
-    "  rgba(241, 219, 228, 0.5)",
+    "rgb(244,235,247)",
+    "rgb(240,247,239)",
+    "rgb(254,246,237)",
+    "rgb(253,232,229)",
+    "rgb(254,248,229)",
+    "rgb(237,247,252)"
+
   ];
   const borderColorArray = [
-    "    rgba(240, 247, 239, 2)",
-    "  rgba(254, 246, 237, 1)",
-    "  rgba(253, 232, 228, 1)",
-    "  rgba(244, 235, 247, 1)",
-    "  rgba(255, 248, 229, 1)",
-    "  rgba(237, 247, 252, 1)",
-    "  rgba(231, 228, 249, 1)",
-    "  rgba(241, 219, 228, 1)",
+    "rgb(216,186,228)",
+    "rgb(113,200,158)",
+    "rgb(250,190,124)",
+    "rgb(248,176,160)",
+    "rgb(253,235,178)",
+    "rgb(201,231,247)"
   ];
+
+  // console.log("color",myColor,"border",myBorder);
+
   function getRandomColor() {
-    let color = Math.floor(Math.random() * 9);
-    console.log(color);
-    setMyColor(colorArray[color]);
-    setBorder(borderColorArray[color]);
-    console.log(myColor);
+    let randomNumber = Math.floor(Math.random() * 6);
+    // setMyColor(colorArray[randomNumber]);
+    // setBorder(borderColorArray[randomNumber]);
+    return randomNumber;
+   
+    
+    
   }
 
   // const{setcategoryname}=useMyContext();
@@ -223,8 +229,10 @@ const Category = () => {
         }
       );
       const data = await resp.json();
-      console.log(data);
+      data?.reverse();
       setCategories(data);
+      console.log("category",data);
+      
     };
 
     fetchData();
@@ -232,31 +240,39 @@ const Category = () => {
   useEffect(() => {
     getRandomColor();
   }, [refreshing]);
+  
+
+ 
 
   return (
     <>
-      <ScrollView>
-        <View style={{ padding: 10 }}>
+    <StatusBar backgroundColor="#fff"/>
+      <ScrollView style={{minHeight:"100%"}} showsVerticalScrollIndicator={false}>
+        <View style={{width:"100%",backgroundColor:"white",justifyContent:"center",alignItems:"center",minHeight:"100%",paddingVertical:10,marginLeft:16}}>
           <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 10,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+           style={{
+            display: "flex",
+            flexDirection:"row",    
+            minHeight: "100%",
+            width:"100%",
+            backgroundColor:"white",
+            flexWrap:"wrap",
+            alignItems:"center",
+            gap:10,
+            paddingTop:10,
+            justifyContent:'flex-start'
+          }}
           >
-            {categories?.map((item: any, index: any): any => (
+            {categories.length > 0 ? categories?.map((item: any,index:any) => {
+              const randomNum = getRandomColor();
+              console.log("category",item?.category_imgpath);
+              
+              return(
               <TouchableOpacity
                 onAccessibilityAction={() => setRefreshing(!false)}
                 onPress={() =>
                   setCategoryName(item.category_id, item.category_name)
                 }
-                // onPress={() => {
-                //   // setProductId(item.category_id),
-                //   setProductId(item.category_id) ,showProducts();
-                // }}
                 key={index}
                 style={styles.cardBody}
               >
@@ -264,15 +280,18 @@ const Category = () => {
                   style={[
                     styles.imgBody,
                     {
-                      backgroundColor: `${colorArray[index]}`,
-                      borderColor: `${borderColorArray[index]}`,
+                      // backgroundColor: `${colorArray[index]}`,
+                      // borderColor: `${borderColorArray[index]}`,
+                      backgroundColor:`${colorArray[randomNum]}`,
+                      borderColor:`${borderColorArray[randomNum]}`,
                       borderWidth: 1,
                     },
                   ]}
+                  // style={getRandomColor() ? colorArray[2] : borderColorArray[2]}
                 >
                   <Image
                     style={{ width: "60%", aspectRatio: 1 }}
-                    source={{ uri: item.category_imgpath }}
+                    source={{ uri: `${imageUrl + item?.category_imgpath}`}}
                   />
                   <View>
                     <Text
@@ -280,7 +299,6 @@ const Category = () => {
                         textAlign: "center",
                         fontSize: 16,
                         fontStyle: "normal",
-                        fontWeight: "500",
                         fontFamily: "Gilroy-Bold",
                       }}
                     >
@@ -289,7 +307,7 @@ const Category = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-            ))}
+            )}): <View style={{width:"100%",justifyContent:"center",alignContent:'center',paddingTop:200}}><ActivityIndicator size={50} color={"rgb(105,175,94)"}/></View>}
           </View>
         </View>
       </ScrollView>
@@ -301,21 +319,21 @@ export default Category;
 
 const styles = StyleSheet.create({
   cardBody: {
-    width: "48%",
-    height: 190,
+    width: "45%",
+    height: 200,
     // backgroundColor: "pink",
     display: "flex",
     alignItems: "center",
     padding: 2,
     overflow: "hidden",
-    borderRadius: 40,
+    // borderRadius: 0,
     // justifyContent:"center"
   },
   imgBody: {
     width: "100%",
     height: "100%",
     // backgroundColor: "#666666",
-    borderRadius: 35,
+    borderRadius: 15,
     padding: 7,
     display: "flex",
     alignItems: "center",

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet} from "react-native";
 import { Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -25,9 +25,20 @@ import Cart from "./src/screens/Cart";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomNav from "./src/screens/BottomNav";
-import React, { version } from "react";
+import React, { useEffect, useState, version } from "react";
 import { Provider } from "react-redux";
-import appStore from "./redux/store/appStore";
+import TopRated from "./src/screens/TopRated";
+import About from "./src/screens/About";
+import Help from "./src/screens/Help";
+import YourProfile from "./src/screens/YourProfile";
+import SelectLocation from "./src/screens/SelectLocation";
+import Order from "./src/screens/Order";
+import TrackOrder from "./src/screens/TrackOrder";
+import Orders from "./src/screens/Orders";
+import UploadImage from "./src/screens/UploadImage";
+import EditProfile from "./src/screens/EditProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -61,8 +72,9 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+
   return (
-    <Provider store={appStore}>
+    <MyProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -83,7 +95,7 @@ export default function App() {
           <Stack.Screen
             name="Otp"
             component={Otp}
-            options={{ headerShown: false }}
+            options={{ headerShown: false}}
           />
           <Stack.Screen
             name="Maillogin"
@@ -165,9 +177,47 @@ export default function App() {
             options={{ title: "Favourite" }}
             component={Favourite}
           />
+          <Stack.Screen name="TopRated" component={TopRated} options={{title:"Top Rated"}} />
+          <Stack.Screen name="About" component={About} />
+          <Stack.Screen name="Help" component={Help} />
+          <Stack.Screen
+            name="YourProfile"
+            component={YourProfile}
+            options={{ title: 'Profile' }}
+          />
+          <Stack.Screen
+            name="SelectLocation"
+            component={SelectLocation}
+            options={{ title: "Location" }}
+          />
+          <Stack.Screen
+            name="Order"
+            component={Order}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="TrackOrder" component={TrackOrder} />
+          <Stack.Screen
+             name="Orders"
+             component={Orders}
+             options={{title:"Order History"}}
+
+          />
+
+          <Stack.Screen
+           name="UploadImage"
+           component={UploadImage}
+          />
+     
+          <Stack.Screen 
+            name="EditProfile"
+            component={EditProfile}
+            options={{title:"Edit Profile"}}
+          />
+
         </Stack.Navigator>
+        {/* <StatusBar backgroundColor="rgb(105,175,94)"/> */}
       </NavigationContainer>
-    </Provider>
+    </MyProvider>
   );
 }
 

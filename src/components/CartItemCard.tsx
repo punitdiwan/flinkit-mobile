@@ -6,57 +6,28 @@ import { CategoryData } from "./Category";
 import { useMyContext } from "../context/Context";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { addToCart, decreaseItemQuantity, decreaseTheQuantity, deleteCartItem, deleteParticularItemInCart, loadCartData } from "../screens/supabaseClient";
+import { addToCart, decreaseItemQuantity, deleteCartItem,loadCartData } from "../screens/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
-import { addToCartFun } from "../../lib/cartFun";
+import { addToCartFun, decreaseItemQuantityFun, removeFromcartFun} from "../../lib/cartFun";
+import { imageUrl } from "../../lib/constant";
 
 type cardItemsProps = {
   item: {
-    // id: string;
-    // quantity: number;
-    product_name:string,
-    product_price:number,
-    thumbnail:string,
-    qty:number
+    product_id: number,
+    product_name: string,
+    product_price: number,
+    thumbnail: string,
+    qty: number
   };
 };
 const CartItemCard = ({ item }: cardItemsProps) => {
-  console.log("cart item in cart",item);
-
-  const {product_name,product_price,thumbnail,qty} = item;
-  console.log(product_name,product_price,thumbnail);
+  const {deleteParticularItemInCart,decreaseCartQuantity,increaseCartQuantity} = useMyContext();
   
+  const { product_name,price,imagename, qty, product_id } = item;
   
-const navigation = useNavigation();
-const dispatch = useDispatch();
 
-  const items: any = CategoryData.find((i) => i.id === item.id);
-  
-  const removeFromcart = async (id:any) => {
-    // console.log("ready to delete",id)
-    await deleteCartItem(id);
-    await dispatch(clearCartList());
-    const response = await loadCartData();
-    await dispatch(addItemInCart(response))
-  }
 
-  const increaseParticularCartItemQuantity = async (item:any) => {
-        // console.log("ready to increase quantity",item?.productid);
-        await addToCartFun(item);
-        await dispatch(clearCartList());
-        const response = await loadCartData();
-        await dispatch(addItemInCart(response));
-  }
-
-const decreaseParticularCartItemQuantity = async(item:any) => {
-  console.log("ready to increase quantity",item?.productid);
-  await decreaseItemQuantity(item?.productid);
-  await dispatch(clearCartList());
-  const response = await loadCartData();
-  await dispatch(addItemInCart(response));
-}
+  const navigation = useNavigation();
 
   return (
     <View
@@ -91,7 +62,7 @@ const decreaseParticularCartItemQuantity = async(item:any) => {
         }}
       >
         <Image
-          source={{ uri: thumbnail}}
+          source={{ uri: `${imageUrl}${imagename[0]?.name}` }}
           style={{
             width: "100%",
             height: "auto",
@@ -114,23 +85,24 @@ const decreaseParticularCartItemQuantity = async(item:any) => {
           position: "relative",
         }}
       >
-        <Text style={{ fontSize: 20 }}>{product_name}</Text>
+        <Text style={{ fontSize: 15,fontWeight:"bold" }}>{product_name}</Text>
         <Text
           style={{
-            color: "green",
-            fontSize: 20,
+            color: "rgb(53,52,64)",
+            fontSize: 15,
             position: "absolute",
             right: 5,
             bottom: 10,
+            fontWeight:"bold"
           }}
         >
-          ₹{product_price}
+          ₹{price*qty}
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 0, top: 0 }}
-          onPress={() => removeFromcart(item?.productid)}
+          onPress={() => deleteParticularItemInCart(item?.product_id)}
         >
-          <Entypo name="cross" size={20} color="#B3B3B3" />
+          <Entypo name="cross" size={20} color="rgb(188,188,188)" />
         </TouchableOpacity>
 
         <View
@@ -150,41 +122,41 @@ const decreaseParticularCartItemQuantity = async(item:any) => {
               width: "100%",
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent:"space-evenly",
               alignItems: "center",
               marginTop: 20,
             }}
           >
             <TouchableOpacity
-              onPress={() => decreaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,
                 borderWidth: 2,
-                borderColor: "#F0F0F0",
+                borderColor: "rgb(240,240,240)",
                 borderRadius: 20,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              onPress={() => decreaseCartQuantity(item?.product_id)}
             >
-              <Feather name="minus" size={24} color="black" />
+              <Feather name="minus" size={24} color="rgb(179,179,179)" />
             </TouchableOpacity>
-            <Text style={{ fontSize: 25, fontWeight: "500" }}>
+            <Text style={{ fontSize: 15,fontWeight:"bold"}}>
               {qty}
             </Text>
             <TouchableOpacity
-              onPress={() => increaseParticularCartItemQuantity(item)}
               style={{
                 width: 46,
                 height: 46,
                 borderWidth: 2,
-                borderColor: "#F0F0F0",
+                borderColor: "rgb(236,236,236)",
                 borderRadius: 20,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              onPress={() => increaseCartQuantity(item?.product_id)}
             >
               <Feather name="plus" size={24} color="#69AF5D" />
             </TouchableOpacity>

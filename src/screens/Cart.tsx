@@ -7,10 +7,9 @@ import { CategoryData } from "../components/Category";
 import { RootStackParamList } from "../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { loadCartData } from "./supabaseClient";
-import { useDispatch, useSelector } from "react-redux";
-import { addItemInCart, clearCartList } from "../../redux/slices/cartSlice";
-import { current } from "@reduxjs/toolkit";
+import { addItemsInOrder, loadCartData } from "./supabaseClient";
+// import { useDispatch, useSelector } from "react-redux";
+// import { current } from "@reduxjs/toolkit";
 import Checkout from "./Checkout";
 import { Entypo } from '@expo/vector-icons';
 // import { Image } from "react-native-reanimated/lib/typescript/Animated";
@@ -23,46 +22,72 @@ const Cart = () => {
   const navigation = useNavigation<any>();
   const [totalCartPrice,setTotalCartPrice] = useState(0);
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
-  const [cartItem,setCartItem] = useState([]);
-  
-  const dispatch = useDispatch();
-  const cartItemList = useSelector((store) => store?.cart?.cartItemList);
-  console.log("cartItemList",cartItemList);
-  
+  const [totalAmount,setTotalAmount] = useState(0);
 
-  async function loadedCart(){
-    console.log("running");
-    const response = await loadCartData();
-    await dispatch(clearCartList());
-    await dispatch(addItemInCart(response))
+  const {cartItem,clearCart} = useMyContext();
+  // console.log("cartItemm",cartItem);
+
+
+  function generateRandomCode() {
+    const length = 8;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Define the characters to use
+    let result = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+  
+    return result;
   }
 
-useEffect(() => {
-  loadedCart();
-},[])
+  const getMonthName = (index) => {
+    const arrOfMonth = ['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sep','Oct','Nov','Dec']
+    return(arrOfMonth[index])
+  }
 
+  const getCurrDate = () => {
+     const currentDate = new Date();
+    const date = currentDate.getDate();
+    const monthNum = currentDate.getMonth();
+    const monthName = getMonthName(monthNum);
+    const year = currentDate.getFullYear();
+    const fullDate =`${date} ${monthName} ${year}`;
+    return fullDate;
+  }
+
+  const addCartItemOrder = async () => {
+    console.log("cartData",cartItem);
+    
+    const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
+      return accumulator + (currentValue.qty * currentValue.price);
+    }, 0)
+
+   const dateoforder = getCurrDate();
+
+    const darkroomownerid = cartItem[0].darkroomownerid;
+    
+    const orderId =  generateRandomCode();
+    addItemsInOrder(orderId,totalAmount,darkroomownerid,dateoforder,cartItem);
+    clearCart();
+  }
 
   return (
-    <View style={{flex:1,backgroundColor:"white"}}>
+    <View style={{flex:1,backgroundColor:"rgb(255,255,255)"}}>
       <View
         style={{
           display: "flex",
-          // borderWidth: 1,
-          // paddingVertical: 5,
-          // backgroundColor: "red ",
-          // minHeight:"full"
-          flex:1,
-          
+          flex:1
         }}
       >
-        <View style={{ width: "100%", height: 500 }}>
+        <View style={{ width: "100%",height:650}}>
           {/* <FlatList
             data={cartItemList}
             renderItem={({ item }) => <CartItemCard item={item} />}
             keyExtractor={(item) => item.id}
           /> */}
-          <ScrollView>
-          {cartItemList && cartItemList.map(item => <CartItemCard item={item}/>)}
+          <ScrollView showsVerticalScrollIndicator={false}>
+          {cartItem?.length > 0 ? cartItem?.map(item => <CartItemCard item={item}/>) : <View style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",height:700}}><Text style={{fontSize:20,fontWeight:500,textAlign:"center",color:"#b3afaf"}}>Your cart is {"\n"}Empty</Text></View>}
           </ScrollView>
         </View>
       </View>
@@ -72,12 +97,11 @@ useEffect(() => {
           // borderWidth: 1,
           borderColor: "lightgrey",
           paddingHorizontal: 10,
-          backgroundColor:'#ffffff',
+          backgroundColor:'#fff',
           marginBottom: 10,
-
           display: "flex",
           rowGap: 5,
-          height: 110,
+          height: 30
         }}
       >
         <View
@@ -88,30 +112,30 @@ useEffect(() => {
             justifyContent: "center",
           }}
         >
-           {cartItemList?.length > 0 ?
+           {cartItem?.length > 0 ?
            (<TouchableOpacity
             style={{
-              backgroundColor: "#69AF5D",
-              height: 67,
+              backgroundColor: "rgb(105,175,93)",
+              height: 65,
               width: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 20,
+              borderRadius: 15,
               flexDirection: "row",
-              position:"absolute"
+              position:"absolute",
             }}
             onPress={() => setIsCheckoutVisible(!isCheckoutVisible)}
           >
           <View>
-            <Text style={{color:"white",fontWeight:"bold",fontSize:20}}>Go To Checkout:</Text>
+            <Text style={{color:"rgb(252,252,252)",fontWeight:"500",fontSize:20}}>Go To Checkout:</Text>
           </View>
             <View
               style={{
                 height: 37,
                 width: 73,
                 position: "absolute",
-                backgroundColor: "#166432",
+                backgroundColor: "rgb(22,100,50)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -123,8 +147,8 @@ useEffect(() => {
               <FontAwesome name="rupee" size={14} color="#ffffff" />
               <Text style={{ fontSize: 14, color: "#ffffff" }}>
                 {
-                  cartItemList?.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue.qty * currentValue.product_price);
+                  cartItem?.reduce((accumulator:any, currentValue:any) => {
+                    return accumulator + (currentValue.qty * currentValue.price);
                   }, 0)
                 }
               </Text>
@@ -132,7 +156,7 @@ useEffect(() => {
           </TouchableOpacity>) : (
               <TouchableOpacity
               style={{
-                backgroundColor: "#69AF5D",
+                backgroundColor: "rgb(105,175,93)",
                 height: 67,
                 width: "100%",
                 display: "flex",
@@ -143,8 +167,9 @@ useEffect(() => {
                 flexDirection: "row",
                 bottom:0
               }}
+              onPress={() => navigation.navigate("SearchScreen")}
             >
-              <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart,Go to Category</Text>
+              <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Go to Category</Text>
               {/* <Text style={{color:"white",fontSize:20,fontWeight:"bold"}}>Empty cart</Text> */}
             </TouchableOpacity>
           )}
@@ -153,7 +178,7 @@ useEffect(() => {
 
 
       {isCheckoutVisible ? (
-         <View style={{ backgroundColor: "white", position: "absolute", bottom: 20, height: 650, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
+         <View style={{ backgroundColor: "white", position: "absolute", bottom:7, height: 600, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 100 }}>
              <Text style={{ fontSize: 24, fontWeight: "bold", color: "#1c1c1c" }}>Checkout</Text>
              <Entypo name="cross" size={28} color="black" style={{ position: "absolute", right: 10 }} onPress={() => setIsCheckoutVisible(!isCheckoutVisible)}/>
@@ -182,8 +207,8 @@ useEffect(() => {
          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 55, shadowColor: "#edebeb" }}>
              <Text style={{ fontSize: 18, color: "#828181", fontWeight: "500" }}>Total Cost</Text>
              <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}><Text style={{ fontWeight: "bold" }}> ₹{
-                  cartItemList.reduce((accumulator:any, currentValue:any) => {
-                    return accumulator + (currentValue?.qty * currentValue?.product_price);
+                  cartItem.reduce((accumulator:any, currentValue:any) => {
+                    return accumulator + (currentValue?.qty * currentValue?.price);
                   }, 0)
                 }</Text><Image source={require("../../assets/Vector.png")} /></View>
          </View>
@@ -194,8 +219,9 @@ useEffect(() => {
          <View style={{width: "100%", backgroundColor: "white", marginTop: 30, display: "flex", justifyContent: "center", alignContent: "center", alignItems: "center",paddingHorizontal:20}}>
              <TouchableOpacity style={{ backgroundColor: "#69AF5D",width:"100%",paddingVertical: 20,borderRadius:20}} onPress={() => navigation.replace("Orderaccepted")}>
                  <Text style={{textAlign:"center",fontWeight:"bold",fontSize:20,color:"white"}} onPress={() => {
+                  addCartItemOrder()
                   navigation.navigate("Orderaccepted");
-                  setIsCheckoutVisible(!isCheckoutVisible)
+                  setIsCheckoutVisible(!isCheckoutVisible);
                   }}>Place Order</Text>
              </TouchableOpacity>
          </View>
