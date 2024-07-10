@@ -133,7 +133,7 @@ export const loadCartData = async () => {
 
 // Favourite Item
 export const addFavouriteItem = async (price,product_id,product_imagename,product_name,darkroomownerid) => {
-  console.log("price");
+  console.log("price",price);
   try {
     const user_id=3;
     const userExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
@@ -145,7 +145,7 @@ export const addFavouriteItem = async (price,product_id,product_imagename,produc
     }else {
       const isProductExistsOrNot = await supabase.from("favourite_products").select("*").eq("user_id",user_id).eq("product_id",product_id);
       if(isProductExistsOrNot?.data?.length == 0){
-        const response = await supabase.from("favourite_products").insert({user_id,product_id,product_imagename,product_name,price,darkroom_owner_id:darkroomownerid});
+        const response = await supabase.from("favourite_products").insert({user_id,product_id,imagename:product_imagename,product_name,price,darkroom_owner_id:darkroomownerid});
         const response1 = await supabase.from("favourite_products").select("*").eq("user_id",user_id);
         return
       }else{
@@ -236,19 +236,54 @@ export const getProductsRelatedToCategoryId = async (categoryId) => {
 
 // -------------------------------------------------------------
 // storing ratings
-export const addProductRating = async (product,rating) => {
-    try {
-      // const {product_name,product_category,imagename,price} = product[0];
-      product[0].product_rating = rating;
-      console.log("product",product[0]);
-      const {category_id,darkroomownerid,imagename,packing_weight,price,product_brand,product_category,product_name,product_rating} = product[0]
-      const getReviwedProducts = await supabase.from("reviwed_products").select("*");
-      const addingReviwedProduct = await supabase.from("reviwed_products").insert({product_id:pr});
-      console.log(addingReviwedProduct);
-    } catch (error) {
-      console.log(error.message);
-    }
-}
+// export const addProductRating = async (product,rating) => {
+//     try {
+//       console.log("Productt rating",product[0]?.product_details,rating);
+//       product[0].product_rating = rating;
+//       console.log("product",product[0]);
+//       const {product_id,category_id,darkroomownerid,imagename,packing_weight,price,product_brand,product_category,product_name,product_rating,product_details} = product[0]
+//       const getReviwedProducts = await supabase.from("reviwed_products").select("*");
+//       const addingReviwedProduct = await supabase.from("reviwed_products").insert({product_id,product_category,price,product_name,product_brand,product_rating,darkroomownerid,imagename,user_id:2,product_details,category_id,packing_weight});
+//       console.log(addingReviwedProduct);
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+// }
+
+export const addProductRating = async (product, rating) => {
+  try {
+    console.log("Product rating", product[0], rating);
+    product[0].product_rating = rating;
+    console.log("Product", product[0]);
+
+    // Destructure the required fields from product[0]
+    const { product_id, category_id, darkroomownerid, imagename, packing_weight, price, product_brand, product_category, product_name, product_rating, product_details,product_total_qty} = product[0];
+
+    // Selecting all rows from reviwed_products (optional step)
+    const getReviwedProducts = await supabase.from("reviwed_products").select("*");
+
+    // Inserting a new row into reviwed_products
+    const addingReviwedProduct = await supabase.from("reviwed_products").insert({
+      product_id,
+      product_category,
+      price,
+      product_name,
+      product_brand,
+      product_rating,
+      darkroomownerid,
+      imagename,
+      user_id: 1, // Assuming user_id is fixed or retrieved dynamically
+      product_details,
+      category_id,
+      packing_weight
+    });
+
+    console.log(addingReviwedProduct);
+  } catch (error) {
+    console.error("Error adding product rating:", error.message);
+  }
+};
+
 
 export const getAllTopRatedProducts = async () => {
   try {

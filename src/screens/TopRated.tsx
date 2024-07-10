@@ -4,6 +4,7 @@ import { getAllTopRatedProducts } from './supabaseClient';
 import { useMyContext } from '../context/Context';
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
+import { imageUrl } from '../../lib/constant';
 
 const TopRated = () => {
   const [products,setProducts] = useState([]);
@@ -47,7 +48,7 @@ const TopRated = () => {
                 })
               }>
                 <View>
-                  <Image style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?.product_imagename }}
+                  <Image style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: `${imageUrl}${item?.imagename[0]?.name}`}}
                   />
                   <Text style={{ fontSize: 15, fontWeight: "bold", color: "rgb(38,37,50)" }}>{item?.product_name}</Text>
                   <Text style={{ paddingTop: 5, color: "rgb(205,205,205)", fontWeight: "bold" }}>325ml,Price</Text>

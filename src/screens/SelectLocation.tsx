@@ -27,6 +27,7 @@ import { StatusBar } from 'expo-status-bar';
 
 
 
+
 const SelectLocation = () => {
     const focus = useIsFocused();
 

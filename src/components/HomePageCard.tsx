@@ -20,6 +20,7 @@ import { addFavouriteItem, addToCart, getAllTopRatedProducts, loadCartData } fro
 import { useMyContext } from "../context/Context";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { imageUrl } from "../../lib/constant";
 
 
 const HomePageCard = ({ name, data }: any) => {
@@ -201,7 +202,7 @@ const HomePageCard = ({ name, data }: any) => {
                 })
               }>
                 <View>
-                  <Image style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: item?.product_imagename }}
+                  <Image style={{ width: "100%", height: 110 }} resizeMode="contain" source={{ uri: `${imageUrl}${item?.imagename[0]?.name}`}}
                   />
                   <Text style={{ fontSize: 15, fontWeight: "bold", color: "rgb(38,37,50)" }}>{item?.product_name}</Text>
                   <Text style={{ paddingTop: 5, color: "rgb(205,205,205)", fontWeight: "bold" }}>325ml,Price</Text>

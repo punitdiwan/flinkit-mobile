@@ -21,7 +21,10 @@ import { StatusBar } from "expo-status-bar";
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
-  console.log("orderdetailsTrack", orderDetailsData[0]);
+
+  const totalOrder = orderDetailsData[0]?.orderitems?.length;
+  console.log("totalOrder",totalOrder);
+  
 
   // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
@@ -93,7 +96,6 @@ const Order = (orderdetails: any) => {
 
   const loadOrdersData = async () => {
     setOrderDetailsData([orderDetails]);
-    
   };
 
   useEffect(() => {
@@ -432,7 +434,7 @@ const Order = (orderdetails: any) => {
                   </View>
                   <View style={{ paddingTop: 15 }}>
                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-                      Order Number : {orderDetailsData[0]?.orderid}
+                      Order Number : <Text style={{color:"rgb(105,195,74)"}}>{orderDetailsData[0]?.orderid}</Text>
                     </Text>
                   </View>
 
@@ -463,21 +465,10 @@ const Order = (orderdetails: any) => {
                           }}
                           onPress={() => setShowMore(!showMore)}
                         >
-                          {showMore ? (
+                          {showMore ? "" : (
                             <>
                               <Text
-                                style={{ fontWeight: "semibold", fontSize: 13 }}
-                              >
-                                Show less
-                              </Text>
-                              <Image
-                                source={require("../../assets/arrowbottom.png")}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <Text
-                                style={{ fontWeight: "semibold", fontSize: 13 }}
+                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)" }}
                               >
                                 Show more
                               </Text>
@@ -521,6 +512,16 @@ const Order = (orderdetails: any) => {
                             <Text style={{ fontWeight: "bold" }}>
                               {item?.product_name}
                             </Text>
+                            {showMore && index == totalOrder-1 &&    <TouchableOpacity onPress={() => setShowMore(!showMore)} style={{flexDirection:"row",alignItems:"center",gap:5}}>
+                              <Text
+                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)"}}
+                              >
+                                Show less
+                              </Text>
+                              <Image
+                                source={require("../../assets/arrowbottom.png")}
+                              />
+                            </TouchableOpacity>}
                           </View>
                         </View>
                       );
@@ -540,7 +541,8 @@ const Order = (orderdetails: any) => {
                     Total
                   </Text>
                   <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                    {orderDetailsData[0]?.totalamt}
+                  
+                    <Text style={{color:"rgb(105,175,94)"}}>₹{orderDetailsData[0]?.totalamt}</Text>
                   </Text>
                 </View>
               </View>

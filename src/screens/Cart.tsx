@@ -57,6 +57,8 @@ const Cart = () => {
   }
 
   const addCartItemOrder = async () => {
+    console.log("cartData",cartItem);
+    
     const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
       return accumulator + (currentValue.qty * currentValue.price);
     }, 0)

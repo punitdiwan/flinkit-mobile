@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { loadOrders } from "./supabaseClient";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
+import { imageUrl } from "../../lib/constant";
 
 // order history page
 
@@ -253,7 +254,7 @@ const Orders = () => {
                         <View>
                           <Image
                             source={{
-                              uri: item?.orderitems[0]?.product_imagename,
+                              uri: `${imageUrl}${item?.orderitems[0]?.imagename[0]?.name}`,
                             }}
                             style={{
                               width: 70,

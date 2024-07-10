@@ -108,6 +108,7 @@ const BottomNav = () => {
               tabBarIcon: ({ color, size }) => {
                 return <Feather name="shopping-cart" size={25} color={color} />;
               },
+              
               header: () => <YourCustomHeaderComponent name={"My Cart"} />,
             }}
           />

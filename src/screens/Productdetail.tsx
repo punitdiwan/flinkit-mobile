@@ -45,14 +45,10 @@ const Productdetail = (id: any) => {
   const [heartIconColor, setHeartIconColor] = useState("black");
 
   const fetchData = async () => {
-    console.log("working");
-    // console.log("category_id:", id.route.params.id);
     const resp: any = await supabase
       .from("newproducts")
       .select("*")
       .eq("product_id", productId);
-    // console.log("product-details", resp.data);
-
     setFetchProduct(resp.data);
   };
 
@@ -73,22 +69,6 @@ const Productdetail = (id: any) => {
     setDetailsExpanded(false); // Close details section
   };
 
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  // const setFavItem = async (item:any) => {
-  //    await addToFavFun(item);
-  //    await dispatch(clearFavItemList());
-  //    const response = await loadFavItem();
-  //    await dispatch(addFavItem(response));
-  // }
 
   const {
     cartItem,
