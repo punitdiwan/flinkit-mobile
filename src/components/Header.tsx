@@ -145,7 +145,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                 </View>
                 <View>
                   <Text style={{ color: "#0000004d", fontSize: 17 }}>
-                    Search store
+                    Search Products
                   </Text>
                 </View>
               </View>

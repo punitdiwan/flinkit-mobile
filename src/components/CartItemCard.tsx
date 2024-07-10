@@ -68,6 +68,7 @@ const CartItemCard = ({ item }: cardItemsProps) => {
             height: "auto",
             aspectRatio: 1,
             // borderColor: "black",
+            borderRadius:5
           }}
         />
       </View>

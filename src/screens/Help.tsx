@@ -52,7 +52,7 @@ const Help = () => {
             <View style={{height:"97%"}}>
             <ScrollView style={{ marginBottom: 20, minHeight: "98%", backgroundColor: "white"}}>
                 <View style={{ width: "100%", minHeight: "100%", backgroundColor: "white" }} key={count}>
-                    {arr.map((count,index) => <><Text style={{ width: "100%", textAlign: "center", paddingVertical: 20, fontSize: 15, fontWeight: 500 }}>Today</Text>
+                    {arr.map((count,index) => <View key={index} ><Text style={{ width: "100%", textAlign: "center", paddingVertical: 20, fontSize: 15, fontWeight: 500 }}>Today</Text>
                         <View style={{ width: 300, height: "auto", backgroundColor: "rgb(237,247,252)", justifyContent: "flex-start", alignItems: "center", marginHorizontal: 10, borderRadius: 10, paddingHorizontal: 5, paddingVertical: 5 }}>
                             <View style={{ justifyContent: "flex-start", width: "100%", paddingTop: 5, paddingLeft: 10, paddingBottom: 2 }}>
                                 <Text style={{ fontSize: 20, fontWeight: 500 }}>Support</Text>
@@ -70,7 +70,7 @@ const Help = () => {
                                 <Text style={{ textAlign: "center", fontWeight: "bold", backgroundColor: "lightyellow", fontSize: 13 }}>This conversation has been closed</Text>
                             </View>
                         </View>
-                    </>
+                    </View>
                     )}
                 </View>
             </ScrollView>

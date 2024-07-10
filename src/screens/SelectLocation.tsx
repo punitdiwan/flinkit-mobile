@@ -19,18 +19,11 @@ import { useIsFocused } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 
-
-
-
 // const googleApiKey="";
-
-
-
 
 
 const SelectLocation = () => {
     const focus = useIsFocused();
-
     const [refresh,setRefresh] = useState(true);
 
     const [location,setLocation] = useState("");

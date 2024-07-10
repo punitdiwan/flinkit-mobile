@@ -79,6 +79,7 @@ const Favourite = () => {
                 height: "auto",
                 aspectRatio: 1,
                 // borderColor: "black",
+                borderRadius:5
               }}
             />
           </View>
@@ -137,7 +138,7 @@ const Favourite = () => {
         showsVerticalScrollIndicator={false}
         data={favouriteItem}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.product_id}
         contentContainerStyle={styles.listContainer}
       /> : <View style={{paddingTop:300,minHeight:600}}><Text style={{fontSize:15,fontWeight:"500",textAlign:"center"}}>Please add yours{"\n"}Favourite Products</Text></View> }
       <View>

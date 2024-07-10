@@ -158,7 +158,7 @@ const Filter = ({navigation}) => {
       <View>
         <Text style={{fontSize:24,marginVertical:5,fontFamily:'Gilroy-Semibold',marginBottom:10,paddingHorizontal:15}}>Categories</Text>
         {
-          category?.length > 0 ? category.map(item => <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
+          category?.length > 0 ? category.map((item,index) => <View key={index} style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'flex-start',gap:7,marginVertical:5,marginHorizontal:15}}>
             <Checkbox
               value={item?.name}
               onValueChange={() => {

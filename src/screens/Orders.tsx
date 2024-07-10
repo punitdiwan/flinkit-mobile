@@ -450,13 +450,11 @@ const Orders = () => {
                       <View>
                         <Image
                           source={{
-                            uri: item?.orderitems[0]?.product_imagename,
+                            uri: `${imageUrl}${item?.orderitems[0]?.imagename[0]?.name}`,
                           }}
                           style={{
                             width: 70,
                             height: 70,
-                            //   backgroundColor: "red",
-                            borderRadius: 10,
                           }}
                         />
                       </View>
@@ -479,50 +477,6 @@ const Orders = () => {
                         </Text>
                       </View>
                     </View>
-
-                    {/* { more &&
-                      <View
-                        style={{
-                          justifyContent: "space-between",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          paddingVertical: 10,
-                          paddingHorizontal: 20,
-                        }}
-                      >
-                        <View>
-                          <Image
-                            source={{
-                              uri: item?.orderitems[0]?.product_imagename,
-                            }}
-                            style={{
-                              width: 70,
-                              height: 70,
-                              //   backgroundColor: "red",
-                              borderRadius: 10,
-                            }}
-                          />
-                        </View>
-                        <View style={{ width: 200, height: 40 }}>
-                          <Text style={{ fontWeight: "500", color: "black" }}>
-                            {item?.orderitems[0]?.product_name}
-                          </Text>
-                        </View>
-                        <View>
-                          <Text
-                            style={{
-                              fontWeight: "500",
-                              color: "rgb(105,175,94)",
-                            }}
-                          >
-                            +
-                            <Text style={{ color: "rgb(105,174,94)" }}>
-                              {item?.orderitems.length - 1}
-                            </Text>
-                          </Text>
-                        </View>
-                      </View>
-                    } */}
 
                     <View
                       style={{

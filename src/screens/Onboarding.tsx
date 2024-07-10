@@ -20,6 +20,9 @@ const Onboarding = () => {
     }
   };
 
+
+
+
   useEffect(() => {
     checkIsLoggedIn();
   }, []);
