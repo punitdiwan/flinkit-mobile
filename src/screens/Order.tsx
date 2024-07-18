@@ -69,6 +69,8 @@ const Order = (orderdetails: any) => {
       setPercentage(25);
     } else if (orderStatus?.toLowerCase() == "confirmed") {
       setPercentage(50);
+    }else if (orderStatus?.toLowerCase() == "out of delivery"){
+       setPercentage(75);
     } else if (orderStatus?.toLowerCase() == "delivered") {
       setPercentage(100);
     } else if (percentage > 75 && percentage < 100) {

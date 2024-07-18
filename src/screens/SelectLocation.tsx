@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 
 // const googleApiKey="";
+const googleApiKey="AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
 
 
 const SelectLocation = () => {

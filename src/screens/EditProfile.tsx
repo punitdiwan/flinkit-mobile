@@ -101,7 +101,7 @@ const EditProfile = () => {
           }} style={style.uploadBtn}>
             {/* <Text>{image ? 'Edit' : 'Upload'} Image</Text> */}
             {/* <AntDesign name="camera" size={20} color="black" /> */}
-            <Image source={require("../../assets/camerra.png")} style={{width:20,height:20,padding:1,  filter: 'grayscale(200%)'}}/>
+            <Image source={require("../../assets/camera.png")} style={{width:20,height:20,padding:1,  filter: 'grayscale(200%)'}}/>
           </TouchableOpacity>
         </View>
         </View>
