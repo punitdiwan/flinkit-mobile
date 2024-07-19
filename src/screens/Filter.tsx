@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
@@ -117,6 +117,7 @@ const Filter = ({navigation}) => {
 
   return (
     <SafeAreaView style={{backgroundColor:'white'}}>
+      <ScrollView>
       <View
         style={{
           backgroundColor: "white",
@@ -208,6 +209,7 @@ const Filter = ({navigation}) => {
         <Text style={{color:"#ffffff",fontSize:18,fontFamily:'Gilroy-Semibold',fontWeight:"bold"}}>Apply Filter</Text>
       </TouchableOpacity>}
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

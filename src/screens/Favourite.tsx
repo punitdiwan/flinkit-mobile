@@ -143,21 +143,21 @@ const Favourite = () => {
       /> : <View style={{paddingTop:300,minHeight:600}}><Text style={{fontSize:15,fontWeight:"500",textAlign:"center"}}>Please add yours{"\n"}Favourite Products</Text></View> }
       <View>
        
-       {favouriteItem?.length > 0 ? <TouchableOpacity
+       {favouriteItem?.length > 0 ? <View style={{backgroundColor:"white",height:80,justifyContent:"center"}}><TouchableOpacity
           style={{
             width: "100%",
             backgroundColor: "#69AF5D",
-            paddingVertical: 20,
+            paddingVertical: 15,
             borderRadius: 10,
           }}
           onPress={() => addingAllFavItemInCart()}
         >
           <Text style={styles.addToCartButtonText} >Add all to cart</Text>
-        </TouchableOpacity> : <TouchableOpacity
+        </TouchableOpacity></View> : <TouchableOpacity
           style={{
             width: "100%",
             backgroundColor: "#69AF5D",
-            paddingVertical: 20,
+            paddingVertical:15,
             borderRadius: 10,
           }}
           onPress={() => navigation.replace("SearchScreen")}

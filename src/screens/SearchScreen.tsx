@@ -54,7 +54,7 @@ const SearchScreen = ({navigation}) => {
 
   return (
     <>
-    <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} />
+    {/* <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} /> */}
     <View>
       <ScrollView style={{ backgroundColor: "#ffffff" }} showsVerticalScrollIndicator={false}>
         <View

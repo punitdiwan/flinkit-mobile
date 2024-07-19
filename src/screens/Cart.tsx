@@ -157,13 +157,13 @@ const Cart = () => {
               <TouchableOpacity
               style={{
                 backgroundColor: "rgb(105,175,93)",
-                height: 67,
+                height:60,
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 position: "absolute",
-                borderRadius: 20,
+                borderRadius: 10,
                 flexDirection: "row",
                 bottom:0
               }}
