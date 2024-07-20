@@ -31,16 +31,12 @@ const SearchScreen = ({navigation}) => {
 
   const {cartItem,addingItemInCart,decreaseCartQuantity,increaseCartQuantity} = useMyContext();
   
-
-  console.log(mapData);
-  
-
   const handleInputChange = (inputText) => {
     setText(inputText);
   };
 
   const filterData = dummyData?.filter((item) => item?.product_name?.toLowerCase()?.includes(text.toLowerCase()));
-  console.log("filterData",filterData);
+ 
   
   const getProducts = async () => {
     const productData:any = await getAllProducts();

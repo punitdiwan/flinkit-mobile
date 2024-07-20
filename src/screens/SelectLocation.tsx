@@ -30,21 +30,53 @@ const SelectLocation = () => {
     const [location,setLocation] = useState("");
     const navigation = useNavigation();
 
+    // handleLocationSubmit
     const handleSubmit = async () => {
+      const placeId = location?.place_id;
+      
         if(!location){
             alert("Please select your location");
             // showAlert();
         }else{
+          getPostalCode(placeId)
           ref.current?.setAddressText('');
           navigation.navigate("BottomNav");
         }
     }
 
-    const ref = useRef();
+    // getting loaction postal code
+    const getPostalCode = (placeId) => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${googleApiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("dd",data?.results[0]?.geometry);
+        
+        const result = data.results[0];
+        if (result) {
+          const addressComponents = result.address_components;
+          let postalCode = null;
+    
+          if (addressComponents) {
+            addressComponents.forEach(component => {
+              if (component.types.includes('postal_code')) {
+                postalCode = component.long_name;
+              }
+            });
+          }
+    
+          console.log('Postal Code:', postalCode);
+        } else {
+          console.error('No results found');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+    
+    }
+    
 
-    // useEffect(() => {
-    //   ref.current?.setAddressText('Some Text');
-    // }, []);
+    const ref = useRef();
 
     return (
       <>

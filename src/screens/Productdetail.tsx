@@ -9,6 +9,7 @@ import {
   ImageBackground,
   ActivityIndicator,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
@@ -24,7 +25,7 @@ import {
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
 import { AirbnbRating, Rating } from "react-native-ratings";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 
 import Swiper from "react-native-swiper";
 import { imageUrl } from "../../lib/constant";
@@ -32,7 +33,7 @@ import { imageUrl } from "../../lib/constant";
 
 
 const Productdetail = (id: any) => {
-  console.log("product_id", id.route.params.id);
+  // console.log("product_id", id.route.params.id);
 
   const productId = id.route.params.id;
   const navigation = useNavigation();
@@ -43,6 +44,7 @@ const Productdetail = (id: any) => {
   const [fetchProduct, setFetchProduct] = useState<any>([]);
   const [isProductPresent, setIsProduct] = useState(false);
   const [heartIconColor, setHeartIconColor] = useState("black");
+  const [imageLoading,setImageLoading] = useState(true);
 
   const fetchData = async () => {
     const resp: any = await supabase
@@ -97,7 +99,6 @@ const Productdetail = (id: any) => {
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
 
   const addToFav = async (data) => {
-    console.log("fav",data.imagename);
     const {
       price,
       product_id,
@@ -119,7 +120,6 @@ const Productdetail = (id: any) => {
 
   const removeFromFav = async (data) => {
     const { product_id } = data;
-    console.log(product_id);
     removeItemFromFav(product_id);
     const response = await loadFavItem();
     addFavouriteItemList(response);
@@ -129,26 +129,33 @@ const Productdetail = (id: any) => {
   const loadFav = async () => {
     const response = await loadFavItem();
     addFavouriteItemList(response);
+    setImageLoading(false);
   };
 
   const ratingCompleted = (rating) => {
     addProductRating(fetchProduct, rating);
   };
 
+  const handleLoad = () => {
+    // console.log("calling load image");
+    // setImageLoading(false);
+  }
+
   useEffect(() => {
     loadFav();
+    // setImageLoading(false)
   }, []);
 
   
 
   return (
     <>
-      <StatusBar backgroundColor="white" />
+      <StatusBar backgroundColor="white" barStyle={'dark-content'} />
       {/* <ScrollView style={{height:"auto"}}> */}
       <View style={styles.container}>
         {fetchProduct.length > 0 ? (
           fetchProduct?.map((item: any, index: number) => {
-            console.log("ProductDetailPage",item?.imagename);
+            console.log(item);
             
             return (
               <>
@@ -163,7 +170,23 @@ const Productdetail = (id: any) => {
                   }}
                 >
                   <Swiper activeDotColor="rgb(105,175,94)" activeDotStyle={{width:30}} dotColor="rgb(181,178,177)">
-                  {item?.imagename.map(item => <Image source={{uri:`${imageUrl}${item?.name}`}}  style={{width:"100%",height:"100%"}}/>)}
+
+
+                  {imageLoading ? (
+                      <View style={{width:"100%",justifyContent:"center",alignItems:"center",marginTop:"50%"}}><ActivityIndicator
+                        style={{  position: 'absolute',
+                          zIndex: 1,}}
+                        size="large"
+                        color="rgb(105,175,94)"
+                      /></View>
+                    ) : (item?.imagename?.map((item,index) => <Image key={item?.imgid}
+                    source={{ uri: `${imageUrl}${item?.name}` }}
+                    onLoad={handleLoad}
+                    style={{    width: '100%',
+                      height: '100%',
+                      resizeMode: 'cover'}}
+                  />
+                  ))}
                   </Swiper>
                 </View>
 {/* 

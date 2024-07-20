@@ -24,7 +24,7 @@ import { imageUrl } from "../../lib/constant";
 
 
 const HomePageCard = ({ name, data }: any) => {
-  console.log("data",data);
+  // console.log("data",data);
   const [count,setCount] = React.useState(0);
   
   const imgUrl =
@@ -81,120 +81,7 @@ const HomePageCard = ({ name, data }: any) => {
             gap:10
           }}
         >
-          {/* {data?.map(
-          (
-            item: {
-              imgUrl: any;
-              name:
-                | string
-                | number
-                | boolean
-                | ReactElement<any, string | JSXElementConstructor<any>>
-                | Iterable<ReactNode>
-                | ReactPortal
-                | null
-                | undefined;
-              price:
-                | string
-                | number
-                | boolean
-                | ReactElement<any, string | JSXElementConstructor<any>>
-                | Iterable<ReactNode>
-                | ReactPortal
-                | null
-                | undefined;
-            },
-            index: Key | null | undefined
-          ) => (
-            <TouchableOpacity
-              key={index}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-                borderColor:"rgb(233,233,233)",
-                borderWidth:1,
-                width: 180,
-                padding: 20,
-                height: "100%",
-                // borderWidth: 2,
-                borderRadius: 15,
-                marginHorizontal: 5,
-              }}
-              onPress={() => navigation.navigate("Productdetail", { id: item?.product_id })}
-            >
-              <View
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderColor:"rgb(233,233,233)",
-                }}
-              >
-                <Image
-                  source={{ uri: item?.product_imagename}}
-                  style={{ width: "100%", height: "auto", aspectRatio: 1 }}
-                  resizeMode="cover"
-                />
-              </View>
-              <View style={{ width: "100%" }}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: "semibold",
-                    // fontFamily: "Gilroy-Medium",
-                  }}
-                >
-                  {item?.product_brand}
-                </Text>
-                <Text style={{ color: "#7C7C7C" }}>7ps Price</Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#181725",
-                    // fontFamily: "Gilroy-Bold",
-                    fontSize: 18,
-                  }}
-                >
-                  ₹ {item?.price}
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    width: 40,
-                    height: 40,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#69AF5D",
-                    borderRadius: 15,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: "bold",
-                      color: "white",
-                    }}
-                    onPress={callAddToCart}
-                  >
-                    +
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          )
-        )} */}
-
-          {data?.length > 0 ? data.map(item =>
+    {data?.length > 0 ? data.map(item =>
             <View key={item?.product_id} style={{ backgroundColor: "white", width: 185, marginVertical: 3, paddingVertical: 30, paddingHorizontal: 10, borderRadius: 20, height: 270, borderColor: "rgb(233,233,233)", borderWidth: 1 }}>
               <TouchableOpacity onPress={() =>
                 navigation.navigate("Productdetail", {

@@ -38,7 +38,8 @@ import Orders from "./src/screens/Orders";
 import UploadImage from "./src/screens/UploadImage";
 import EditProfile from "./src/screens/EditProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -215,7 +216,7 @@ export default function App() {
           />
 
         </Stack.Navigator>
-        {/* <StatusBar backgroundColor="rgb(105,175,94)"/> */}
+        <StatusBar backgroundColor="#fff" barStyle={"dark-content"}/>
       </NavigationContainer>
     </MyProvider>
   );

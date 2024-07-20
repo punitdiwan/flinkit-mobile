@@ -190,36 +190,26 @@ const Category = () => {
     "rgb(201,231,247)"
   ];
 
-  // console.log("color",myColor,"border",myBorder);
 
   function getRandomColor() {
     let randomNumber = Math.floor(Math.random() * 6);
-    // setMyColor(colorArray[randomNumber]);
-    // setBorder(borderColorArray[randomNumber]);
     return randomNumber;
    
     
     
   }
 
-  // const{setcategoryname}=useMyContext();
   const navigation = useNavigation<any>();
   const setCategoryName = async (
     category_id: string,
     category_name: string
   ) => {
-    // console.log("category_id", category_id);
-    // console.log("product_category", category_name);
-
     navigation.navigate("CategoryScreen", {
       category_id,
       name: `${category_name}`,
     });
   };
-  // const showProducts = ({item.category_id}) => {
-  //   Alert.alert(item.category_id);
-  //   // navigation.navigate("CategoryScreen");
-  // };
+
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(
@@ -233,8 +223,6 @@ const Category = () => {
       const data = await resp.json();
       data?.reverse();
       setCategories(data);
-      console.log("category",data);
-      
     };
 
     fetchData();
@@ -248,7 +236,7 @@ const Category = () => {
 
   return (
     <>
-    <StatusBar backgroundColor="#fff"/>
+    {/* <StatusBar backgroundColor="#fff" /> */}
       <ScrollView style={{minHeight:"100%"}} showsVerticalScrollIndicator={false}>
         <View style={{width:"100%",backgroundColor:"white",justifyContent:"center",alignItems:"center",minHeight:"100%",paddingVertical:10,marginLeft:16}}>
           <View

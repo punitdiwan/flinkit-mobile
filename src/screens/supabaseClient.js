@@ -209,7 +209,7 @@ export const addItemsInOrder = async (orderId,totalAmount,darkroomownerid,dateof
 
 export const loadOrders = async () => {
   try {
-    const response  = await supabase.from("orders").select("*").eq("userid",1);
+    const response  = await supabase.from("orders").select("*").eq("userid",1).order('created_at', { ascending: false });
     return response?.data;
   } catch (error) {
     console.log(error.message);

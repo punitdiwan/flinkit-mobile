@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { getAllOrderItems, loadOrders } from "./supabaseClient";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { Entypo, AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 
 import React from "react";
 import { StyleSheet } from "react-native";
@@ -21,13 +21,13 @@ import { StatusBar } from "expo-status-bar";
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
-
   const totalOrder = orderDetailsData[0]?.orderitems?.length;
-  console.log("totalOrder",totalOrder);
-  
+  // console.log("totalOrder",totalOrder);
 
   // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
+  console.log("orderdetails:", orderDetails?.orderstatus == "Out Of delivery");
+
   // setOrderDetailsData(orderDetails)
 
   const fillAnimation = useRef(new Animated.Value(0)).current;
@@ -38,27 +38,6 @@ const Order = (orderdetails: any) => {
   const [orderList, setOrderList] = useState([]);
   const [orderStatus, setOrderStatus] = useState("");
   const [firstProductName, setFirstProductName] = useState("");
-
-  // useEffect(() => {
-  //   animateFill();
-  // }, []);
-
-  // const animateFill = () => {
-  //   Animated.timing(fillAnimation, {
-  //     toValue: 1,
-  //     duration: 2000, // Adjust duration as needed
-  //     useNativeDriver: false, // false for backgroundColor animation
-  //   }).start();
-  // };
-
-  // const interpolateColor = fillAnimation.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ["rgb(217,217,217)", "rgb(105,175,94)"], // Start with transparent and end with your desired color
-  // });
-
-  // const animatedStyle = {
-  //   backgroundColor: interpolateColor,
-  // };
   const [percentage, setPercentage] = useState(0);
   console.log("percentage", percentage);
 
@@ -69,8 +48,8 @@ const Order = (orderdetails: any) => {
       setPercentage(25);
     } else if (orderStatus?.toLowerCase() == "confirmed") {
       setPercentage(50);
-    }else if (orderStatus?.toLowerCase() == "out of delivery"){
-       setPercentage(75);
+    } else if (orderStatus?.toLowerCase() == "out of delivery") {
+      setPercentage(75);
     } else if (orderStatus?.toLowerCase() == "delivered") {
       setPercentage(100);
     } else if (percentage > 75 && percentage < 100) {
@@ -174,9 +153,11 @@ const Order = (orderdetails: any) => {
                   : orderDetails?.orderstatus}
               </Text>
               <View style={{ paddingTop: 5 }}>
-                <Text style={{ fontWeight: "semibold" }}>
-                  Arriving <Text style={styles.boldText}>10:15</Text>
-                </Text>
+                {orderDetails?.orderstatus !== "Delivered" && (
+                  <Text style={{ fontWeight: "semibold" }}>
+                    Arriving <Text style={styles.boldText}>10:15</Text>
+                  </Text>
+                )}
 
                 <View
                   style={{
@@ -227,11 +208,18 @@ const Order = (orderdetails: any) => {
                 <Animated.View style={[styles.box, animatedStyle]} />
                 <Animated.View style={[styles.box, animatedStyle]} />
               </View> */}
+
                 <View style={styles.arrivalInfo}>
-                  <Text>
-                    Estimated arrival by{" "}
-                    <Text style={styles.boldText}>10:15</Text>
-                  </Text>
+                  {orderDetails?.orderstatus !== "Delivered" ? (
+                    <Text>
+                      Estimated arrival by{" "}
+                      <Text style={styles.boldText}>10:15</Text>
+                    </Text>
+                  ) : (
+                    <Text>
+                      Arrived at <Text style={styles.boldText}>10:00</Text>
+                    </Text>
+                  )}
                   {/* Additional content */}
                 </View>
                 <View
@@ -254,6 +242,91 @@ const Order = (orderdetails: any) => {
                     }}
                   ></Text>
                 </View>
+
+                {orderDetails?.orderstatus == "Out Of delivery" && (
+                  <View
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      marginVertical: 30,
+                      // justifyContent: "space-between",
+                      flexDirection: "row",
+                      backgroundColor: "red",
+                    }}
+                  >
+                    <View
+                      style={{ flexDirection: "row", backgroundColor: "black" }}
+                    >
+                      <View>
+                        <Image
+                          source={{
+                            uri: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600",
+                          }}
+                          width={100}
+                          height={100}
+                          style={{ borderRadius: 100 }}
+                        />
+                        <View
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "white",
+                            width: 90,
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: "rgb(105,175,94)",
+                              width: 80,
+                              borderRadius: 100,
+                              gap: 5,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              position: "absolute",
+                              bottom: 0,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "rgb(255,229,0)",
+                                fontSize: 15,
+                                textAlign: "center",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              4.6{" "}
+                              <Entypo
+                                name="star"
+                                size={20}
+                                color="rgb(255,229,0)"
+                              />
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          alignItems: "center",
+                          // justifyContent: "center",
+                        }}
+                      >
+                        <Image
+                          source={require("../../assets/driverscooter.png")}
+                        />
+                      </View>
+                    </View>
+                    <View>
+                      <View style={{ flexDirection: "row", gap: 10,alignContent:"center",alignItems:"center",justifyContent:"center" }}>
+                        <Text>Drake balakrishna</Text>
+                        <FontAwesome6
+                          name="user-check"
+                          size={24}
+                          color="rgb(105,175,94)"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                )}
 
                 <View style={{ marginTop: 20 }}>
                   <Text style={{ fontWeight: "bold", fontSize: 15 }}>
@@ -436,7 +509,10 @@ const Order = (orderdetails: any) => {
                   </View>
                   <View style={{ paddingTop: 15 }}>
                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-                      Order Number : <Text style={{color:"rgb(105,195,74)"}}>{orderDetailsData[0]?.orderid}</Text>
+                      Order Number :{" "}
+                      <Text style={{ color: "rgb(105,195,74)" }}>
+                        {orderDetailsData[0]?.orderid}
+                      </Text>
                     </Text>
                   </View>
 
@@ -467,10 +543,16 @@ const Order = (orderdetails: any) => {
                           }}
                           onPress={() => setShowMore(!showMore)}
                         >
-                          {showMore ? "" : (
+                          {showMore ? (
+                            ""
+                          ) : (
                             <>
                               <Text
-                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)" }}
+                                style={{
+                                  fontWeight: "semibold",
+                                  fontSize: 13,
+                                  color: "rgb(105,175,94)",
+                                }}
                               >
                                 Show more
                               </Text>
@@ -514,16 +596,29 @@ const Order = (orderdetails: any) => {
                             <Text style={{ fontWeight: "bold" }}>
                               {item?.product_name}
                             </Text>
-                            {showMore && index == totalOrder-1 &&    <TouchableOpacity onPress={() => setShowMore(!showMore)} style={{flexDirection:"row",alignItems:"center",gap:5}}>
-                              <Text
-                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)"}}
+                            {showMore && index == totalOrder - 1 && (
+                              <TouchableOpacity
+                                onPress={() => setShowMore(!showMore)}
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 5,
+                                }}
                               >
-                                Show less
-                              </Text>
-                              <Image
-                                source={require("../../assets/arrowbottom.png")}
-                              />
-                            </TouchableOpacity>}
+                                <Text
+                                  style={{
+                                    fontWeight: "semibold",
+                                    fontSize: 13,
+                                    color: "rgb(105,175,94)",
+                                  }}
+                                >
+                                  Show less
+                                </Text>
+                                <Image
+                                  source={require("../../assets/arrowbottom.png")}
+                                />
+                              </TouchableOpacity>
+                            )}
                           </View>
                         </View>
                       );
@@ -543,8 +638,9 @@ const Order = (orderdetails: any) => {
                     Total
                   </Text>
                   <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  
-                    <Text style={{color:"rgb(105,175,94)"}}>₹{orderDetailsData[0]?.totalamt}</Text>
+                    <Text style={{ color: "rgb(105,175,94)" }}>
+                      ₹{orderDetailsData[0]?.totalamt}
+                    </Text>
                   </Text>
                 </View>
               </View>

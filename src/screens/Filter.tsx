@@ -44,7 +44,7 @@ const Filter = ({navigation}) => {
   const apiKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzE3NDM5NDAwLAogICJleHAiOiAxODc1MjA1ODAwCn0.JEhCAjkG0KvAc7H6A4RkQNsF-lZW_OpYuT--XKHlAlw"
 
 
-  const fetchData = async (categoryId) => {
+  const fetchData = async (categoryId : any) => {
     const data = await getProductsRelatedToCategoryId(categoryId);
     // console.log(data);
     

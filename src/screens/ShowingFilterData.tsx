@@ -1,23 +1,3 @@
-// import { View,Text,ScrollView,TouchableOpacity } from "react-native";
-// import { useNavigation, useRoute } from '@react-navigation/native';
-
-// const ShowingFilterData = ({id,category,brand}:any) => {
-//     // const route = useRoute();
-    
-//     // const {id} = route.params;
-//     // console.log(id);
-//     console.log(category.route.params.category);
-    
-
-//     return (
-//        <View>
-//         <Text>ShowingFilterData</Text>
-//        </View>
-//       );
-// }
-
-// export default ShowingFilterData;
-
 import React, { useEffect, useState } from 'react';
 import { View, Text,TouchableOpacity,ScrollView,Image,StyleSheet } from 'react-native';
 import { useRoute,useNavigation } from '@react-navigation/native';
@@ -47,9 +27,7 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
   const {cartItem,increaseCartQuantity,decreaseCartQuantity,addingItemInCart} = useMyContext();
 
   const getAllProducts = async (categoryId:any) => {
-       const response = await getProductsRelatedToCategoryId(categoryId);
-    //    console.log("showingFilter",response);
-    //    console.log("brandd",brand);
+    const response = await getProductsRelatedToCategoryId(categoryId);
     let filterProductsOnBrand = response;
        if(brand){
          filterProductsOnBrand = await response?.filter(item => item?.product_brand?.toLowerCase() == brand.toLowerCase() );
@@ -68,7 +46,7 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
             <AntDesign name='arrowleft' size={24} style={{fontWeight:"bold",marginRight:150}} onPress={() => navigation.navigate("Filter")}/>
             <Text style={{fontSize:22,fontWeight:"500"}}>Filter</Text>
           </View>
-         {products.length == 0 ? <View style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"400",textDecorationLine:"underline"}}>"No such Products"</Text></View>: <View
+         {products.length == 0 ? <View  style={{width:"100%",justifyContent:"center",alignItems:"center",minHeight:"100%"}}><Text style={{fontSize:20,fontWeight:"400",textDecorationLine:"underline"}}>"No such Products"</Text></View>: <View
             style={{
               display: "flex",
               flexDirection: "row",    
@@ -84,7 +62,7 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
             }}
           >
             {products.map(item => 
-                <View style={{backgroundColor:"white",width:200,marginVertical:1,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:260,borderWidth:1,borderColor:"rgb(233,233,233)",elevation:1}}>
+                <View key={item?.product_id} style={{backgroundColor:"white",width:200,marginVertical:1,paddingVertical:30,paddingHorizontal:10,borderRadius:10,height:260,borderWidth:1,borderColor:"rgb(233,233,233)",elevation:1}}>
                   <TouchableOpacity onPress={() => navigation.navigate("Productdetail", {id: item?.product_id})
           } >
                     <View>
