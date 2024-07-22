@@ -11,6 +11,7 @@ const TopRated = () => {
   const navigation = useNavigation();
   // context state
   const {cartItem,increaseCartQuantity,decreaseCartQuantity,addingItemInCart} = useMyContext();
+  
 
   const loadCategory = async () => {
       const response  = await getAllTopRatedProducts();

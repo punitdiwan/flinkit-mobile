@@ -22,6 +22,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI"
+        }
+      },
       "package": "com.prince01.flinkitmobile"
     },
     "web": {

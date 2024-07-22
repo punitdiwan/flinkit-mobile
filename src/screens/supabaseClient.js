@@ -308,6 +308,15 @@ export const getAllOrderItems = async () => {
 }
 
 
+export const getDriverDetails = async (driverId) => {
+  try {
+    const response = await supabase.from("driver_registration").select("*").eq("driver_uniqueid",driverId);
+    console.log("driverUser",response?.data);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 

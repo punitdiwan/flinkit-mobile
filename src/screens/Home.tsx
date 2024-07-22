@@ -35,8 +35,6 @@ const Home = ({ navigation, route }: HomeProps) => {
   const [cartData,setCartData] = useState([]);
   const [topRatedProducts,setTopRatedProducts] = useState([]);
 
-
-  
   const loadTopRatedProducts = async () => {
     const response = await getAllTopRatedProducts();
     // console.log("useEffect")
@@ -48,7 +46,7 @@ const Home = ({ navigation, route }: HomeProps) => {
 
 React.useEffect(() => {
   loadTopRatedProducts();
-},[])
+},[]);
 
   return (
     <>

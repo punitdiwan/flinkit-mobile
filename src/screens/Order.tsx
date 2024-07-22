@@ -8,14 +8,21 @@ import {
   Animated,
   ScrollView,
   SafeAreaView,
+  Linking,
 } from "react-native";
-import { getAllOrderItems, loadOrders } from "./supabaseClient";
+import {
+  getAllOrderItems,
+  getDriverDetails,
+  loadOrders,
+} from "./supabaseClient";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Entypo, AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import MapView from "react-native-maps";
+import { imageUrl } from "../../lib/constant";
 
 // Order details page
 
@@ -26,7 +33,8 @@ const Order = (orderdetails: any) => {
 
   // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
-  console.log("orderdetails:", orderDetails?.orderstatus == "Out Of delivery");
+  console.log("orderdetails", orderDetails?.assigndriverid);
+  // console.log("orderdetails:", orderDetails?.orderstatus == "Out Of delivery");
 
   // setOrderDetailsData(orderDetails)
 
@@ -39,6 +47,10 @@ const Order = (orderdetails: any) => {
   const [orderStatus, setOrderStatus] = useState("");
   const [firstProductName, setFirstProductName] = useState("");
   const [percentage, setPercentage] = useState(0);
+  const [driverId, setDriverId] = useState("");
+  const [driverDetails, setDriverDetails] = useState([]);
+  console.log(`driverImage ${imageUrl}${driverDetails[0]?.profileimg}`);
+
   console.log("percentage", percentage);
 
   const handlePercentage = (orderStatus) => {
@@ -48,7 +60,7 @@ const Order = (orderdetails: any) => {
       setPercentage(25);
     } else if (orderStatus?.toLowerCase() == "confirmed") {
       setPercentage(50);
-    } else if (orderStatus?.toLowerCase() == "out of delivery") {
+    } else if (orderStatus?.toLowerCase() == "out for delivery") {
       setPercentage(75);
     } else if (orderStatus?.toLowerCase() == "delivered") {
       setPercentage(100);
@@ -77,12 +89,27 @@ const Order = (orderdetails: any) => {
 
   const loadOrdersData = async () => {
     setOrderDetailsData([orderDetails]);
+    setDriverId(orderDetails?.assigndriverid);
   };
 
   useEffect(() => {
     loadOrdersData();
     handlePercentage(orderDetails?.orderstatus);
   }, []);
+
+  const getDriver = async () => {
+    try {
+      const response = await getDriverDetails(driverId);
+      setDriverDetails(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("calling driver details");
+    getDriver();
+  }, [driverId]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -222,111 +249,149 @@ const Order = (orderdetails: any) => {
                   )}
                   {/* Additional content */}
                 </View>
-                <View
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 50,
-                  }}
-                >
-                  <Image source={require("../../assets/orderbackground.png")} />
-                  <Text
-                    style={{
-                      width: "20%",
-                      backgroundColor: "#EEEEEE",
-                      height: 10,
-                      fontWeight: "500",
-                      marginTop: 30,
-                      borderRadius: 20,
-                    }}
-                  ></Text>
-                </View>
 
-                {orderDetails?.orderstatus == "Out Of delivery" && (
+                {orderDetails?.orderstatus !== "Out for delivery" && (
                   <View
                     style={{
                       width: "100%",
-                      height: "auto",
-                      marginVertical: 30,
-                      // justifyContent: "space-between",
-                      flexDirection: "row",
-                      backgroundColor: "red",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: 50,
                     }}
                   >
+                    {
+                      <Image
+                        source={require("../../assets/orderbackground.png")}
+                      />
+                    }
+                    <Text
+                      style={{
+                        width: "20%",
+                        backgroundColor: "#EEEEEE",
+                        height: 10,
+                        fontWeight: "500",
+                        marginTop: 30,
+                        borderRadius: 20,
+                      }}
+                    ></Text>
+                  </View>
+                )}
+
+                {orderDetails?.orderstatus == "Out for delivery" && (
+                  <View style={{ marginVertical: 15 }}>
+                    <MapView
+                      initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                      }}
+                      style={{ width: "100%", height: 350 }}
+                    />
+                  </View>
+                )}
+
+                {orderDetails?.orderstatus == "Out for delivery" &&
+                  driverDetails && (
                     <View
-                      style={{ flexDirection: "row", backgroundColor: "black" }}
+                      style={{
+                        justifyContent: "center",
+                        gap: 10,
+                        marginVertical: 10,
+                        paddingHorizontal: 7,
+                        paddingVertical: 10,
+                        borderRadius: 5,
+                        shadowColor: "#E3E3E3", // Change this to adjust shadow color
+                        shadowOffset: { width: 0, height: 2 }, // Change shadow offset as needed
+                        shadowOpacity: 0.8, // Change opacity (0-1)
+                        shadowRadius: 2, // Change radius
+                        elevation: 3,
+                      }}
                     >
-                      <View>
-                        <Image
-                          source={{
-                            uri: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600",
-                          }}
-                          width={100}
-                          height={100}
-                          style={{ borderRadius: 100 }}
-                        />
-                        <View
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "white",
-                            width: 90,
-                          }}
-                        >
+                      <View
+                        style={{
+                          justifyContent: "space-between",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <View style={{backgroundColor:"#f0f0f0",borderRadius:100,elevation:4}}>
+                          <Image
+                            source={{
+                              uri: `${imageUrl}${driverDetails[0]?.profileimg}`,
+                            }}
+                            width={100}
+                            height={100}
+                            borderRadius={100}
+                          />
                           <View
                             style={{
                               backgroundColor: "rgb(105,175,94)",
-                              width: 80,
                               borderRadius: 100,
-                              gap: 5,
                               justifyContent: "center",
                               alignItems: "center",
+                              // paddingVertical: 1,
                               position: "absolute",
                               bottom: 0,
+                              width: 70,
+                              marginLeft: 17,
+                              elevation:4
                             }}
                           >
-                            <Text
-                              style={{
-                                color: "rgb(255,229,0)",
-                                fontSize: 15,
-                                textAlign: "center",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              4.6{" "}
-                              <Entypo
-                                name="star"
-                                size={20}
-                                color="rgb(255,229,0)"
-                              />
+                            <Text style={{ color: "rgb(255,229,0)",fontWeight:"bold"}}>
+                              {" "}
+                              4.5 <Entypo name="star" />
                             </Text>
                           </View>
                         </View>
-                      </View>
-                      <View
-                        style={{
-                          alignItems: "center",
-                          // justifyContent: "center",
-                        }}
-                      >
-                        <Image
-                          source={require("../../assets/driverscooter.png")}
-                        />
+
+                        <View
+                          style={{
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          {/* <Feather name="user-check" size={20} /> */}
+                          <Text
+                            style={{
+                              fontWeight: "bold",
+                              color: "rgb(105,175,94)",
+                              fontSize: 15,
+                            }}
+                          >
+                            {`Mr.${driverDetails[0]?.driverfirst_name} ${driverDetails[0]?.driverlast_name}`}
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() =>
+                              Linking.openURL(
+                                `tel:${"+91" + driverDetails?.contact}`
+                              )
+                            }
+                            style={{
+                              backgroundColor: "rgb(105,175,94)",
+                              width: 50,
+                              height: 50,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRadius: 100,
+                              elevation:5
+                            }}
+                          >
+                            <Feather name="phone" size={20} color={"#fff"} style={{elevation:5}}/>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                    <View>
-                      <View style={{ flexDirection: "row", gap: 10,alignContent:"center",alignItems:"center",justifyContent:"center" }}>
-                        <Text>Drake balakrishna</Text>
-                        <FontAwesome6
-                          name="user-check"
-                          size={24}
-                          color="rgb(105,175,94)"
-                        />
-                      </View>
-                    </View>
-                  </View>
-                )}
+                  )}
 
                 <View style={{ marginTop: 20 }}>
                   <Text style={{ fontWeight: "bold", fontSize: 15 }}>
@@ -746,3 +811,63 @@ const styles = StyleSheet.create({
 });
 
 export default Order;
+
+// <View>
+{
+  /* <View>
+  <Image
+    source={require("../../assets/driverscooter.png")}
+  />
+</View> */
+}
+// </View>
+
+{
+  /* <View> */
+}
+{
+  /* <Image source={require("../../assets/driverscooter.png")} /> */
+}
+
+{
+  /* <Text
+  style={{
+    fontWeight: 500,
+    color: "rgb(105,175,94)",
+  }}
+>
+  Drake Balakrishna
+</Text>
+</View>
+
+
+<View>
+<Text
+  style={{ fontWeight: 500, color: "rgb(105,175,94)" }}
+>
+  Drake Balakrishna
+</Text>
+</View>
+
+<View
+style={{
+  width: 50,
+  height: 50,
+  backgroundColor: "rgb(105,175,94)",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: 100,
+}}
+>
+<Feather name="phone" size={20} />
+</View>
+
+<Image
+source={{
+  uri: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+}}
+width={80}
+height={80}
+borderRadius={100}
+/> */
+}
