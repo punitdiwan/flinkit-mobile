@@ -126,7 +126,7 @@ export default function App() {
           <Stack.Screen
             name="AddAddress"
             component={AddAddress}
-            options={{ title: "Add Address" }}
+            options={{ title: "Add Address",headerShown:true }}
           />
           <Stack.Screen
             name="OrderListScreen"

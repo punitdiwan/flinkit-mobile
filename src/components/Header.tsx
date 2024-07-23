@@ -15,7 +15,9 @@ import { useState } from "react";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Icon2 from "@expo/vector-icons/Fontisto";
 import Carousel from "./Carousel";
-import AppLoading from "expo-app-loading";
+
+import { Entypo } from "@expo/vector-icons";
+
 import * as Font from "expo-font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -34,19 +36,6 @@ const loadFonts = async () => {
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
-  // const img = {
-  //   uri: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  // };
-  // const [fontLoaded, setFontLoaded] = useState(false);
-  // if (!fontLoaded) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadFonts}
-  //       onFinish={() => setFontLoaded(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
 
   return (
     <SafeAreaView>
@@ -97,29 +86,6 @@ const Header = ({ navigation, route }: HomeProps) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {/* <View>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Profile", { userId: "123" })
-                  }
-                  style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: "#ffff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 100,
-                    borderWidth: 3,
-                    borderColor: "#000000",
-                    padding: 10,
-                  }}
-                >
-                  <Text>
-                    <Icon name="user" size={30} color="#000000" />
-                  </Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
             <TouchableOpacity
               onPress={() => navigation.navigate("SearchScreen")}
@@ -154,37 +120,27 @@ const Header = ({ navigation, route }: HomeProps) => {
         </LinearGradient>
         <Carousel />
         {modalVisible ? (
-          <View style={styles.addressParent}>
-            <View>
-              <TouchableOpacity>
-                <Icon2
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}
-                  name="minus-a"
-                  size={40}
-                  color="rgba(0, 0, 0, 0.459)"
-                  style={styles.minusIcon}
-                />
+         <View style={{width:"100%",height:"80%",backgroundColor:"#fff"}}>
+            <View style={{width:"100%",justifyContent:"center",alignItems:"center"}}>
+            <View style={{position:"absolute",width:60,height:60,backgroundColor:"#FFf",justifyContent:"center",alignItems:"center",borderRadius:50,padding:5}}>
+              <TouchableOpacity style={{width:50,height:50,justifyContent:"center",alignItems:"center",backgroundColor:"rgb(105,175,94)",borderRadius:50}} onPress={() => setModalVisible(!modalVisible)}>
+                <Entypo name="cross" size={20} color={"#fff"}/>
               </TouchableOpacity>
+             </View>
             </View>
-            <View style={styles.selectAddressMainContainer}>
-              <Text style={styles.addressText}>Select Address</Text>
-              <Text style={styles.noAddressText}>No address available</Text>
 
-              <View style={styles.addressBtnContainer}>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("AddAddress");
-                  }}
-                >
-                  <View style={styles.addressBtnContainerText}>
-                    <Text style={styles.addressText2}>Add new address</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+             <View style={{justifyContent:"center",alignItems:"center",marginTop:100,gap:40}}>
+              <Text style={{fontSize:18,fontWeight:"500",color:"#818181"}}>Change your Address</Text>
+               <View style={{paddingHorizontal:10,width:"100%"}}>
+               <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
+                setModalVisible(!modalVisible);
+                navigation.navigate("AddAddress")
+               }}>
+                <Text style={{color:"white",fontWeight:"bold"}}>Add new address</Text>
+              </TouchableOpacity>
+               </View>
+             </View>
+         </View>
         ) : null}
       </View>
     </SafeAreaView>
@@ -214,6 +170,7 @@ const styles = StyleSheet.create({
   addressParent: {
     width: "100%",
     height: "85%",
+    // paddingTop:50
   },
   minusIcon: {
     textAlign: "center",
@@ -235,13 +192,11 @@ const styles = StyleSheet.create({
 
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-
-    height: 80,
+    justifyContent: "space-between"
   },
   addressText: {
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
   },
   noAddressText: {
@@ -267,4 +222,36 @@ const styles = StyleSheet.create({
 });
 function componentDidMount() {
   throw new Error("Function not implemented.");
+}
+
+{
+  /* <View>
+<TouchableOpacity>
+  <Icon2
+    onPress={() => {
+      setModalVisible(false);
+    }}
+    name="minus-a"
+    size={40}
+    color="rgba(0, 0, 0, 0.459)"
+    style={styles.minusIcon}
+  />
+</TouchableOpacity>
+</View>
+<View style={styles.selectAddressMainContainer}>
+<Text style={styles.addressText}>Select Address</Text>
+<Text style={styles.noAddressText}>No address available</Text>
+
+<View style={styles.addressBtnContainer}>
+  <TouchableOpacity
+    onPress={() => {
+      navigation.navigate("AddAddress");
+    }}
+  >
+    <View style={styles.addressBtnContainerText}>
+      <Text style={styles.addressText2}>Add new address</Text>
+    </View>
+  </TouchableOpacity>
+</View>
+</View> */
 }

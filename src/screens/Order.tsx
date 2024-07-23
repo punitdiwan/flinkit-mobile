@@ -9,6 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
   Linking,
+  Alert,
 } from "react-native";
 import {
   getAllOrderItems,
@@ -21,10 +22,13 @@ import { Entypo, AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import MapView from "react-native-maps";
+import MapView, { Marker, Polygon } from "react-native-maps";
 import { imageUrl } from "../../lib/constant";
+import MapViewDirections from "react-native-maps-directions";
 
 // Order details page
+
+const googleApiKey = "AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
@@ -49,6 +53,26 @@ const Order = (orderdetails: any) => {
   const [percentage, setPercentage] = useState(0);
   const [driverId, setDriverId] = useState("");
   const [driverDetails, setDriverDetails] = useState([]);
+  const intervalRef = useRef(null);
+  const mapRef = useRef();
+
+  const [state, setState] = useState({
+    pickupCords: {
+      latitude: 23.2811,
+      longitude: 77.3605,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    },
+    droplocationCords: {
+      latitude: 23.1046,
+      longitude: 77.4903,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    },
+  });
+
+  const { pickupCords, droplocationCords } = state;
+
   console.log(`driverImage ${imageUrl}${driverDetails[0]?.profileimg}`);
 
   console.log("percentage", percentage);
@@ -105,10 +129,43 @@ const Order = (orderdetails: any) => {
       console.log(error);
     }
   };
+// Replace with your API key and coordinates
+const apiKey = 'YOUR_API_KEY';
+const origin = '37.7749,-122.4194'; // San Francisco, CA
+const destination = '34.0522,-118.2437'; // Los Angeles, CA
+
+
+const getAsstimatedDeliveryTime = () => {
+  // Construct the URL for the API request
+const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&mode=driving&key=${googleApiKey}`;
+
+// Fetch data from Google Maps Distance Matrix API
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    // console.log(response);
+    
+    return response.json();
+  })
+  .then(data => {
+    // Handle the response data
+    console.log("distance",data);
+    
+    // console.log('Distance:', data.rows[0].elements[0].distance.text);
+    // console.log('Duration:', data.rows[0].elements[0].duration.text);
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+
+}
 
   useEffect(() => {
     console.log("calling driver details");
     getDriver();
+    getAsstimatedDeliveryTime();
   }, [driverId]);
 
   return (
@@ -280,14 +337,41 @@ const Order = (orderdetails: any) => {
                 {orderDetails?.orderstatus == "Out for delivery" && (
                   <View style={{ marginVertical: 15 }}>
                     <MapView
-                      initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                      }}
+                      ref={mapRef}
+                      initialRegion={pickupCords}
                       style={{ width: "100%", height: 350 }}
-                    />
+                    >
+                      <Marker coordinate={pickupCords}>
+                        <Image
+                          source={require("../../assets/delivery-bike.png")}
+                          style={{ width: 40, height: 50 }} // Adjust width and height as needed
+                        />
+                      </Marker>
+                      <Marker
+                        coordinate={droplocationCords}
+                        style={{ width: 20, height: 20 }}
+                      />
+
+
+                      <MapViewDirections
+                        origin={pickupCords}
+                        destination={droplocationCords}
+                        apikey={googleApiKey}
+                        strokeWidth={4}
+                        strokeColor="blue"
+                        optimizeWaypoints={true}
+                        onReady={(result) => {
+                          mapRef.current.fitToCoordinates(result.coordinates, {
+                            edgePadding: {
+                              right: 30,
+                              left: 30,
+                              bottom: 300,
+                              top: 300,
+                            },
+                          });
+                        }}
+                      />
+                    </MapView>
                   </View>
                 )}
 
@@ -314,7 +398,13 @@ const Order = (orderdetails: any) => {
                           flexDirection: "row",
                         }}
                       >
-                        <View style={{backgroundColor:"#f0f0f0",borderRadius:100,elevation:4}}>
+                        <View
+                          style={{
+                            backgroundColor: "#f0f0f0",
+                            borderRadius: 100,
+                            elevation: 4,
+                          }}
+                        >
                           <Image
                             source={{
                               uri: `${imageUrl}${driverDetails[0]?.profileimg}`,
@@ -334,10 +424,15 @@ const Order = (orderdetails: any) => {
                               bottom: 0,
                               width: 70,
                               marginLeft: 17,
-                              elevation:4
+                              elevation: 4,
                             }}
                           >
-                            <Text style={{ color: "rgb(255,229,0)",fontWeight:"bold"}}>
+                            <Text
+                              style={{
+                                color: "rgb(255,229,0)",
+                                fontWeight: "bold",
+                              }}
+                            >
                               {" "}
                               4.5 <Entypo name="star" />
                             </Text>
@@ -383,10 +478,15 @@ const Order = (orderdetails: any) => {
                               justifyContent: "center",
                               alignItems: "center",
                               borderRadius: 100,
-                              elevation:5
+                              elevation: 5,
                             }}
                           >
-                            <Feather name="phone" size={20} color={"#fff"} style={{elevation:5}}/>
+                            <Feather
+                              name="phone"
+                              size={20}
+                              color={"#fff"}
+                              style={{ elevation: 5 }}
+                            />
                           </TouchableOpacity>
                         </View>
                       </View>
