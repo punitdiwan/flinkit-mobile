@@ -3,17 +3,21 @@ import { ImageBackground, StyleSheet, Text, View, TouchableOpacity, StatusBar } 
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMyContext } from '../context/Context';
 // import * as SplashScreen  from 'expo-splash-screen';
 // import * as Font from 'expo-font';
 
 
 const Onboarding = () => {
   const navigation = useNavigation();
+  const {userId,setUserId} = useMyContext();
+  console.log("Onboard",userId);
+  
 
  
   const checkIsLoggedIn = async () => {
     const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true') {
+    if (isLoggedIn === 'true' ) {
       navigation.navigate('BottomNav');
     } else {
       navigation.navigate('Onboarding');

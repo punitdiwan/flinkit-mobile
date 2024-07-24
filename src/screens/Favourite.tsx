@@ -14,6 +14,7 @@ import { addToCart, loadFavItem } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { useIsFocused } from "@react-navigation/native";
 import { imageUrl } from "../../lib/constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const loadFonts = async () => {
@@ -35,8 +36,8 @@ const Favourite = () => {
 
 
   const loadFav = async () => {
-    const response = await loadFavItem();
-    // setFavItemList(response);
+    const userId = await AsyncStorage.getItem("userMobileNumber");
+    const response = await loadFavItem(userId);
     addFavouriteItemList(response);
   }
 

@@ -12,13 +12,14 @@ import * as React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import { channel } from "expo-updates";
+import { channel, checkAutomatically } from "expo-updates";
 import {
   getuserbyphone,
   signUpUser,
   setConfirmation,
   verifyOtp,
   supabase,
+  checkUserExistingOrCreatingNewUser,
 } from "../supabaseClient";
 
 import * as SplashScreen  from 'expo-splash-screen';
@@ -30,43 +31,31 @@ type Props = {};
 const Login = (props: Props) => {
   const navigation = useNavigation<any>();
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [MobileNumber, setMobileNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  // console.log("MobileNumber",mobileNumber);
 
-  const apikey = "";
+  // generateOTP
+  const generateOTP = () => {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log('OTP',otp);
+    return otp;
+    
+  }
+
   const handleLogin = async () => {
-    const apiUrl = "https://admin.delivery.launchmysite.in/api/setConfirmation";
-
-    if (MobileNumber.length == 10) {
-      // const response = await fetch(apiUrl, {
-      //   method: "POST",
-      //   headers: {
-      //     Apikey: apikey,
-      //   },
-      //   body: JSON.stringify({
-      //     phone_number: MobileNumber,
-      //     code: "654321",
-      //   }),
-      // });
-      // const data = await response.json();
-      // console.log(data);
-      // ------------------------------------------------------
-
-      const response = await supabase.rpc("set_confirmation", {
-        phone_number: MobileNumber,
-        code: "654321",
-      });
-      console.log("Login.tsx, response:", response);
-      navigation.replace("Otp", { MobileNumber });
-
-      // ---------------------------------------------------------
-      // const resp = await supabase.auth.admin.createUser({
-      //   phone: MobileNumber,
-      //   phone_confirm: true,
-      // });
-      // console.log("resp", resp);
-      // navigation.replace("Otp", { MobileNumber });
+    if(mobileNumber.length == 10){
+      const otp = generateOTP();
+      if(otp){
+        await checkUserExistingOrCreatingNewUser(mobileNumber,otp);
+        navigation.replace("Otp", {mobileNumber});
+      }
+    }else{
+      Alert.alert("Please enter valid mobile number");
     }
-  };
+  }
+  
+
+ 
 
 
   React.useEffect(() => {
@@ -158,7 +147,7 @@ const Login = (props: Props) => {
             <Text style={{ fontSize: 25 }}>+91</Text>
             <TextInput
               style={{ width: "75%", fontSize: 25 }}
-              value={MobileNumber}
+              value={mobileNumber}
               maxLength={10}
               keyboardType="phone-pad"
               onChangeText={setMobileNumber}
@@ -236,3 +225,47 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
 });
+
+
+
+
+
+// const apikey = "";
+// const handleLogin = async () => {
+//   const apiUrl = "https://admin.delivery.launchmysite.in/api/setConfirmation";
+
+//   if (MobileNumber.length == 10) {
+//     // const response = await fetch(apiUrl, {
+//     //   method: "POST",
+//     //   headers: {
+//     //     Apikey: apikey,
+//     //   },
+//     //   body: JSON.stringify({
+//     //     phone_number: MobileNumber,
+//     //     code: "654321",
+//     //   }),
+//     // });
+//     // const data = await response.json();
+//     // console.log(data);
+//     // ------------------------------------------------------
+
+//     const response = await supabase.rpc("set_confirmation", {
+//       phone_number: MobileNumber,
+//       code: "654321",
+//     });
+//     console.log("Login.tsx, response:", response);
+     
+//     const otp = generateOTP();
+//     checkUserExistingOrCreatingNewUser(MobileNumber);
+
+//     navigation.replace("Otp", { MobileNumber });
+
+//     // ---------------------------------------------------------
+//     // const resp = await supabase.auth.admin.createUser({
+//     //   phone: MobileNumber,
+//     //   phone_confirm: true,
+//     // });
+//     // console.log("resp", resp);
+//     // navigation.replace("Otp", { MobileNumber });
+//   }
+// };

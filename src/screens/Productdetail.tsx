@@ -29,6 +29,7 @@ import { AirbnbRating, Rating } from "react-native-ratings";
 
 import Swiper from "react-native-swiper";
 import { imageUrl } from "../../lib/constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -46,20 +47,7 @@ const Productdetail = (id: any) => {
   const [heartIconColor, setHeartIconColor] = useState("black");
   const [imageLoading,setImageLoading] = useState(true);
 
-  const fetchData = async () => {
-    const resp: any = await supabase
-      .from("newproducts")
-      .select("*")
-      .eq("product_id", productId);
-    setFetchProduct(resp.data);
-  };
-
-  useEffect(() => {
-    fetchData();
- 
-  }, [productId]);
-
-
+  
 
   const toggleDetails = () => {
     setDetailsExpanded(!detailsExpanded);
@@ -98,7 +86,10 @@ const Productdetail = (id: any) => {
     );
   const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
 
-  const addToFav = async (data) => {
+  const addToFav = async (data : any) => {
+    const userId = await AsyncStorage.getItem("userMobileNumber");
+    console.log("||",userId);
+    
     const {
       price,
       product_id,
@@ -111,23 +102,18 @@ const Productdetail = (id: any) => {
       product_id,
       imagename,
       product_name,
-      darkroomownerid
+      darkroomownerid,
+      userId
     );
-    const response = await loadFavItem();
+    const response = await loadFavItem(userId);
     addFavouriteItemList(response);
     setHeartIconColor("red");
   };
 
-  const removeFromFav = async (data) => {
-    const { product_id } = data;
-    removeItemFromFav(product_id);
-    const response = await loadFavItem();
-    addFavouriteItemList(response);
-    setHeartIconColor("black");
-  };
-
   const loadFav = async () => {
-    const response = await loadFavItem();
+    console.log("loadingFav",userId);
+    
+    const response = await loadFavItem(userId);
     addFavouriteItemList(response);
     setImageLoading(false);
   };
@@ -141,9 +127,24 @@ const Productdetail = (id: any) => {
     // setImageLoading(false);
   }
 
+  const fetchData = async () => {
+    const resp: any = await supabase
+      .from("newproducts")
+      .select("*")
+      .eq("product_id", productId);
+    setFetchProduct(resp.data);
+  };
+
+
+  useEffect(() => {
+    fetchData();
+    
+  }, [productId]);
+
+
   useEffect(() => {
     loadFav();
-    // setImageLoading(false)
+    setImageLoading(false);
   }, []);
 
   

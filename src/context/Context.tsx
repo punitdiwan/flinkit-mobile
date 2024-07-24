@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { addToCart, loadCartData } from "../screens/supabaseClient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface MyContextData {
   getItemQuintity: (id: string) => number;
@@ -17,7 +18,9 @@ interface MyContextData {
   cartItem: [];
   favouriteItem:[];
   clearCart:() => void;
-  addAllFavItemInCart : (data:[]) => void
+  addAllFavItemInCart : (data:[]) => void;
+  userId:"";
+  setUserId:() => void
 }
 
 // Create the context with initial values
@@ -140,6 +143,9 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setCartItem([...updatedCart]);
       }
   }
+
+
+ 
   // end
 
   return (
@@ -153,7 +159,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         increaseCartQuantity,
         addFavouriteItemList,
         clearCart,
-        addAllFavItemInCart
+        addAllFavItemInCart,
       }}
     >
       {children}

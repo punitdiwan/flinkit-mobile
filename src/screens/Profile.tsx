@@ -81,6 +81,8 @@ const Profile = ({ navigation, route }: ProfileProps) => {
 
   const removeLoggedInDataFromStorage = async () => {
     try {
+      console.log("userID", await AsyncStorage.getItem("userMobileNumber"),"isLoggedIn",await AsyncStorage.getItem("isLoggedIn"));
+      
       const response = await AsyncStorage.setItem("isLoggedIn","false");
       console.log("response",response);
       const currState = await AsyncStorage.getItem("isLoggedIn");
