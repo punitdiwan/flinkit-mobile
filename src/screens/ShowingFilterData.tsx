@@ -78,7 +78,18 @@ const ShowingFilterData: React.FC<ShowingFilterDataProps> = () => {
                         <Text style={{fontSize:15,fontWeight:"bold"}}>₹{item?.price}</Text>
                         </View>
 
-                        {cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
+                        {item?.product_total_qty == 0 ?  <View
+                              style={{
+                                backgroundColor: "#f0f0f0",
+                                paddingHorizontal: 5,
+                                paddingVertical: 2,
+                                borderRadius: 5,
+                              }}
+                            >
+                              <Text style={{ color: "red", fontWeight: 500 }}>
+                                Out Of Stock
+                              </Text>
+                            </View> : cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ?   <View style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"row",gap:2}}>
                     <TouchableOpacity style={{
                       // backgroundColor:"red",
                       width:30,

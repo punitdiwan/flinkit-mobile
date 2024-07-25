@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { addToCart, loadCartData } from "../screens/supabaseClient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,7 +20,8 @@ interface MyContextData {
   clearCart:() => void;
   addAllFavItemInCart : (data:[]) => void;
   userId:"";
-  setUserId:() => void
+  setUserId:() => void;
+  getAsyncStorageCartItemsAndAddInCart : (data:[]) => void
 }
 
 // Create the context with initial values
@@ -35,17 +36,21 @@ type CartItem = {
 
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // const [cartItem, setCartItem] = useState<CartItem[]>([]);
+
   const [cartItem, setCartItem] = useState([]);
   const [favouriteItem,setFavouriteItem] = useState([]);
+  
 
   // Add to cart by harsh
-  function addingItemInCart(data: any) {
+  async function addingItemInCart(data: any) {
     
     if (cartItem?.length == 0) {
       const itemObj = new Object(data);
       itemObj.qty = 1;
       const item = [itemObj];
       setCartItem(item);
+      AsyncStorage.setItem("cartItem",JSON.stringify(item));
+      
     } else {
       const findingProductInCartItem = cartItem?.filter((item): any => item?.product_id == data?.product_id);
       if (findingProductInCartItem?.length > 0) {
@@ -53,19 +58,24 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         findingProductInCartItem[0].qty = findingProductInCartItem[0].qty + 1;
         removeFindProduct.push(...findingProductInCartItem);
         setCartItem([...removeFindProduct]);
-
+        AsyncStorage.setItem("cartItem",JSON.stringify(removeFindProduct));
       } else {
         const newObj = new Object(data);
         newObj.qty = 1;
         const newArr = [...cartItem];
         newArr.push(newObj);
         setCartItem([...newArr]);
+        AsyncStorage.setItem("cartItem",JSON.stringify(newArr));
       }
 
     }
     // console.log("cartItem",cartItem?.length);
     
   }
+
+function getAsyncStorageCartItemsAndAddInCart(data:any){
+      setCartItem(data);
+}
 
    const deleteParticularItemInCart = (product_id) => {
     console.log(product_id);
@@ -77,7 +87,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       if(findProductExistOrNot.length > 0){
         const updatedCartItem = cartItem.filter(item => item?.product_id !== product_id);
         setCartItem([...updatedCartItem])
-        console.log("c",cartItem);
+        AsyncStorage.setItem("cartItem",JSON.stringify(updatedCartItem));
         
       }else{
         return
@@ -95,6 +105,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             findProductExistsOrNot[0].qty = findProductExistsOrNot[0]?.qty - 1;
             updatedCart.push(findProductExistsOrNot[0]);
             setCartItem(updatedCart);
+            AsyncStorage.setItem("cartItem",JSON.stringify(updatedCart));
         }else{
           deleteParticularItemInCart(product_id);
         }
@@ -110,7 +121,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       findProductExistsOrNot[0].qty = findProductExistsOrNot[0]?.qty + 1;
       updatedCart.push(findProductExistsOrNot[0]);
       setCartItem(updatedCart)
-
+      AsyncStorage.setItem("cartItem",JSON.stringify(updatedCart));
     }else{
       return;
     }
@@ -148,6 +159,17 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
  
   // end
 
+  const loadCartItemFromAsyncStorage = async () => {
+    try {
+      const cart = await AsyncStorage.getItem("cartItem") || [];
+      console.log("carttt",cart);
+      setCartItem(cart)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   return (
     <MyContext.Provider
       value={{
@@ -160,6 +182,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         addFavouriteItemList,
         clearCart,
         addAllFavItemInCart,
+        getAsyncStorageCartItemsAndAddInCart
       }}
     >
       {children}

@@ -100,7 +100,18 @@ const HomePageCard = ({ name, data }: any) => {
                     <Text style={{ fontSize: 15, fontWeight: "bold", color: "rgb(38,37,50)" }}>₹{item?.price}</Text>
                   </View>
 
-                  {cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ? <View style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 2 }}>
+                  {item?.product_total_qty == 0 ?  <View
+                              style={{
+                                backgroundColor: "#E3E3E3",
+                                paddingHorizontal: 5,
+                                paddingVertical: 2,
+                                borderRadius: 5,
+                              }}
+                            >
+                              <Text style={{ color: "red", fontWeight: 500 }}>
+                                Out Of Stock
+                              </Text>
+                            </View> : cartItem.filter(itemm => itemm?.product_id == item?.product_id).length > 0 ? <View style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 2 }}>
                     <TouchableOpacity style={{
                       // backgroundColor:"red",
                       width: 30,

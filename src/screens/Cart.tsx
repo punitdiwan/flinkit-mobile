@@ -7,11 +7,12 @@ import { CategoryData } from "../components/Category";
 import { RootStackParamList } from "../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { addItemsInOrder, loadCartData } from "./supabaseClient";
+import { addItemsInOrder, loadCartData, saveCartItemInCartTable } from "./supabaseClient";
 // import { useDispatch, useSelector } from "react-redux";
 // import { current } from "@reduxjs/toolkit";
 import Checkout from "./Checkout";
 import { Entypo } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { Image } from "react-native-reanimated/lib/typescript/Animated";
 
 
@@ -24,7 +25,7 @@ const Cart = () => {
   const [isCheckoutVisible,setIsCheckoutVisible] = useState(false);
   const [totalAmount,setTotalAmount] = useState(0);
 
-  const {cartItem,clearCart} = useMyContext();
+  const {cartItem,clearCart,addingItemInCart,getAsyncStorageCartItemsAndAddInCart} = useMyContext();
   // console.log("cartItemm",cartItem);
 
 
@@ -71,6 +72,8 @@ const Cart = () => {
     addItemsInOrder(orderId,totalAmount,darkroomownerid,dateoforder,cartItem);
     clearCart();
   }
+
+
 
   return (
     <View style={{flex:1,backgroundColor:"rgb(255,255,255)"}}>

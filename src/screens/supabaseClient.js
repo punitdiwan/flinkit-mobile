@@ -518,3 +518,15 @@ export const saveUserAddressAndZipCodeDetails = async (user_id,location,zip_code
     console.log(error);
   }
 }
+
+
+
+export const saveCartItemInCartTable = async (cartitems) => {
+    try {
+      const userid = 3;
+      const response = await supabase.from("cart").insert({userid,cartitems:cartitems});
+      console.log("savecart",response);
+    } catch (error) {
+      console.log(error);
+    }
+}
