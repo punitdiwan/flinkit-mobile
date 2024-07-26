@@ -26,22 +26,14 @@ import MapView, { Marker, Polygon } from "react-native-maps";
 import { imageUrl } from "../../lib/constant";
 import MapViewDirections from "react-native-maps-directions";
 
-// Order details page
 
 const googleApiKey = "AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
   const totalOrder = orderDetailsData[0]?.orderitems?.length;
-  // console.log("totalOrder",totalOrder);
-
-  // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
   console.log("orderdetails", orderDetails?.assigndriverid);
-  // console.log("orderdetails:", orderDetails?.orderstatus == "Out Of delivery");
-
-  // setOrderDetailsData(orderDetails)
-
   const fillAnimation = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
 
@@ -73,13 +65,7 @@ const Order = (orderdetails: any) => {
 
   const { pickupCords, droplocationCords } = state;
 
-  console.log(`driverImage ${imageUrl}${driverDetails[0]?.profileimg}`);
-
-  console.log("percentage", percentage);
-
   const handlePercentage = (orderStatus) => {
-    console.log("handle Percenatege", orderStatus);
-
     if (orderStatus?.toLowerCase() == "pending") {
       setPercentage(25);
     } else if (orderStatus?.toLowerCase() == "confirmed") {
@@ -91,11 +77,9 @@ const Order = (orderdetails: any) => {
     } else if (percentage > 75 && percentage < 100) {
       setPercentage(percentage + 25);
     } else {
-      // console.log("0", percentage);
       setPercentage(0);
     }
   };
-  //  const timer = setTimeout(handlePercentage,2000);
 
   const width = `${percentage}%`;
 
@@ -145,16 +129,10 @@ fetch(url)
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    // console.log(response);
     
     return response.json();
   })
   .then(data => {
-    // Handle the response data
-    console.log("distance",data);
-    
-    // console.log('Distance:', data.rows[0].elements[0].distance.text);
-    // console.log('Duration:', data.rows[0].elements[0].duration.text);
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);
@@ -243,55 +221,13 @@ fetch(url)
                   </Text>
                 )}
 
-                <View
-                  style={{
-                    width: "100%",
-                    backgroundColor: "rgb(238,238,238)",
-                    height: 10,
-                    justifyContent: "center",
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}
-                >
-                  <View
-                    style={[styles.progressBar, { width, backgroundColor }]}
-                  >
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 85,
-                      }}
-                    ></View>
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 175,
-                      }}
-                    ></View>
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 275,
-                      }}
-                    ></View>
+                <View style={styles.progressBarContainer}>
+                  <View style={[styles.progressBar, { width, backgroundColor }]}>
+                    {[85, 175, 275].map((left, index) => (
+                      <View key={index} style={[styles.progressMarker, { left }]} />
+                    ))}
                   </View>
                 </View>
-
-                {/* <View style={styles.animationContainer}>
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-              </View> */}
 
                 <View style={styles.arrivalInfo}>
                   {orderDetails?.orderstatus !== "Delivered" ? (
@@ -869,7 +805,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "rgb(238,238,238)",
     borderRadius: 5,
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   content: {
     flex: 1,
@@ -895,79 +831,77 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   box: {
-    // width: 200,
-    // height: 200,
-    // borderRadius: 10,
     width: "25%",
     marginRight: 5,
     borderRadius: 2,
     height: 7,
   },
-  // Add more styles for other sections as needed
+  progressBarContainer: {
+    height: 10,
+    borderRadius: 5,
+    overflow: "hidden",
+    backgroundColor: "#e0e0e0",
+    marginVertical: 10,
+  },
   progressBar: {
-    height: 7,
-    borderRadius: 2,
+    height: "100%",
+    borderRadius: 5,
+    position: "relative",
+  },
+  progressMarker: {
+    position: "absolute",
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+    borderColor: "#000",
+    borderWidth: 1,
   },
 });
 
 export default Order;
 
-// <View>
-{
-  /* <View>
-  <Image
-    source={require("../../assets/driverscooter.png")}
-  />
-</View> */
-}
-// </View>
-
-{
-  /* <View> */
-}
-{
-  /* <Image source={require("../../assets/driverscooter.png")} /> */
-}
-
-{
-  /* <Text
-  style={{
-    fontWeight: 500,
-    color: "rgb(105,175,94)",
-  }}
->
-  Drake Balakrishna
-</Text>
-</View>
 
 
-<View>
-<Text
-  style={{ fontWeight: 500, color: "rgb(105,175,94)" }}
->
-  Drake Balakrishna
-</Text>
-</View>
-
-<View
-style={{
-  width: 50,
-  height: 50,
-  backgroundColor: "rgb(105,175,94)",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: 100,
-}}
->
-<Feather name="phone" size={20} />
-</View>
-
-<Image
-source={{
-  uri: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-}}
-width={80}
-height={80}
-borderRadius={100}
-/> */
-}
+         {/* <View
+                  style={{
+                    width: "100%",
+                    backgroundColor: "rgb(238,238,238)",
+                    height: 10,
+                    justifyContent: "center",
+                    borderRadius: 5,
+                    marginTop: 10,
+                  }}
+                >
+                  <View
+                    style={[styles.progressBar, { width, backgroundColor }]}
+                  >
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 85,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 175,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 275,
+                      }}
+                    ></View>
+                  </View>
+                </View> */}

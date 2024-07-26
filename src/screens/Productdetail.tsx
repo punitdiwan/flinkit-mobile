@@ -1,62 +1,45 @@
 import { useState, useEffect } from "react";
-import * as React from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  ImageBackground,
   ActivityIndicator,
-  ScrollView,
   StatusBar,
-  Alert,
   Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { Rating } from "react-native-ratings";
+import Swiper from "react-native-swiper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   addFavouriteItem,
   addProductRating,
   loadFavItem,
   supabase,
-  removeItemFromFav,
 } from "./supabaseClient";
 import { addToFavFun } from "../../lib/cartFun";
 import { useMyContext } from "../context/Context";
-import { AirbnbRating, Rating } from "react-native-ratings";
-// import { StatusBar } from "expo-status-bar";
-
-import Swiper from "react-native-swiper";
-import { imageUrl } from "../../lib/constant";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { checkProductQuantity, CustomAlert } from "../utils/CheckQuantity";
+import { imageUrl } from "../../lib/constant";
 
-const Productdetail = (id: any) => {
-  // console.log("product_id", id.route.params.id);
-
-  const productId = id.route.params.id;
+const Productdetail = ({ route }) => {
+  const productId = route.params.id;
   const navigation = useNavigation();
+
   const [detailsExpanded, setDetailsExpanded] = useState(false);
   const [nutritionExpanded, setNutritionExpanded] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [fetchProduct, setFetchProduct] = useState<any>([]);
+  const [fetchProduct, setFetchProduct] = useState([]);
   const [isProductPresent, setIsProduct] = useState(false);
   const [heartIconColor, setHeartIconColor] = useState("black");
   const [imageLoading, setImageLoading] = useState(true);
-
-  const toggleDetails = () => {
-    setDetailsExpanded(!detailsExpanded);
-    setNutritionExpanded(false); // Close nutrition section
-  };
-
-  const toggleNutrition = () => {
-    setNutritionExpanded(!nutritionExpanded);
-    setDetailsExpanded(false); // Close details section
-  };
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const {
     cartItem,
@@ -67,45 +50,38 @@ const Productdetail = (id: any) => {
     favouriteItem,
   } = useMyContext();
 
-  const addToCart = (item: any) => {
+  const toggleDetails = () => {
+    setDetailsExpanded(!detailsExpanded);
+    setNutritionExpanded(false);
+  };
+
+  const toggleNutrition = () => {
+    setNutritionExpanded(!nutritionExpanded);
+    setDetailsExpanded(false);
+  };
+
+  const addToCart = (item) => {
     addingItemInCart(item);
   };
 
-  const checkProductPresentInCartOrNot =
-    cartItem?.length > 0 &&
-    cartItem?.filter((item) => item?.product_id == fetchProduct[0]?.product_id);
-  const textData =
-    checkProductPresentInCartOrNot?.length > 0 ? "Go To Basket" : "Add To Cart";
+  const checkProductPresentInCartOrNot = cartItem?.some(item => item?.product_id === fetchProduct[0]?.product_id);
+  const textData = checkProductPresentInCartOrNot ? "Go To Basket" : "Add To Cart";
 
-  const isFavItemOrNot =
-    favouriteItem?.length > 0 &&
-    favouriteItem.filter(
-      (item) => item?.product_id == fetchProduct[0]?.product_id
-    );
-  const isFavItem = isFavItemOrNot?.length > 0 ? true : false;
+  const isFavItemOrNot = favouriteItem?.some(item => item?.product_id === fetchProduct[0]?.product_id);
+  const isFavItem = isFavItemOrNot;
 
-  const addToFav = async (data: any) => {
+  const addToFav = async (data) => {
     const userId = await AsyncStorage.getItem("userMobileNumber");
-    console.log("||", userId);
-
-    const { price, product_id, imagename, product_name, darkroomownerid } =
-      data;
-    await addFavouriteItem(
-      price,
-      product_id,
-      imagename,
-      product_name,
-      darkroomownerid,
-      userId
-    );
+    const { price, product_id, imagename, product_name, darkroomownerid } = data;
+    
+    await addFavouriteItem(price, product_id, imagename, product_name, darkroomownerid, userId);
     const response = await loadFavItem(userId);
     addFavouriteItemList(response);
     setHeartIconColor("red");
   };
 
   const loadFav = async () => {
-    console.log("loadingFav", userId);
-
+    const userId = await AsyncStorage.getItem("userMobileNumber");
     const response = await loadFavItem(userId);
     addFavouriteItemList(response);
     setImageLoading(false);
@@ -115,28 +91,13 @@ const Productdetail = (id: any) => {
     addProductRating(fetchProduct, rating);
   };
 
-  const handleLoad = () => {
-    // console.log("calling load image");
-    // setImageLoading(false);
-  };
-
   const fetchData = async () => {
-    const resp: any = await supabase
-      .from("newproducts")
-      .select("*")
-      .eq("product_id", productId);
+    const resp = await supabase.from("newproducts").select("*").eq("product_id", productId);
     setFetchProduct(resp.data);
   };
 
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-
-  const showAlert = () => {
-    setIsAlertVisible(true);
-  };
-
-  const closeAlert = () => {
-    setIsAlertVisible(false);
-  };
+  const showAlert = () => setIsAlertVisible(true);
+  const closeAlert = () => setIsAlertVisible(false);
 
   useEffect(() => {
     fetchData();
@@ -149,438 +110,246 @@ const Productdetail = (id: any) => {
 
   return (
     <>
-      <StatusBar backgroundColor="white" barStyle={"dark-content"} />
-      {/* <ScrollView style={{height:"auto"}}> */}
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View style={styles.container}>
         {fetchProduct.length > 0 ? (
-          fetchProduct?.map((item: any, index: number) => {
-            console.log(item);
-
-            return (
-              <>
-                <View
-                  style={{
-                    height: "50%",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    elevation: 2,
-                  }}
+          fetchProduct.map((item, index) => (
+            <React.Fragment key={index}>
+              <View style={styles.imageContainer}>
+                <Swiper
+                  activeDotColor="rgb(105,175,94)"
+                  activeDotStyle={styles.activeDot}
+                  dotColor="rgb(181,178,177)"
                 >
-                  <Swiper
-                    activeDotColor="rgb(105,175,94)"
-                    activeDotStyle={{ width: 30 }}
-                    dotColor="rgb(181,178,177)"
-                  >
-                    {imageLoading ? (
-                      <View
-                        style={{
-                          width: "100%",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginTop: "50%",
-                        }}
-                      >
-                        <ActivityIndicator
-                          style={{ position: "absolute", zIndex: 1 }}
-                          size="large"
-                          color="rgb(105,175,94)"
-                        />
-                      </View>
-                    ) : (
-                      item?.imagename?.map((item, index) => (
-                        <Image
-                          key={item?.imgid}
-                          source={{ uri: `${imageUrl}${item?.name}` }}
-                          onLoad={handleLoad}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            resizeMode: "cover",
-                          }}
-                        />
-                      ))
-                    )}
-                  </Swiper>
+                  {imageLoading ? (
+                    <View style={styles.loaderContainer}>
+                      <ActivityIndicator size="large" color="rgb(105,175,94)" />
+                    </View>
+                  ) : (
+                    item?.imagename?.map((img, imgIndex) => (
+                      <Image
+                        key={img?.imgid}
+                        source={{ uri: `${imageUrl}${img?.name}` }}
+                        onLoad={() => setImageLoading(false)}
+                        style={styles.image}
+                      />
+                    ))
+                  )}
+                </Swiper>
+              </View>
+
+              <View style={styles.detailsContainer}>
+                <View style={styles.header}>
+                  <Text style={styles.productName}>{item.product_name}</Text>
+                  <Entypo
+                    name="heart-outlined"
+                    size={24}
+                    color={isFavItem ? "red" : "black"}
+                    onPress={() => isFavItem ? navigation.navigate("Favourite") : addToFav(item)}
+                  />
                 </View>
 
-                <View style={styles.detailsContainer}>
-                  <View
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginVertical: 5,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 24,
-                        width: 300,
-                        fontFamily: "Gilroy-Bold",
-                      }}
-                    >
-                      {item.product_name}
-                    </Text>
-                    {isFavItem ? (
-                      <Text>
-                        <Entypo
-                          name="heart-outlined"
-                          size={24}
-                          color={"red"}
-                          onPress={() => {
-                            navigation.navigate("Favourite");
-                          }}
-                        />
-                      </Text>
-                    ) : (
-                      <Text>
-                        <Entypo
-                          name="heart-outlined"
-                          color={"black"}
-                          size={24}
-                          onPress={() => addToFav(item)}
-                        />
-                      </Text>
-                    )}
-                  </View>
-                  <View style={{ width: "100%" }}>
-                    <Text
-                      style={{
-                        fontSize: 1,
-                        fontWeight: "500",
-                        color: "#b5b2b1",
-                      }}
-                    >
-                      1Kg, price
-                    </Text>
-                  </View>
+                <Text style={styles.productDetails}>1Kg, price</Text>
 
-                  <View style={styles.quantityContainer}>
-                    {item?.product_total_qty == 0 ? (
-                      <View
-                        style={{
-                          backgroundColor: "#E3E3E3",
-                          paddingHorizontal: 5,
-                          paddingVertical: 2,
-                          borderRadius: 5,
-                        }}
-                      >
-                        <Text style={{ color: "red", fontWeight: 500 }}>
-                          Out Of Stock
-                        </Text>
-                      </View>
-                    ) : cartItem.filter(
-                        (itemm) => itemm.product_id == item.product_id
-                      ).length > 0 ? (
-                      <View
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          gap: 2,
-                        }}
-                      >
-                        <TouchableOpacity
-                          style={{
-                            // backgroundColor:"red",
-                            width: 40,
-                            height: 40,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            // borderWidth:1,
-                            borderColor: "#bab7b6",
-                            borderRadius: 5,
-                          }}
-                          onPress={() => decreaseCartQuantity(item?.product_id)}
-                        >
-                          <Text style={{ color: "#bab7b6" }}>
-                            <Entypo name="minus" size={20} />
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={{
-                            // backgroundColor:"red",
-                            width: 40,
-                            height: 40,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            // borderWidth:1,
-                            borderColor: "#bab7b6",
-                            borderRadius: 5,
-                          }}
-                        >
-                          <Text style={{ fontSize: 20 }}>
-                            {
-                              cartItem.filter(
-                                (itemm) => itemm.product_id == item.product_id
-                              )?.[0]?.qty
-                            }
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={{
-                            // backgroundColor:"red",
-                            width: 40,
-                            height: 40,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            // borderWidth:1,
-                            borderColor: "#bab7b6",
-                            borderRadius: 5,
-                          }}
-                          onPress={() => {
-                            const response = checkProductQuantity(
-                              item,
-                              cartItem
-                            );
-                            if (response)
-                              increaseCartQuantity(item?.product_id);
-                            else {
-                              // onPress={showAlert}
-                              showAlert();
-                            }
-                          }}
-                        >
-                          <Text style={{ fontSize: 20, color: "#69AF5D" }}>
-                            <Entypo name="plus" size={20} />
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    ) : (
-                      <TouchableOpacity
-                        style={{
-                          width: 40,
-                          height: 40,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          backgroundColor: "#69AF5D",
-                          borderRadius: 15,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 25,
-                            fontWeight: "bold",
-                            color: "white",
-                            // backgroundColor:"red",
-                          }}
-                          onPress={() => addingItemInCart(item)}
-                        >
-                          +
-                        </Text>
+                <View style={styles.quantityContainer}>
+                  {item?.product_total_qty === 0 ? (
+                    <View style={styles.outOfStock}>
+                      <Text style={styles.outOfStockText}>Out Of Stock</Text>
+                    </View>
+                  ) : cartItem.some(cartItem => cartItem?.product_id === item?.product_id) ? (
+                    <View style={styles.quantityControls}>
+                      <TouchableOpacity style={styles.quantityButton} onPress={() => decreaseCartQuantity(item?.product_id)}>
+                        <Text style={styles.quantityButtonText}><Entypo name="minus" size={20} /></Text>
                       </TouchableOpacity>
-                    )}
-
-                    <View
-                      style={{
-                        width: "60%",
-
-                        alignItems: "flex-end",
-                        alignContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 18,
-
-                          fontFamily: "Gilroy-Bold",
+                      <TouchableOpacity style={styles.quantityButton}>
+                        <Text style={styles.quantityText}>{cartItem.find(cartItem => cartItem?.product_id === item?.product_id)?.qty}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.quantityButton}
+                        onPress={() => {
+                          const response = checkProductQuantity(item, cartItem);
+                          response ? increaseCartQuantity(item?.product_id) : showAlert();
                         }}
                       >
-                        ₹ {item.price}
-                      </Text>
+                        <Text style={styles.quantityButtonText}><Entypo name="plus" size={20} color="#69AF5D" /></Text>
+                      </TouchableOpacity>
                     </View>
-                  </View>
-
-                  <View style={styles.reviewContainer}>
-                    <Text style={styles.reviewTitle}>Product Details</Text>
-                    <TouchableOpacity
-                      onPress={toggleDetails}
-                      style={styles.toggleButton}
-                    >
-                      <Entypo
-                        name={
-                          detailsExpanded
-                            ? "chevron-small-up"
-                            : "chevron-small-down"
-                        }
-                        size={24}
-                        color="black"
-                      />
+                  ) : (
+                    <TouchableOpacity style={styles.addButton} onPress={() => addingItemInCart(item)}>
+                      <Text style={styles.addButtonText}>+</Text>
                     </TouchableOpacity>
-                  </View>
-                  {detailsExpanded && (
-                    <Text style={styles.detailsText}>
-                      {item.product_details}
-                    </Text>
                   )}
 
-                  <View style={styles.reviewContainer}>
-                    <Text style={styles.reviewTitle}>Nutritions</Text>
-                    <TouchableOpacity
-                      onPress={toggleNutrition}
-                      style={styles.toggleButton}
-                    >
-                      <Entypo
-                        name={
-                          nutritionExpanded
-                            ? "chevron-small-up"
-                            : "chevron-small-down"
-                        }
-                        size={24}
-                        color="black"
-                      />
-                    </TouchableOpacity>
+                  <View style={styles.priceContainer}>
+                    <Text style={styles.productPrice}>₹ {item?.price}</Text>
                   </View>
-                  {nutritionExpanded && (
-                    <Text style={styles.detailsText}>
-                      Total Fat 0.2 g, Cholesterol 0 mg 0%, Sodium 1 mg 0%,
-                      Potassium 107 mg
-                    </Text>
-                  )}
+                </View>
 
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <Text style={styles.reviewTitle}>Review</Text>
-                    <View>
-                      {/* <AirbnbRating size={10} reviewSize={0} reviews={[]} /> */}
-                      <Rating
-                        onFinishRating={ratingCompleted}
-                        imageSize={25}
-                        style={{
-                          paddingVertical: 0,
-                          backgroundColor: "transparent",
-                        }}
-                      />
-                    </View>
-                    <Image
-                      source={require("../../assets/Vector.png")}
-                      style={styles.reviewImage}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.addToCartButton}
-                    onPress={() => {
-                      if (textData == "Go To Basket") {
-                        navigation.navigate("Cart");
-                      } else {
-                        addToCart(item);
-                      }
-                    }}
-                  >
-                    <Text style={styles.addToCartButtonText}>{textData}</Text>
+                <View style={styles.reviewContainer}>
+                  <Text style={styles.reviewTitle}>Product Details</Text>
+                  <TouchableOpacity onPress={toggleDetails} style={styles.toggleButton}>
+                    <Entypo name={detailsExpanded ? "chevron-small-up" : "chevron-small-down"} size={24} color="black" />
                   </TouchableOpacity>
                 </View>
-                
-              </>
-            );
-          })
+                {detailsExpanded && <Text style={styles.detailsText}>{item?.product_details}</Text>}
+
+                <View style={styles.reviewContainer}>
+                  <Text style={styles.reviewTitle}>Nutritions</Text>
+                  <TouchableOpacity onPress={toggleNutrition} style={styles.toggleButton}>
+                    <Entypo name={nutritionExpanded ? "chevron-small-up" : "chevron-small-down"} size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+                {nutritionExpanded && <Text style={styles.detailsText}>Total Fat 0.2 g, Cholesterol 0 mg 0%, Sodium 1 mg 0%, Potassium 107 mg</Text>}
+
+                <View style={styles.ratingContainer}>
+                  <Text style={styles.reviewTitle}>Review</Text>
+                  <Rating
+                    onFinishRating={ratingCompleted}
+                    imageSize={25}
+                    style={styles.rating}
+                  />
+                  <Image source={require("../../assets/Vector.png")} style={styles.reviewImage} />
+                </View>
+
+                <TouchableOpacity
+                  style={styles.addToCartButton}
+                  onPress={() => textData === "Go To Basket" ? navigation.navigate("Cart") : addToCart(item)}
+                >
+                  <Text style={styles.addToCartButtonText}>{textData}</Text>
+                </TouchableOpacity>
+              </View>
+            </React.Fragment>
+          ))
         ) : (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              paddingTop: 300,
-            }}
-          >
-            <ActivityIndicator size={50} color={"rgb(105,175,94)"} />
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={50} color="rgb(105,175,94)" />
           </View>
         )}
+
         {isAlertVisible && (
-                  <CustomAlert
-                    visible={isAlertVisible}
-                    title="Out of Stock"
-                    productName={`${fetchProduct[0]?.product_name}`}
-                    productQty={`${fetchProduct[0]?.product_total_qty}`}
-                    onClose={closeAlert}
-                  />
-                )}
+          <CustomAlert
+            visible={isAlertVisible}
+            title="Out of Stock"
+            productName={fetchProduct[0]?.product_name}
+            productQty={fetchProduct[0]?.product_total_qty}
+            onClose={closeAlert}
+          />
+        )}
       </View>
-      {/* </ScrollView> */}
     </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     gap: 5,
-    height: "100%"
   },
-  imageBackground: {
+  imageContainer: {
+    height: "50%",
     width: "100%",
-    height: "40%",
-    justifyContent: "flex-end"
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
   },
-  backIcon: {
-    position: "absolute",
-    top: 15,
-    left: 20,
-    zIndex: 1,
+  activeDot: {
+    width: 30,
+  },
+  loaderContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "50%",
   },
   image: {
-    // marginTop: 30,
     width: "100%",
-    height: "auto",
-    aspectRatio: 1,
-    // borderRadius:,
-    paddingVertical: 2,
-    paddingHorizontal: 2,
+    height: "100%",
+    resizeMode: "cover",
   },
   detailsContainer: {
     padding: 20,
     alignItems: "center",
-    backgroundColor: "rgb(255,255,255)",
-
+    backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginVertical: 5,
   },
   productName: {
     fontSize: 24,
+    width: 300,
     fontFamily: "Gilroy-Bold",
-    marginTop: 15,
-    marginRight: 80,
-    textAlign: "center",
+  },
+  productDetails: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#b5b2b1",
+    width:"100%",
   },
   quantityContainer: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "98%",
     marginVertical: 10,
-    marginHorizontal: "1%",
-    // backgroundColor:"red",
     paddingHorizontal: 10,
   },
-
+  outOfStock: {
+    backgroundColor: "#E3E3E3",
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+  },
+  outOfStockText: {
+    color: "red",
+    fontWeight: "500",
+  },
+  quantityControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
+  quantityButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#bab7b6",
+    borderRadius: 5,
+  },
+  quantityButtonText: {
+    color: "#bab7b6",
+  },
   quantityText: {
-    fontSize: 18,
-    fontFamily: "Gilroy-Medium",
+    fontSize: 20,
+  },
+  addButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#69AF5D",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addButtonText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  priceContainer: {
+    width: "60%",
+    alignItems: "flex-end",
   },
   productPrice: {
-    fontSize: 15,
-    fontFamily: "Gilroy-Semibold",
-    marginBottom: 8,
-    textAlign: "center",
-    marginRight: 250,
+    fontSize: 18,
+    fontFamily: "Gilroy-Bold",
   },
   reviewContainer: {
     flexDirection: "row",
     alignItems: "center",
-    // marginBottom: 10,
     width: "100%",
     marginVertical: 2,
   },
@@ -598,11 +367,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     width: "100%",
     textAlign: "left",
-    height: 32,
   },
-  starsContainer: {
+  ratingContainer: {
     flexDirection: "row",
-    gap: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rating: {
+    paddingVertical: 0,
+    backgroundColor: "transparent",
   },
   reviewImage: {
     marginLeft: 10,
@@ -619,56 +392,11 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   addToCartButtonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
-  },
-  fillView: {
-    position: "absolute",
-    width: 10,
-    height: 10,
-    top: 20,
-    left: 50,
-    backgroundColor: "yellow",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // semi-transparent background
-  },
-  modalView: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    width: "80%",
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  modalText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  highlight: {
-    color: "red", // Customize color here
-    fontWeight: "bold",
-  },
-  closeButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: "#2196F3",
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
   },
 });
 
 export default Productdetail;
+

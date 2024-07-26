@@ -11,23 +11,19 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
-import SearchSubCategory from "../components/SearchSubCategory";
-import { CategoryData } from "../components/Category";
-import SearchCard from "../components/SearchCard";
 import Category from "../components/Category";
 import { getAllProducts } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
-import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { imageUrl } from "../../lib/constant";
-// import { StatusBar } from "expo-status-bar";
+import { checkProductQuantity, CustomAlert } from "../utils/CheckQuantity";
 
-const SearchScreen = ({ navigation }) => {
+const SearchScreen = ({ navigation }:any) => {
   const focus = useIsFocused();
-
   const [text, setText] = useState("");
-  const [mapData, setMapData] = useState([]);
   const [dummyData, setDummyData] = useState([]);
+  const [alertsVisible, setAlertsVisible] = useState({});
 
   const {
     cartItem,
@@ -36,16 +32,16 @@ const SearchScreen = ({ navigation }) => {
     increaseCartQuantity,
   } = useMyContext();
 
-  const handleInputChange = (inputText) => {
+  const handleInputChange = (inputText:any) => {
     setText(inputText);
   };
 
-  const filterData = dummyData?.filter((item) =>
-    item?.product_name?.toLowerCase()?.includes(text.toLowerCase())
+  const filterData = dummyData.filter((item) =>
+    item.product_name.toLowerCase().includes(text.toLowerCase())
   );
 
   const getProducts = async () => {
-    const productData: any = await getAllProducts();
+    const productData = await getAllProducts();
     setDummyData(productData);
   };
 
@@ -54,283 +50,131 @@ const SearchScreen = ({ navigation }) => {
     setText("");
   }, [focus]);
 
+  const showAlert = (itemId:any) => {
+    setAlertsVisible((prev) => ({ ...prev, [itemId]: true }));
+  };
+
+  const closeAlert = (itemId:any) => {
+    setAlertsVisible((prev) => ({ ...prev, [itemId]: false }));
+  };
+
+  const renderItem = ({ item }:any) => {
+    const isAlertVisible = alertsVisible[item.product_id] || false;
+
+    return (
+      <TouchableOpacity
+        key={item.product_id}
+        style={styles.itemContainer}
+        onPress={() =>
+          navigation.navigate("Productdetail", { id: item.product_id })
+        }
+      >
+        <Image
+          style={styles.itemImage}
+          resizeMode="contain"
+          source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
+        />
+        <View style={styles.itemContent}>
+          <Text style={styles.itemName}>{item.product_name}</Text>
+          <Text style={styles.itemDetails}>325ml, Price</Text>
+          <View style={styles.itemFooter}>
+            <Text style={styles.itemPrice}>₹ {item.price}</Text>
+            {item.product_total_qty === 0 ? (
+              <View style={styles.outOfStock}>
+                <Text style={styles.outOfStockText}>Out Of Stock</Text>
+              </View>
+            ) : cartItem.some(
+                (cartItem) => cartItem.product_id === item.product_id
+              ) ? (
+              <View style={styles.cartControls}>
+                <TouchableOpacity
+                  style={styles.cartButton}
+                  onPress={() => decreaseCartQuantity(item.product_id)}
+                >
+                  <Entypo name="minus" size={20} color="#bab7b6" />
+                </TouchableOpacity>
+                <Text style={styles.cartQuantity}>
+                  {
+                    cartItem.find(
+                      (cartItem) => cartItem.product_id === item.product_id
+                    )?.qty
+                  }
+                </Text>
+                <TouchableOpacity
+                  style={styles.cartButton}
+                  onPress={() => {
+                    const response = checkProductQuantity(item, cartItem);
+                    if (response) {
+                      increaseCartQuantity(item?.product_id);
+                    } else {
+                      showAlert(item.product_id);
+                    }
+                  }}
+                >
+                  <Entypo name="plus" size={20} color="#69AF5D" />
+                </TouchableOpacity>
+                {isAlertVisible && (
+                  <CustomAlert
+                    visible={isAlertVisible}
+                    title="Out of Stock"
+                    productName={`${item?.product_name}`}
+                    productQty={`${item?.product_total_qty}`}
+                    onClose={() => closeAlert(item.product_id)}
+                  />
+                )}
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => addingItemInCart(item)}
+              >
+                <Text style={styles.addButtonText}>+</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <>
-      {/* <StatusBar backgroundColor="rgb(255,255,255)" barStyle={"dark-content"} /> */}
-      <View>
-        <ScrollView
-          style={{ backgroundColor: "#ffffff" }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={{
-              padding: 10,
-              width: "90%",
-              height: 100,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "row",
-              gap: 10,
-              marginLeft: 20,
-            }}
-          >
-            <View style={styles.searchBody}>
-              <View>
-                <Icon name="search" size={25} color="rgba(0, 0, 0, 0.459);" />
-              </View>
-              <TextInput
-                style={{
-                  width: "70%",
-                  height: 25,
-                  marginRight: 75,
-                  fontWeight: "bold",
-                }}
-                placeholder="Search store"
-                onChangeText={handleInputChange}
-                value={text}
-              />
-            </View>
-            <View>
-              <TouchableOpacity onPress={() => navigation.navigate("Filter")}>
-                <Image
-                  source={require("../../assets/Group 6839.png")}
-                  style={{ width: 15, height: 15 }}
-                />
-              </TouchableOpacity>
-            </View>
+      <StatusBar backgroundColor="rgb(255,255,255)" barStyle="dark-content" />
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBody}>
+            <Icon name="search" size={25} color="rgba(0, 0, 0, 0.459);" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search store"
+              onChangeText={handleInputChange}
+              value={text}
+            />
           </View>
-
-          {text == "" ? (
-            <Category />
-          ) : (
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: 15,
-                justifyContent: "center",
-                flexWrap: "wrap",
-                paddingTop: 10,
-                minHeight: 650,
-                paddingBottom: 40,
-              }}
-            >
-              {filterData.length > 0 ? (
-                filterData.map((item) => (
-                  <TouchableOpacity
-                    key={item.product_id}
-                    style={styles.body}
-                    // onPress={() =>
-                    //   console.log("Productdetail", item.product_id)
-                    // }
-                    onPress={() =>
-                      navigation.navigate("Productdetail", {
-                        id: item.product_id,
-                      })
-                    }
-                  >
-                    <View key={item.product_id}>
-                      <View>
-                        <Image
-                          style={{ width: "100%", height: 110 }}
-                          resizeMode="contain"
-                          source={{
-                            uri: `${imageUrl}${item?.imagename[0]?.name}`,
-                          }}
-                        />
-                        <View style={{ height: 58 }}>
-                          <Text
-                            style={{
-                              marginTop: 10,
-                              fontSize: 16,
-                              color: "#000",
-                              marginBottom: 1,
-                              fontFamily: "Gilroy-Bold",
-                            }}
-                          >
-                            {item.product_name}
-                          </Text>
-                        </View>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            paddingTop: 5,
-                            color: "rgb(205,205,205)",
-                            fontFamily: "Gilroy-Semibold",
-                            marginBottom: 20,
-                          }}
-                        >
-                          325ml,Price
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <View
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 18,
-                              color: "#000000",
-                              fontFamily: "Gilroy-Semibold",
-                            }}
-                          >
-                            ₹ {item.price}
-                          </Text>
-
-                          {/* {console.log("yes",(cartItem.filter(itemm => itemm.product_id == item.product_id))[0]?.qty)} */}
-
-                          {item?.product_total_qty == 0 ? (
-                            <View
-                              style={{
-                                backgroundColor: "#F0F0F0",
-                                paddingHorizontal: 5,
-                                paddingVertical: 2,
-                                borderRadius: 5,
-                              }}
-                            >
-                              <Text style={{ color: "red", fontWeight: 500 }}>
-                                Out Of Stock
-                              </Text>
-                            </View>
-                          ) : cartItem.filter(
-                              (itemm) => itemm.product_id == item.product_id
-                            ).length > 0 ? (
-                            <View
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                flexDirection: "row",
-                                gap: 2,
-                              }}
-                            >
-                              <TouchableOpacity
-                                style={{
-                                  // backgroundColor:"red",
-                                  width: 30,
-                                  height: 30,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  // borderWidth:1,
-                                  borderColor: "#bab7b6",
-                                  borderRadius: 5,
-                                }}
-                                onPress={() =>
-                                  decreaseCartQuantity(item?.product_id)
-                                }
-                              >
-                                <Text style={{ color: "#bab7b6" }}>
-                                  <Entypo name="minus" size={20} />
-                                </Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                style={{
-                                  // backgroundColor:"red",
-                                  width: 30,
-                                  height: 30,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  // borderWidth:1,
-                                  borderColor: "#bab7b6",
-                                  borderRadius: 5,
-                                }}
-                              >
-                                <Text
-                                  style={{ fontSize: 15, fontWeight: "bold" }}
-                                >
-                                  {
-                                    cartItem.filter(
-                                      (itemm) =>
-                                        itemm.product_id == item.product_id
-                                    )?.[0]?.qty
-                                  }
-                                </Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                style={{
-                                  // backgroundColor:"red",
-                                  width: 30,
-                                  height: 30,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  // borderWidth:1,
-                                  borderColor: "#bab7b6",
-                                  borderRadius: 5,
-                                }}
-                                onPress={() =>
-                                  increaseCartQuantity(item?.product_id)
-                                }
-                              >
-                                <Text
-                                  style={{ fontSize: 20, color: "#69AF5D" }}
-                                >
-                                  <Entypo name="plus" size={20} />
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-                          ) : (
-                            <TouchableOpacity
-                              style={{
-                                width: 40,
-                                height: 40,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: "#69AF5D",
-                                borderRadius: 15,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 20,
-                                  fontWeight: "bold",
-                                  color: "white",
-                                  // backgroundColor:"red",
-                                }}
-                                onPress={() => addingItemInCart(item)}
-                              >
-                                +
-                              </Text>
-                            </TouchableOpacity>
-                          )}
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))
-              ) : (
-                <View style={{ alignItems: "center", paddingTop: 200 }}>
-                  <Text
-                    style={{
-                      fontWeight: "semibold",
-                      fontSize: 20,
-                      fontFamily: "serif",
-                      textDecorationLine: "underline",
-                    }}
-                  >
-                    "Product Not Found"
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-        </ScrollView>
+          <TouchableOpacity onPress={() => navigation.navigate("Filter")}>
+            <Image
+              source={require("../../assets/Group 6839.png")}
+              style={styles.filterIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        {text === "" ? (
+          <ScrollView><Category /></ScrollView>
+        ) : (
+          <FlatList
+            data={filterData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.product_id}
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
+            contentContainerStyle={styles.listContainer}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>Product Not Found</Text>
+              </View>
+            }
+          />
+        )}
       </View>
     </>
   );
@@ -339,31 +183,132 @@ const SearchScreen = ({ navigation }) => {
 export default SearchScreen;
 
 const styles = StyleSheet.create({
-  searchBody: {
-    // borderWidth:1,
-    // borderColor:'#00000048',
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 15,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    borderRadius: 15,
-    width: "100%",
-    backgroundColor: "rgb(242,243,242)",
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
   },
-  body: {
+  searchContainer: {
+    padding: 10,
+    width: "95%",
+    height: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+  },
+  searchBody: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 15,
+    backgroundColor: "rgb(242,243,242)",
+    flex: 1,
+  },
+  searchInput: {
+    flex: 1,
+    height: 35,
+    marginLeft: 10,
+    fontWeight: "bold",
+  },
+  filterIcon: {
+    width: 15,
+    height: 15,
+    marginLeft: 10,
+  },
+  itemContainer: {
     width: "45%",
-    height: 280,
     backgroundColor: "white",
-    display: "flex",
-    justifyContent: "space-around",
-    flexDirection: "column",
     borderRadius: 10,
     padding: 10,
     borderWidth: 1,
     borderColor: "#f0ebeb",
-    shadowColor: "white",
+    margin: 5,
+  },
+  itemImage: {
+    width: "100%",
+    height: 110,
+  },
+  itemContent: {
+    flex: 1,
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  itemName: {
+    fontSize: 16,
+    color: "#000",
+    fontFamily: "Gilroy-Bold",
+  },
+  itemDetails: {
+    fontSize: 14,
+    color: "rgb(205,205,205)",
+    fontFamily: "Gilroy-Semibold",
+  },
+  itemFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  itemPrice: {
+    fontSize: 18,
+    color: "#000000",
+    fontFamily: "Gilroy-Semibold",
+  },
+  outOfStock: {
+    backgroundColor: "#F0F0F0",
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+  },
+  outOfStockText: {
+    color: "red",
+    fontWeight: "500",
+  },
+  cartControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
+  cartButton: {
+    width: 30,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#bab7b6",
+    borderRadius: 5,
+  },
+  cartQuantity: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  addButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#69AF5D",
+    borderRadius: 15,
+  },
+  addButtonText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+  },
+  columnWrapper: {
+    justifyContent: "center",
+  },
+  listContainer: {
+    paddingTop: 10,
+    paddingBottom: 40,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    paddingTop: 200,
+  },
+  emptyText: {
+    fontWeight: "semibold",
+    fontSize: 20,
+    fontFamily: "serif",
+    textDecorationLine: "underline",
   },
 });

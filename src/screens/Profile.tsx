@@ -1,224 +1,169 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
-  Button,
-  Alert,
-  FlatList,
-  TouchableOpacity,
   Image,
+  TouchableOpacity,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
-import React from "react";
-import { useState } from "react";
+import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import AddressList from "../components/AddressList";
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather } from "@expo/vector-icons";
-// import AppLoading from "expo-app-loading";
-import * as Font from "expo-font";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { useMyContext } from '../context/Context';
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
-const loadFonts = async () => {
-  await Font.loadAsync({
-    "Gilroy-Semibold": require("../../assets/fonts/Gilroy-SemiBold.ttf"),
-    "Gilroy-Bold": require("../../assets/fonts/Gilroy-Bold.ttf"),
-  });
-};
 const arr = [
-  {
-    id: "1",
-    name: "Orders",
-    img: require("../../assets/Orders icon.png"),
-    navigate: "Orderaccepted",
-  },
-  {
-    id: "2",
-    name: "YourProfile",
-    img: require("../../assets/My Details icon.png"),
-  },
-  {
-    id: "3",
-    name: "Delivery Address",
-    img: require("../../assets/Delicery address.png"),
-  },
-  {
-    id: "4",
-    name: "Payment Methods",
-    img: require("../../assets/Vector icon.png"),
-  },
-  {
-    id: "5",
-    name: "Promo Card",
-    img: require("../../assets/Promo Cord icon.png"),
-  },
-  {
-    id: "6",
-    name: "Notifications",
-    img: require("../../assets/Bell icon.png"),
-  },
-  {
-    id: "7",
-    name: "Help",
-    img: require("../../assets/help icon.png"),
-  },
-  {
-    id: "8",
-    name: "About",
-    img: require("../../assets/about icon.png"),
-  },
+  { id: "1", name: "Orders", img: require("../../assets/Orders icon.png"), navigate: "Orderaccepted" },
+  { id: "2", name: "YourProfile", img: require("../../assets/cardprofile.png") },
+  { id: "3", name: "Delivery Address", img: require("../../assets/location-profile.png") },
+  { id: "4", name: "Payment Methods", img: require("../../assets/secure-payment.png") },
+  { id: "5", name: "Promo Card", img: require("../../assets/Promo Cord icon.png") },
+  { id: "6", name: "Notifications", img: require("../../assets/notification.png") },
+  { id: "7", name: "Help", img: require("../../assets/question.png") },
+  { id: "8", name: "About", img: require("../../assets/info.png") },
 ];
-const ProfileImag =
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-const Profile = ({ navigation, route }: ProfileProps) => {
-  const [fontLoaded, setFontLoaded] = useState(false);
-  const [showOrderPage,setShowOrderPage] = useState(false);
 
-  const removeLoggedInDataFromStorage = async () => {
+const Profile = ({ navigation }: ProfileProps) => {
+  const handleLogout = async () => {
     try {
-      console.log("userID", await AsyncStorage.getItem("userMobileNumber"),"isLoggedIn",await AsyncStorage.getItem("isLoggedIn"));
-      
-      const response = await AsyncStorage.setItem("isLoggedIn","false");
-      console.log("response",response);
-      const currState = await AsyncStorage.getItem("isLoggedIn");
-      if(currState == "false"){
-        navigation.replace("Onboarding");
-      }
-      
+      await AsyncStorage.setItem("isLoggedIn", "false");
+      navigation.replace("Onboarding");
     } catch (error) {
-      console.log("error",error)
+      console.error("Error logging out:", error);
     }
-  }
+  };
 
   return (
-    <SafeAreaView>
-      <View style={{ width: "100%", height: "100%", backgroundColor: "white" }}>
-        {/* <View style={{ width: "100%", height: "auto" }}>
-        <Text style={{ fontSize: 26, fontWeight: "600", margin: 15 }}>
-          Saved Addresses{" "}
-        </Text>
-      </View> */}
-        <View
-          style={{
-            width: "100%",
-            height: 100,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            flexDirection: "row",
-            paddingHorizontal: 10,
-            gap: 10,
-          }}
-        >
-          <View style={{width:63.5,height:63.5,justifyContent:"center",alignItems:"center",paddingTop:2,paddingBottom:2,paddingHorizontal:2}}>
-          <Image
-            source={require("../../assets/person.png")}
-            resizeMode="cover"
-            style={{ width: 63, height: 63, borderRadius:100}}
-          />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Image source={require("../../assets/person.png")} style={styles.profileImage} />
+        <View style={styles.profileInfo}>
+          <View style={styles.profileNameWrapper}>
+            <Text style={styles.profileName}>User Name</Text>
+            <Feather name="edit-2" size={20} color="#69AF5D" onPress={() => navigation.navigate("EditProfile")} />
           </View>
+          <Text style={styles.profileEmail}>user@gmail.com</Text>
+        </View>
+      </View>
 
-          <View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: 150,
-              }}
-            >
-              <Text style={{ fontSize: 20,fontWeight:"bold" }}>
-                User Name
-              </Text>
-              <Feather name="edit-2" size={20} color="#69AF5D" onPress={() => navigation.navigate("EditProfile")}/>
-            </View>
-            <Text style={{ color: "rgb(214,214,214)", fontSize: 16 }}>
-              user@gmail.com
-            </Text>
-          </View>
-        </View>
-        <View style={{ width: "100%", height: "auto", padding: 5 }}>
-          {arr?.map((item) =>{
-            return (
-            <TouchableOpacity
-              key={item.id}
-              style={{
-                width: "100%",
-                height: 60,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                paddingHorizontal: 10,
-                borderBottomWidth: 0.5,
-                borderColor: "#E2E2E2",
-                // paddingVertical:10
-              }}
-              onPress={() => navigation.navigate(`${item?.name}`)}
-            >
-              <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
-                <Image source={item.img} />
-                <Text style={{ fontFamily: "Gilroy-SemiBold.ttf",fontWeight:"bold" }}>
-                  {item.name}
-                </Text>
-              </View>
-              <View>
-                <Image source={require("../../assets/Vector.png")} />
-              </View>
-            </TouchableOpacity>
-          )})}
-        </View>
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: 150,
-            paddingHorizontal:20,
-            position:"absolute",
-            bottom:0
-          }}
-        >
+      <View style={styles.optionsList}>
+        {arr.map((item) => (
           <TouchableOpacity
-            style={{
-              width: "100%",
-              height: 65,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: 20,
-              backgroundColor: "rgb(242,243,242)",
-              borderRadius: 10,
-              position: "relative"
-            }}
-            onPress={async () => {
-              // dispatch(clearCartList());
-              await removeLoggedInDataFromStorage();
-              // navigation.replace("Onboarding");
-             
-            }}
+            key={item.id}
+            style={styles.optionItem}
+            onPress={() => navigation.navigate(item.name)}
           >
-            <Text style={{ color: "#69AF5D", fontSize: 18,fontWeight:"semibold" }}>Log Out</Text>
-            <Feather
-              style={{ position: "absolute", left: 30 }}
-              name="log-out"
-              size={24}
-              color="#69AF5D"
-            />
+            <View style={styles.optionContent}>
+              <Image source={item.img} style={styles.optionImage} />
+              <Text style={styles.optionText}>{item.name}</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#E2E2E2" />
           </TouchableOpacity>
-        </View>
+        ))}
+      </View>
+
+      <View style={styles.logoutButtonWrapper}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Log Out</Text>
+          <Feather name="log-out" size={24} color="#69AF5D" style={styles.logoutIcon} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Profile;
+const { width } = Dimensions.get('window');
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingVertical:30
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    height: 100,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#E2E2E2",
+  },
+  profileImage: {
+    width: 63,
+    height: 63,
+    borderRadius: 31.5,
+    marginRight: 15,
+  },
+  profileInfo: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  profileNameWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginRight: 10,
+  },
+  profileEmail: {
+    color: "rgb(214,214,214)",
+    fontSize: 16,
+  },
+  optionsList: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  optionItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 60,
+    borderBottomWidth: 0.5,
+    borderColor: "#E2E2E2",
+    paddingHorizontal: 10,
+  },
+  optionContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  optionImage: {
+    width: 24,
+    height: 24,
+    marginRight: 20,
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  logoutButtonWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  logoutButton: {
+    width: width - 40, // Adjust width relative to screen
+    height: 65,
+    backgroundColor: "rgb(242,243,242)",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  logoutButtonText: {
+    color: "#69AF5D",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  logoutIcon: {
+    position: "absolute",
+    left: 30,
+  },
+});
+
+export default Profile;
