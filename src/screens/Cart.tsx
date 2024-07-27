@@ -15,7 +15,6 @@
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // // import { Image } from "react-native-reanimated/lib/typescript/Animated";
 
-
 // type Props = NativeStackScreenProps<RootStackParamList, "Cart">;
 
 // const Cart = () => {
@@ -28,17 +27,16 @@
 //   const {cartItem,clearCart,addingItemInCart,getAsyncStorageCartItemsAndAddInCart} = useMyContext();
 //   // console.log("cartItemm",cartItem);
 
-
 //   function generateRandomCode() {
 //     const length = 8;
 //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Define the characters to use
 //     let result = '';
-  
+
 //     for (let i = 0; i < length; i++) {
 //       const randomIndex = Math.floor(Math.random() * characters.length);
 //       result += characters[randomIndex];
 //     }
-  
+
 //     return result;
 //   }
 
@@ -59,7 +57,7 @@
 
 //   const addCartItemOrder = async () => {
 //     console.log("cartData",cartItem);
-    
+
 //     const totalAmount =  cartItem?.reduce((accumulator:any, currentValue:any) => {
 //       return accumulator + (currentValue.qty * currentValue.price);
 //     }, 0)
@@ -67,13 +65,11 @@
 //    const dateoforder = getCurrDate();
 
 //     const darkroomownerid = cartItem[0].darkroomownerid;
-    
+
 //     const orderId =  generateRandomCode();
 //     addItemsInOrder(orderId,totalAmount,darkroomownerid,dateoforder,cartItem);
 //     clearCart();
 //   }
-
-
 
 //   return (
 //     <View style={{flex:1,backgroundColor:"rgb(255,255,255)"}}>
@@ -179,7 +175,6 @@
 //         </View>
 //       </View>
 
-
 //       {isCheckoutVisible ? (
 //          <View style={{ backgroundColor: "white", position: "absolute", bottom:7, height: 600, borderTopStartRadius: 30, borderTopEndRadius: 30 }}>
 //          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center", height: 100 }}>
@@ -236,7 +231,6 @@
 // };
 // export default Cart;
 
-
 import React, { useState } from "react";
 import {
   View,
@@ -244,25 +238,46 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useMyContext } from "../context/Context";
 import CartItemCard from "../components/CartItemCard";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { addItemsInOrder } from "./supabaseClient";
+import { imageUrl } from "../../lib/constant";
 
 // Utility Functions
 const generateRandomCode = (length = 8) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  return Array.from({ length }, () =>
+    characters.charAt(Math.floor(Math.random() * characters.length))
+  ).join("");
 };
 
-const getMonthName = (index) => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][index];
+const getMonthName = (index) =>
+  [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ][index];
+
+// console.log("getMonthName",getMonthName);
 
 const getCurrDate = () => {
   const currentDate = new Date();
-  return `${currentDate.getDate()} ${getMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`;
+  return `${currentDate.getDate()} ${getMonthName(
+    currentDate.getMonth()
+  )} ${currentDate.getFullYear()}`;
 };
 
 // Cart Component
@@ -272,16 +287,24 @@ const Cart = () => {
   const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
 
   const calculateTotalAmount = () => {
-    return cartItem?.reduce((acc, item) => acc + (item?.qty * item?.price), 0) ?? 0;
+    return (
+      cartItem?.reduce((acc, item) => acc + item?.qty * item?.price, 0) ?? 0
+    );
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     const totalAmount = calculateTotalAmount();
     const dateOfOrder = getCurrDate();
     const darkroomOwnerId = cartItem?.[0]?.darkroomownerid;
     const orderId = generateRandomCode();
 
-    addItemsInOrder(orderId, totalAmount, darkroomOwnerId, dateOfOrder, cartItem);
+    await addItemsInOrder(
+      orderId,
+      totalAmount,
+      darkroomOwnerId,
+      dateOfOrder,
+      cartItem
+    );
     clearCart();
     navigation.navigate("Orderaccepted");
     setIsCheckoutVisible(false);
@@ -290,7 +313,9 @@ const Cart = () => {
   const renderCartItems = () => (
     <ScrollView showsVerticalScrollIndicator={false}>
       {cartItem?.length > 0 ? (
-        cartItem.map(item => <CartItemCard key={item?.product_id} item={item} />)
+        cartItem.map((item) => (
+          <CartItemCard key={item?.product_id} item={item} />
+        ))
       ) : (
         <View style={styles.emptyCartContainer}>
           <Text style={styles.emptyCartText}>Your cart is {"\n"}Empty</Text>
@@ -299,11 +324,87 @@ const Cart = () => {
     </ScrollView>
   );
 
+  const checkCartItemIsAvailableInStock = () => (
+    <ScrollView style={{height:1000,backgroundColor:"green"}}>
+      {cartItem &&
+        cartItem?.length > 0 &&
+        cartItem?.map((item, index) => {
+          console.log("images", item);
+
+    return  (
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "#fff",
+                paddingHorizontal: 20,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 5,
+                  width: "100%",
+                  backgroundColor: "#f0f0f0",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginVertical:2,
+                  borderRadius:10,
+                  paddingVertical:7,
+                  paddingHorizontal:5
+                }}
+              >
+                <View style={{ backgroundColor: "#f0f0f0" }}>
+                  <Image
+                    source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
+                    width={50}
+                    height={50}
+                    style={{borderRadius:10}}
+                  />
+                </View>
+
+                <View style={{ width: 50, height: 20 }}>
+                  <Text style={{ fontWeight: 500 }}>{item?.product_name}</Text>
+                </View>
+
+                <View>
+                  <Text style={{ fontWeight: 500 }}>Quantity: {item?.qty}</Text>
+                </View>
+
+                <View>
+                  <Text style={{ fontWeight: 500 }}>
+                    {item?.product_total_qty}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          );
+        })}
+      <View style={{ paddingHorizontal: 10, marginTop: 10 }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "rgb(105,175,94)",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 10,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ fontWeight: 500, color: "white" }}>Go to details</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+
   const renderCheckout = () => (
     <View style={styles.checkoutContainer}>
       <View style={styles.checkoutHeader}>
         <Text style={styles.checkoutTitle}>Checkout</Text>
-        <Entypo name="cross" size={28} color="black" onPress={() => setIsCheckoutVisible(false)} />
+        <Entypo
+          name="cross"
+          size={28}
+          color="black"
+          onPress={() => setIsCheckoutVisible(false)}
+        />
       </View>
       <View style={styles.separator} />
       <View style={styles.checkoutSection}>
@@ -317,7 +418,10 @@ const Cart = () => {
       <View style={styles.checkoutSection}>
         <Text style={styles.sectionTitle}>Payment</Text>
         <View style={styles.sectionContent}>
-          <Image style={styles.paymentIcon} source={require("../../assets/card.png")} />
+          <Image
+            style={styles.paymentIcon}
+            source={require("../../assets/card.png")}
+          />
           <Image source={require("../../assets/Vector.png")} />
         </View>
       </View>
@@ -339,9 +443,13 @@ const Cart = () => {
       </View>
       <Text style={styles.termsText}>
         By placing an order you agree to our{"\n"}
-        <Text style={styles.termsLink}>Terms</Text> and <Text style={styles.termsLink}>Conditions</Text>
+        <Text style={styles.termsLink}>Terms</Text> and{" "}
+        <Text style={styles.termsLink}>Conditions</Text>
       </Text>
-      <TouchableOpacity style={styles.placeOrderButton} onPress={handleCheckout}>
+      <TouchableOpacity
+        style={styles.placeOrderButton}
+        onPress={handleCheckout}
+      >
         <Text style={styles.placeOrderButtonText}>Place Order</Text>
       </TouchableOpacity>
     </View>
@@ -352,7 +460,7 @@ const Cart = () => {
       {/* <View style={styles.cartListContainer}> */}
       <ScrollView style={styles.cartListContainer}>
         {renderCartItems()}
-        </ScrollView>
+      </ScrollView>
       {/* </View> */}
       <View style={styles.checkoutButtonContainer}>
         {cartItem?.length > 0 ? (
@@ -375,7 +483,9 @@ const Cart = () => {
           </TouchableOpacity>
         )}
       </View>
-      {isCheckoutVisible && renderCheckout()}
+      {/* {isCheckoutVisible && renderCheckout()}
+       */}
+      {isCheckoutVisible && checkCartItemIsAvailableInStock()}
     </View>
   );
 };
@@ -388,7 +498,7 @@ const styles = StyleSheet.create({
   },
   cartListContainer: {
     // flex: 1,
-    marginBottom:70
+    marginBottom: 70,
   },
   emptyCartContainer: {
     width: "100%",
@@ -405,7 +515,7 @@ const styles = StyleSheet.create({
   checkoutButtonContainer: {
     width: "100%",
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderColor: "lightgrey",
     borderTopWidth: 1,
     position: "absolute",
@@ -450,8 +560,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "absolute",
     bottom: 0,
-    margin:10
-
+    margin: 10,
   },
   goToCategoryText: {
     color: "white",
@@ -466,7 +575,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 10,
-    width:"100%"
+    width: "100%",
   },
   checkoutHeader: {
     flexDirection: "row",

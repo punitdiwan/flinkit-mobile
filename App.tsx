@@ -17,7 +17,6 @@ import Otp from "./src/screens/Authentication/Otp";
 import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
-import Product_Details from "./src/screens/Product_Details";
 import Productdetail from "./src/screens/Productdetail";
 import Favourite from "./src/screens/Favourite";
 
@@ -143,11 +142,6 @@ export default function App() {
             })}
           />
 
-          <Stack.Screen
-            name="Product_Details"
-            component={Product_Details}
-            options={{ title: "Product Details" }}
-          />
           <Stack.Screen
             name="Cart"
             options={{ title: "Cart" }}

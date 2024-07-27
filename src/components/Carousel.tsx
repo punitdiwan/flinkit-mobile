@@ -48,12 +48,10 @@ const Carousel = () => {
     >
       {arr.map((item, index) => (
         <View style={styles.carouselItem} key={index}>
-          <TouchableOpacity onPress={createThreeButtonAlert}>
             <Image
               style={styles.image}
               source={item.img}
             />
-          </TouchableOpacity>
         </View>
       ))}
     </ScrollView>

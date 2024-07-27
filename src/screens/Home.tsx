@@ -19,27 +19,17 @@ import { ProductData } from "../Date";
 import { Ionicons } from "@expo/vector-icons";
 import Category from "../components/Category";
 import { StatusBar } from "react-native";
-// import { StatusBar } from "expo-status-bar";
-
-// const SUPABASE_URL = 'http://192.168.1.40:8000'
-// const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE';
-
-// const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const Home = ({ navigation, route }: HomeProps) => {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
   const [cartData,setCartData] = useState([]);
   const [topRatedProducts,setTopRatedProducts] = useState([]);
 
   const loadTopRatedProducts = async () => {
     const response = await getAllTopRatedProducts();
-    // console.log("useEffect")
     setTopRatedProducts(response);
-    // console.log(topRatedProducts);
 }
 
 

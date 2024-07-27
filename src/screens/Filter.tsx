@@ -3,7 +3,7 @@
 // import { SafeAreaView } from "react-native-safe-area-context";
 // import { Entypo } from "@expo/vector-icons";
 // import Checkbox from "expo-checkbox";
-// // import  AppLoading  from 'expo-app-loading';
+// // import  ading  from 'expo-app-loading';
 // import * as Font from 'expo-font';
 // import { getProductsRelatedToCategoryId } from "./supabaseClient";
 // import { useNavigation } from "@react-navigation/native";

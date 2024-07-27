@@ -25,9 +25,11 @@ import { StatusBar } from "expo-status-bar";
 import MapView, { Marker, Polygon } from "react-native-maps";
 import { imageUrl } from "../../lib/constant";
 import MapViewDirections from "react-native-maps-directions";
+import { Dimensions } from "react-native";
 
 
 const googleApiKey = "AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
+const { width } = Dimensions.get('window');
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
@@ -836,12 +838,20 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 7,
   },
+  // progressBarContainer: {
+  //   height: 10,
+  //   borderRadius: 5,
+  //   overflow: "hidden",
+  //   backgroundColor: "red",
+  //   marginVertical: 10,
+  // },
   progressBarContainer: {
     height: 10,
     borderRadius: 5,
     overflow: "hidden",
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#e3e3e3",
     marginVertical: 10,
+    width: width * 0.9, // Adjust this percentage as needed
   },
   progressBar: {
     height: "100%",

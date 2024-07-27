@@ -43,6 +43,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   // Add to cart by harsh
   async function addingItemInCart(data: any) {
+    console.log("addingItemInCart",data);
     
     if (cartItem?.length == 0) {
       const itemObj = new Object(data);
@@ -120,6 +121,8 @@ function getAsyncStorageCartItemsAndAddInCart(data:any){
       const updatedCart = cartItem.filter(item => item?.product_id !== product_id);
       findProductExistsOrNot[0].qty = findProductExistsOrNot[0]?.qty + 1;
       updatedCart.push(findProductExistsOrNot[0]);
+      console.log("updatedCart",updatedCart);
+      
       setCartItem(updatedCart)
       AsyncStorage.setItem("cartItem",JSON.stringify(updatedCart));
     }else{
@@ -137,8 +140,7 @@ function getAsyncStorageCartItemsAndAddInCart(data:any){
   }
 
   function addAllFavItemInCart(data){
-    console.log("dataa",data);
-    
+ 
       const findProductIsExistOrNot = cartItem.filter(item => item?.product_id == data?.product_id);
       console.log(findProductIsExistOrNot.length > 0 ? "true" : "false");
       if(findProductIsExistOrNot.length > 0){
@@ -149,7 +151,7 @@ function getAsyncStorageCartItemsAndAddInCart(data:any){
         const updatedCart = cartItem;
         updatedCart.push(obj);
         setCartItem([]);
-        console.log("UpdatedCart",updatedCart);
+
         
         setCartItem([...updatedCart]);
       }
@@ -196,6 +198,3 @@ export const useMyContext = () => useContext(MyContext);
 
 
 
-
-// [
-// {"category_id": 9, "created_at": "2024-06-06T10:33:44.439112+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "price": 30, "product_brand": "Coca Cola", "product_category": "Beaverages", "product_details": "7 up is a Lemon and Lime flavoured soft drink", "product_discount": "10%", "product_id": 25, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/7up.jpg", "product_imgeid": "5bc1ca71-7800-4893-a2fa-668683021a5e", "product_name": "7 Up", "product_packing_type": "liter", "product_total_qty": 120, "qty": 2, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-06T10:33:44.439112+00:00", "uuid": "1796e134-bee6-4d5f-a9e0-67d631c18935", "variant_group_id": null, "visibility": true, "weight": null}, [{"category_id": 9, "created_at": "2024-06-06T10:33:44.439112+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "price": 30, "product_brand": "Coca Cola", "product_category": "Beaverages", "product_details": "7 up is a Lemon and Lime flavoured soft drink", "product_discount": "10%", "product_id": 25, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/7up.jpg", "product_imgeid": "5bc1ca71-7800-4893-a2fa-668683021a5e", "product_name": "7 Up", "product_packing_type": "liter", "product_total_qty": 120, "qty": 2, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-06T10:33:44.439112+00:00", "uuid": "1796e134-bee6-4d5f-a9e0-67d631c18935", "variant_group_id": null, "visibility": true, "weight": null}]]
