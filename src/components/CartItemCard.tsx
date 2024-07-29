@@ -1,11 +1,13 @@
 // 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 import { useMyContext } from "../context/Context";
 import { imageUrl } from "../../lib/constant";
 import { CustomAlert } from "../utils/CheckQuantity";
+import { getCurrentQuantityOfProducts, getCurrentQuantityOfProductsRelatedToId } from "../screens/supabaseClient";
+import { useIsFocused } from "@react-navigation/native";
 
 type CartItemProps = {
   item: {
@@ -18,10 +20,14 @@ type CartItemProps = {
 };
 
 const CartItemCard = ({ item }: CartItemProps) => {
-  console.log("cardItemCard",item);
+
+  const focused = useIsFocused();
+
+  const [currentProductQuantity,setCurrentProductQuantity] = useState([]); 
+
   
   const { deleteParticularItemInCart, decreaseCartQuantity, increaseCartQuantity } = useMyContext();
-  const { product_name, price, imagename, qty, product_id,product_total_qty} = item;
+  const { product_name, price, imagename, qty, product_id} = item;
 
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
@@ -29,13 +35,26 @@ const CartItemCard = ({ item }: CartItemProps) => {
   const closeAlert = () => setIsAlertVisible(false);
 
   const handleAddToCart = () => {
-    const response = qty+1 > product_total_qty;
+    const response = qty+1 > currentProductQuantity[0]?.product_total_qty;
     if (!response) {
       increaseCartQuantity(item?.product_id);
     } else {
       showAlert();
     }
   };
+
+  const loadCurrentProductQuantity = async () => {
+      const data = await getCurrentQuantityOfProductsRelatedToId(item?.product_id);
+      setCurrentProductQuantity(data);
+  }
+
+  useEffect(() => {
+    loadCurrentProductQuantity();
+  },[focused])
+
+  if(currentProductQuantity.length == 0){
+    return ;
+  }
 
   return (
     <View style={styles.container}>
@@ -54,6 +73,7 @@ const CartItemCard = ({ item }: CartItemProps) => {
         >
           <Entypo name="cross" size={24} color="rgb(188,188,188)" />
         </TouchableOpacity>
+        {currentProductQuantity[0]?.product_total_qty == 0 ? <View style={{backgroundColor:"#f3f3f3",width:100,marginVertical:10,padding:5,borderRadius:7}}><Text style={{color:"red",fontWeight:"500"}}>Out of Stock</Text></View>  : 
         <View style={styles.quantityContainer}>
           <TouchableOpacity
             style={styles.quantityButton}
@@ -61,7 +81,7 @@ const CartItemCard = ({ item }: CartItemProps) => {
           >
             <Feather name="minus" size={24} color="rgb(179,179,179)" />
           </TouchableOpacity>
-          <Text style={styles.quantity}>{qty}</Text>
+          <Text style={styles.quantity}>{currentProductQuantity[0]?.product_total_qty < qty ? currentProductQuantity[0]?.product_total_qty : qty}</Text>
           <TouchableOpacity
             style={styles.quantityButton}
             onPress={() => handleAddToCart()}
@@ -69,6 +89,7 @@ const CartItemCard = ({ item }: CartItemProps) => {
             <Feather name="plus" size={24} color="#69AF5D" />
           </TouchableOpacity>
         </View>
+}
       </View>
       {isAlertVisible && 
         (
@@ -76,7 +97,7 @@ const CartItemCard = ({ item }: CartItemProps) => {
             visible={isAlertVisible}
             title="Out of Stock"
             productName={`${product_name}`}
-            productQty={`${product_total_qty}`}
+            productQty={`${currentProductQuantity[0]?.product_total_qty}`}
             onClose={closeAlert}
           />)
       }

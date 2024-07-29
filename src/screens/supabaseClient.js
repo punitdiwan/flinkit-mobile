@@ -526,7 +526,27 @@ export const saveCartItemInCartTable = async (cartitems) => {
       const userid = 3;
       const response = await supabase.from("cart").insert({userid,cartitems:cartitems});
       console.log("savecart",response);
+      return response?.data;
     } catch (error) {
       console.log(error);
     }
+}
+
+export const getCurrentQuantityOfProducts = async () => {
+  try {
+    const response = await supabase.from("newproducts").select("*");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const getCurrentQuantityOfProductsRelatedToId = async (productId) => {
+  try {
+    const response = await supabase.from("newproducts").select("*").eq("product_id",productId);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 }

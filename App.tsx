@@ -39,6 +39,7 @@ import EditProfile from "./src/screens/EditProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { StatusBar } from "expo-status-bar";
 import { StatusBar } from "react-native";
+import OrderSummary from "./src/screens/OrderSummary";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -197,6 +198,12 @@ export default function App() {
              options={{title:"Order History"}}
 
           />
+
+          <Stack.Screen 
+          name="OrderSummary"
+          component={OrderSummary}
+          options={{headerShown:true}}
+           />
 
           <Stack.Screen
            name="UploadImage"
