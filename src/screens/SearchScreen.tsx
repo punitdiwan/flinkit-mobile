@@ -45,6 +45,8 @@ const SearchScreen = ({ navigation }:any) => {
     setDummyData(productData);
   };
 
+  
+
   useEffect(() => {
     getProducts();
     setText("");
@@ -60,6 +62,9 @@ const SearchScreen = ({ navigation }:any) => {
 
   const renderItem = ({ item }:any) => {
     const isAlertVisible = alertsVisible[item.product_id] || false;
+    
+    // const moreCharacter = item?.product_name?.length > 15 ;
+    // const productName = moreCharacter ? item?.product_name.slice(0,15) : item?.product_name;
 
     return (
       <TouchableOpacity
@@ -75,11 +80,11 @@ const SearchScreen = ({ navigation }:any) => {
           source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
         />
         <View style={styles.itemContent}>
-          <Text style={styles.itemName}>{item.product_name}</Text>
+          <Text style={styles.itemName}>{item?.product_name}</Text>
           <Text style={styles.itemDetails}>325ml, Price</Text>
           <View style={styles.itemFooter}>
             <Text style={styles.itemPrice}>₹ {item.price}</Text>
-            {item.product_total_qty === 0 ? (
+            {item.product_total_qty <= 0 ? (
               <View style={styles.outOfStock}>
                 <Text style={styles.outOfStockText}>Out Of Stock</Text>
               </View>
@@ -224,6 +229,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f0ebeb",
     margin: 5,
+    height:248
   },
   itemImage: {
     width: "100%",

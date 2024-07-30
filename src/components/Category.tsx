@@ -159,7 +159,7 @@ export default Category;
 
 const styles = StyleSheet.create({
   cardBody: {
-    height: 200,
+    height: 189,
     display: "flex",
     alignItems: "center",
     overflow: "hidden",

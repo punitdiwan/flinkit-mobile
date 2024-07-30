@@ -298,6 +298,9 @@ const Item = memo(({ item }:any) => {
     }
   };
 
+  const moreCharacter = item?.product_name?.length > 12;
+  const productName = moreCharacter ? item?.product_name?.slice(0, 12) : item?.product_name;
+
   return (
     <View style={styles.itemContainer}>
       <TouchableOpacity
@@ -310,11 +313,11 @@ const Item = memo(({ item }:any) => {
           resizeMode="contain"
           source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
         />
-        <Text style={styles.itemName}>{item?.product_name}</Text>
+        <Text style={styles.itemName}>{moreCharacter ? `${productName}...` : `${productName}`}</Text>
         <Text style={styles.itemDescription}>325ml, Price</Text>
         <View style={styles.itemFooter}>
           <Text style={styles.itemPrice}>₹{item?.price}</Text>
-          {item?.product_total_qty === 0 ? (
+          {item?.product_total_qty <= 0 ? (
             <View style={styles.outOfStockContainer}>
               <Text style={styles.outOfStockText}>Out Of Stock</Text>
             </View>
@@ -405,7 +408,7 @@ const CategoryScreen = ({ route }) => {
             numColumns={2}
             data={products}
             renderItem={({ item }) => <Item item={item} />}
-            keyExtractor={(item) => item.product_id}
+            keyExtractor={(item) => item?.product_id}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Text style={styles.emptyText}>No Products</Text>
@@ -493,7 +496,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: 'rgb(105,175,93)',
-    borderRadius: 20,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

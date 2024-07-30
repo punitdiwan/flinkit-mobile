@@ -15,7 +15,7 @@ const generateRandomCode = (length = 8) => {
     ).join("");
   };
   
-  const getMonthName = (index) =>
+  const getMonthName = (index:any) =>
     [
       "Jan",
       "Feb",
@@ -44,9 +44,14 @@ const OrderSummary = () => {
   const {cartItem,clearCart} = useMyContext();
   const [currentProducts,setCurrentProducts] = useState([]);
   const [checkoutVisible,setIsCheckoutVisible] = useState(false);
+  const [changesInQty,setChangesInQty] = useState(false);
+
   const navigation = useNavigation();
   
   const calculateTotalAmount = () => {
+    const currentProductQuantity = cartItem?.map(item => currentProducts?.filter(itemm => itemm?.product_id == item?.product_id));
+    console.log("ojjhjkh",currentProductQuantity);
+    
     return (
       cartItem?.reduce((acc, item) => acc + item?.qty * item?.price, 0) ?? 0
     );
@@ -143,7 +148,10 @@ const OrderSummary = () => {
 
     const checkCurrProductAvailability = currentProducts.filter(itemm => itemm?.product_id == item?.product_id);
     
-    item.qty =  checkCurrProductAvailability[0]?.product_total_qty < item?.qty ? checkCurrProductAvailability[0]?.product_total_qty : item?.qty;
+    if(checkCurrProductAvailability[0]?.product_total_qty < item?.qty){
+      setChangesInQty(!changesInQty);
+      item.qty = checkCurrProductAvailability[0]?.product_total_qty
+    }
     
     return <View style={{width:"100%",paddingHorizontal:10,marginVertical:5,flexDirection:"row",justifyContent:"space-between",borderBottomWidth:1,paddingVertical:5,borderBottomColor:"#f0f0f0"}}>
       <View style={{flexDirection:"row",alignItems:"center",gap:5,width:"45%",gap:5}}>
@@ -162,6 +170,11 @@ const OrderSummary = () => {
   useEffect(() => {
     loadProducts();
   },[])
+
+  useEffect(() => {
+    console.log("running");
+    
+  },[changesInQty])
 
   return (
     <SafeAreaView>
@@ -188,18 +201,18 @@ const OrderSummary = () => {
         showsVerticalScrollIndicator={false}
         data={cartItem}
         renderItem={({item}) => <ProductCard item={item} />}
-        keyExtractor={item => item.product_id}
+        keyExtractor={item => item?.product_id}
       />
       </View>
       <View style={{position:"absolute",flexDirection:"row",justifyContent:"space-between",width:"100%",bottom:100,padding:10}}>
         <Text style={{fontSize:16,fontWeight:500}}>Total Price</Text>
-        <Text style={{color:"rgb(105,175,94)",fontWeight:"bold",fontSize:16}}>₹{2500}</Text>
+        <Text style={{color:"rgb(105,175,94)",fontWeight:"bold",fontSize:16}}>₹{calculateTotalAmount()}</Text>
       </View>
-      <View style={{justifyContent:"center",alignItems:"center",width:"100%",paddingHorizontal:5,position:"absolute",bottom:40}}>
+      {cartItem?.length > 0 && <View style={{justifyContent:"center",alignItems:"center",width:"100%",paddingHorizontal:5,position:"absolute",bottom:40}}>
         <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:10,borderRadius:10}} onPress={() => setIsCheckoutVisible(true)}>
             <Text style={{fontWeight:"500",color:"white",fontSize:15}}>Continue</Text>
         </TouchableOpacity>
-      </View>
+      </View>}
     </View>
     {checkoutVisible && renderCheckout()}
     </SafeAreaView>

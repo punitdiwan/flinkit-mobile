@@ -11,11 +11,13 @@ import {
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import * as Font from "expo-font";
-import { loadFavItem } from "./supabaseClient";
+import { loadFavItem, removeFromFavourite } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { useIsFocused } from "@react-navigation/native";
 import { imageUrl } from "../../lib/constant";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { Entypo } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -39,6 +41,13 @@ const Favourite = () => {
     const response = await loadFavItem(userId);
     addFavouriteItemList(response);
   };
+
+
+  // handle unfavourite item
+  const handleUnfavouriteItem = async (productId) => {
+     await removeFromFavourite(productId);
+     loadFav();
+  }
 
   useEffect(() => {
     loadFav();
@@ -64,7 +73,10 @@ const Favourite = () => {
           </View>
           <View style={styles.itemPriceContainer}>
             <Text style={styles.itemPrice}>₹{item?.price}</Text>
-            <SimpleLineIcons name="arrow-right" size={18} color="black" />
+            {/* <SimpleLineIcons name="arrow-right" size={18} color="black" /> */}
+            <TouchableOpacity onPress={() => {handleUnfavouriteItem(item?.product_id)}}>
+                <Entypo name="heart" size={30} color={"red"} />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.separator} />

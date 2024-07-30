@@ -157,7 +157,10 @@ function getAsyncStorageCartItemsAndAddInCart(data:any){
       }
   }
 
-
+  const updateCartData = (cartData) => {
+    console.log("cartData",cartData);
+    
+  }
  
   // end
 
@@ -184,7 +187,8 @@ function getAsyncStorageCartItemsAndAddInCart(data:any){
         addFavouriteItemList,
         clearCart,
         addAllFavItemInCart,
-        getAsyncStorageCartItemsAndAddInCart
+        getAsyncStorageCartItemsAndAddInCart,
+        updateCartData
       }}
     >
       {children}

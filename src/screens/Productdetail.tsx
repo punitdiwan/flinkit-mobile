@@ -582,7 +582,7 @@ const Productdetail = ({ route }:any) => {
               <Text style={styles.productDetails}>1Kg, price</Text>
 
               <View style={styles.quantityContainer}>
-                {item?.product_total_qty === 0 ? (
+                {item?.product_total_qty <= 0 ? (
                   <View style={styles.outOfStock}>
                     <Text style={styles.outOfStockText}>Out Of Stock</Text>
                   </View>

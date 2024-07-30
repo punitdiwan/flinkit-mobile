@@ -366,7 +366,7 @@ const ShowingFilterData = () => {
         </View>
         <View style={styles.productFooter}>
           <Text style={styles.productPrice}>₹{item?.price}</Text>
-          {item?.product_total_qty === 0 ? (
+          {item?.product_total_qty <= 0 ? (
             <View style={styles.outOfStock}><Text style={styles.outOfStockText}>Out Of Stock</Text></View>
           ) : cartItem.some(cartItem => cartItem?.product_id === item?.product_id) ? (
             <View style={styles.quantityControls}>

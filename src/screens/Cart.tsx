@@ -907,43 +907,29 @@ const getCurrDate = () => {
 const Cart = () => {
   const focused = useIsFocused();
   const navigation = useNavigation();
+
+  // getting context state 
   const { cartItem, clearCart } = useMyContext();
+
   const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
   const [isCheckingVisible,setIsCheckingVisible] = useState(false);
 
   const [currentProduct,setCurrentProduct] = useState([]);
-  console.log("currPro",currentProduct);
   
-
-  const calculateTotalAmount = () => {
-    return (
-      cartItem?.reduce((acc, item) => acc + item?.qty * item?.price, 0) ?? 0
-    );
-  };
-
-  const handleCheckout = async () => {
-    const totalAmount = calculateTotalAmount();
-    const dateOfOrder = getCurrDate();
-    const darkroomOwnerId = cartItem?.[0]?.darkroomownerid;
-    const orderId = generateRandomCode();
-
-    await addItemsInOrder(
-      orderId,
-      totalAmount,
-      darkroomOwnerId,
-      dateOfOrder,
-      cartItem
-    );
-    clearCart();
-    navigation.navigate("Orderaccepted");
-    setIsCheckoutVisible(false);
-  };
-
+  // loadCurrentProduct
   const loadCurrentProduct = async () => {
       const data = await getCurrentQuantityOfProducts(); 
       setCurrentProduct(data);
   }
 
+  // calculating total amount
+   const calculateTotalAmount = () => {
+    return (
+      cartItem?.reduce((acc, item) => acc + item?.qty * item?.price, 0) ?? 0
+    );
+  };
+
+  // laoding current product quantity
   useEffect(() => {
     loadCurrentProduct();
   },[focused])
@@ -961,37 +947,6 @@ const Cart = () => {
       )}
     </ScrollView>
   );
-
-  const orderSummary = () => {
-    return <ScrollView style={{backgroundColor: "white",
-      position: "absolute",
-      bottom: 0,
-      height: "105%",
-      borderTopLeftRadius: 30,
-      borderTopRightRadius: 30,
-      padding: 10,
-      width: "100%"}}>
-        <Text style={{textAlign:"center"}}>Order Summary</Text>
-      <View style={{flexDirection:"row",gap:5,justifyContent:"space-between"}}>
-        <View>
-          <Text>Product</Text>
-        </View>
-        <View>
-          <Text>Availability</Text>
-        </View>
-        <View>
-          <Text>Quantity</Text>
-        </View>
-        <View>
-          <Text>Each</Text>
-        </View>
-        <View>
-          <Text>Total</Text>
-        </View>
-      </View>
-    </ScrollView>
-  }
-
 
   return (
     <View style={styles.container}>
@@ -1023,9 +978,6 @@ const Cart = () => {
           </TouchableOpacity>
         )}
       </View>
-        {/* {isCheckoutVisible && renderCheckout()} */}
-        
-         {/* {isCheckoutVisible && orderSummary()} */}
     </View>
   );
 };

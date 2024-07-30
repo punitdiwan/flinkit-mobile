@@ -280,10 +280,24 @@ export const loadFavItem = async (userId) => {
       .select("*")
       .eq("user_id", user_id);
     return favItemList?.data;
-  } catch (error) {
+  } catch (error) {  
     console.log(error.message);
   }
 };
+
+
+// handle unfavourite item that are remove from favouriteProducts
+export const removeFromFavourite = async (productId) => {
+  try {
+    const dltResponse = await supabase.from("favourite_products").delete().eq("product_id",productId);
+    console.log("dltResponse",dltResponse);
+    const fetchCurrentData = await supabase.from("favourite_products").select("*");
+    console.log("fetch",fetchCurrentData?.data?.length);
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // -----------------------------------------------------------------------------------------------------------------------
 // Orders
