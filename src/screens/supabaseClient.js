@@ -50,6 +50,15 @@ export const verifyOtp = async (phone, token) => {
 
 // --------------------------------------------------------------------------------------------------
 
+export const fetchProductDetail = async (productId) => {
+  try {
+    const response  = await supabase.from("newproducts").select("*").eq("product_id", productId);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const addToCart = async (
   price,
   product_id,

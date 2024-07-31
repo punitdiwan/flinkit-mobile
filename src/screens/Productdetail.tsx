@@ -420,6 +420,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   addFavouriteItem,
   addProductRating,
+  fetchProductDetail,
   loadFavItem,
   supabase,
 } from "./supabaseClient";
@@ -503,11 +504,8 @@ const Productdetail = ({ route }:any) => {
   };
 
   const fetchData = async () => {
-    const resp = await supabase
-      .from("newproducts")
-      .select("*")
-      .eq("product_id", productId);
-    setFetchProduct(resp.data);
+    const response = await fetchProductDetail(productId);
+    setFetchProduct(response);
   };
 
   const showAlert = () => setIsAlertVisible(true);
@@ -522,7 +520,7 @@ const Productdetail = ({ route }:any) => {
     setImageLoading(false);
   }, []);
 
-  if (fetchProduct.length === 0) {
+  if (fetchProduct?.length === 0) {
     return (
       <View style={[styles.container, styles.loaderContainer]}>
         <ActivityIndicator size={50} color="rgb(105,175,94)" />

@@ -6,6 +6,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  Linking,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
@@ -23,6 +26,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { LinearGradient } from "expo-linear-gradient";
 import Carousel2 from "./Carousel2";
+import * as Location from "expo-location";
 // import { Font } from 'expo'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, "Home">;
@@ -36,6 +40,41 @@ const loadFonts = async () => {
 const Header = ({ navigation, route }: HomeProps) => {
   // const Navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
+  const [showLocationOption,setShowLocationOption] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
+
+  const getCurrentLocation = async () => {
+      setIsLoading(true);
+      const {status} = await Location.requestForegroundPermissionsAsync();
+      console.log("status",status);
+      if(status !== "granted"){
+        Alert.alert('Invalid', 'Location is required to use (use current location) option', [
+          {
+            text: 'Cancel',
+            onPress: () => {
+              Alert.alert("Alert !!","If you not give location permission then you are not able to change addresss");
+              setIsLoading(false);
+            },
+            style: 'cancel',
+          },
+          {text: 'Open setting', onPress: () => {
+            Linking.openSettings();
+            setIsLoading(false);
+          }},
+        ]);
+  }else{
+    const location = await Location.getCurrentPositionAsync();
+        const {latitude,longitude} = location?.coords;
+        console.log("location coords",latitude,longitude);
+        setIsLoading(false)
+      
+    setModalVisible(!modalVisible);
+    setShowLocationOption(false);
+    navigation.navigate("AddAddress",{
+      coords:{latitude,longitude}
+    })
+  }
+}
 
   return (
     <SafeAreaView>
@@ -123,21 +162,38 @@ const Header = ({ navigation, route }: HomeProps) => {
          <View style={{width:"100%",height:"80%",backgroundColor:"#fff"}}>
             <View style={{width:"100%",justifyContent:"center",alignItems:"center"}}>
             <View style={{position:"absolute",width:60,height:60,backgroundColor:"#FFf",justifyContent:"center",alignItems:"center",borderRadius:50,padding:5}}>
-              <TouchableOpacity style={{width:50,height:50,justifyContent:"center",alignItems:"center",backgroundColor:"rgb(105,175,94)",borderRadius:50}} onPress={() => setModalVisible(!modalVisible)}>
+              <TouchableOpacity style={{width:50,height:50,justifyContent:"center",alignItems:"center",backgroundColor:"rgb(105,175,94)",borderRadius:50}} onPress={() => {
+                setModalVisible(!modalVisible);
+                setShowLocationOption(false);
+              }}>
                 <Entypo name="cross" size={20} color={"#fff"}/>
               </TouchableOpacity>
              </View>
             </View>
 
              <View style={{justifyContent:"center",alignItems:"center",marginTop:100,gap:40}}>
-              <Text style={{fontSize:18,fontWeight:"500",color:"#818181"}}>Change your Address</Text>
+              <Text style={{fontSize:18,fontWeight:"500",color:"#818181"}}>Update your Address</Text>
                <View style={{paddingHorizontal:10,width:"100%"}}>
-               <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate("AddAddress")
+               {showLocationOption == false && <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
+                // getCurrentLocation();
+                setShowLocationOption(!showLocationOption);
+               
                }}>
                 <Text style={{color:"white",fontWeight:"bold"}}>Add new address</Text>
+              </TouchableOpacity>}
+
+              {showLocationOption && <View style={{gap:5}}>
+              <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
+                getCurrentLocation();
+               
+               }}>
+                {isLoading ? <ActivityIndicator size={20} color={"#fff"}/> : <Text style={{color:"white",fontWeight:"bold"}}>Use Current Location</Text>}
               </TouchableOpacity>
+              <TouchableOpacity style={{backgroundColor:"#fff",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10,borderWidth:1.5,borderColor:"rgb(233,233,233)"}}>
+                <Text style={{color:"rgb(105,175,94)",fontWeight:"bold"}}>Select Location</Text>
+              </TouchableOpacity>
+              </View>
+}
                </View>
              </View>
          </View>

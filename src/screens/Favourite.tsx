@@ -44,13 +44,16 @@ const Favourite = () => {
 
 
   // handle unfavourite item
-  const handleUnfavouriteItem = async (productId) => {
+  const handleUnfavouriteItem = async (productId : any) => {
      await removeFromFavourite(productId);
      loadFav();
   }
+ 
 
   useEffect(() => {
     loadFav();
+    console.log("calling load fav");
+    
   }, [focus]);
 
   const addingAllFavItemInCart = async () => {
@@ -59,7 +62,7 @@ const Favourite = () => {
 
   const renderItem = ({ item }:any) => (
     <View style={styles.itemContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate("Productdetail", { id: item.product_id })}>
+      <TouchableOpacity onPress={() => navigation.navigate("Productdetail", { id: item?.product_id })}>
         <View style={styles.itemContent}>
           <View style={styles.imageContainer}>
             <Image
