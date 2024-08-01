@@ -189,7 +189,7 @@ const Header = ({ navigation, route }: HomeProps) => {
                }}>
                 {isLoading ? <ActivityIndicator size={20} color={"#fff"}/> : <Text style={{color:"white",fontWeight:"bold"}}>Use Current Location</Text>}
               </TouchableOpacity>
-              <TouchableOpacity style={{backgroundColor:"#fff",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10,borderWidth:1.5,borderColor:"rgb(233,233,233)"}}>
+              <TouchableOpacity style={{backgroundColor:"#fff",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10,borderWidth:1.5,borderColor:"rgb(233,233,233)"}} onPress={() => navigation.navigate("SelectAddress")}>
                 <Text style={{color:"rgb(105,175,94)",fontWeight:"bold"}}>Select Location</Text>
               </TouchableOpacity>
               </View>

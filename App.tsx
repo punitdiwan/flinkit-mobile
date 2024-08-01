@@ -40,6 +40,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { StatusBar } from "expo-status-bar";
 import { StatusBar } from "react-native";
 import OrderSummary from "./src/screens/OrderSummary";
+import SelectAddress from "./src/screens/SelectAddress";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -126,7 +127,7 @@ export default function App() {
           <Stack.Screen
             name="AddAddress"
             component={AddAddress}
-            options={{ title: "Add Address",headerShown:true }}
+            options={{ title: "Current Location",headerShown:true }}
           />
           <Stack.Screen
             name="OrderListScreen"
@@ -214,6 +215,12 @@ export default function App() {
             name="EditProfile"
             component={EditProfile}
             options={{title:"Edit Profile"}}
+          />
+
+          <Stack.Screen 
+            name="SelectAddress"
+            component={SelectAddress}
+            options={{title:"Select Address"}}
           />
 
         </Stack.Navigator>

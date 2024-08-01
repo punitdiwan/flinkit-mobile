@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +36,8 @@ const Favourite = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [favItemList, setFavItemList] = useState([]);
   const { favouriteItem, addFavouriteItemList, addAllFavItemInCart } = useMyContext();
+  const [isFavItemLoading,setIsFavItemLoading] = useState(false);
+  const [isFavItemId,setIsFavItemId] = useState("");
 
   const loadFav = async () => {
     const userId = await AsyncStorage.getItem("userMobileNumber");
@@ -45,8 +48,14 @@ const Favourite = () => {
 
   // handle unfavourite item
   const handleUnfavouriteItem = async (productId : any) => {
+    setIsFavItemId(productId);
+    setIsFavItemLoading(true);
      await removeFromFavourite(productId);
-     loadFav();
+    
+     await loadFav();
+     setIsFavItemLoading(false);
+     setIsFavItemId("");
+    
   }
  
 
@@ -78,7 +87,7 @@ const Favourite = () => {
             <Text style={styles.itemPrice}>₹{item?.price}</Text>
             {/* <SimpleLineIcons name="arrow-right" size={18} color="black" /> */}
             <TouchableOpacity onPress={() => {handleUnfavouriteItem(item?.product_id)}}>
-                <Entypo name="heart" size={30} color={"red"} />
+                {isFavItemLoading && item?.product_id == isFavItemId ? <ActivityIndicator size={20} color={"red"} /> :<Entypo name="heart" size={30} color={"red"} />}
             </TouchableOpacity>
           </View>
         </View>
@@ -101,7 +110,7 @@ const Favourite = () => {
         />
       ) : (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyStateText}>Please add your{'\n'}Favourite Products</Text>
+          <Text style={styles.emptyStateText}>"Please add your{'\n'}Favourite Products"</Text>
         </View>
       )}
       {favouriteItem.length > 0 ? (
@@ -206,9 +215,10 @@ const styles = StyleSheet.create({
     minHeight: height * 0.6,
   },
   emptyStateText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "500",
     textAlign: "center",
+    textDecorationLine:"underline"
   },
   buttonContainer: {
     backgroundColor: "white",

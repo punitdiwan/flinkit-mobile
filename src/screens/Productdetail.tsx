@@ -442,6 +442,8 @@ const Productdetail = ({ route }:any) => {
   const [imageLoading, setImageLoading] = useState(true);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
+  const [isFavItemAddLoading,setIsFavItemAddLoading] = useState(false);
+
   const {
     cartItem,
     increaseCartQuantity,
@@ -476,6 +478,7 @@ const Productdetail = ({ route }:any) => {
   const isFavItem = isFavItemOrNot;
 
   const addToFav = async (data) => {
+    setIsFavItemAddLoading(true);
     const userId = await AsyncStorage.getItem("userMobileNumber");
     const { price, product_id, imagename, product_name, darkroomownerid } = data;
 
@@ -489,6 +492,7 @@ const Productdetail = ({ route }:any) => {
     );
     const response = await loadFavItem(userId);
     addFavouriteItemList(response);
+    setIsFavItemAddLoading(false);
     setHeartIconColor("red");
   };
 
@@ -565,7 +569,7 @@ const Productdetail = ({ route }:any) => {
             <View style={styles.detailsContainer}>
               <View style={styles.header}>
                 <Text style={styles.productName}>{item?.product_name}</Text>
-                <Entypo
+                {isFavItemAddLoading ? <ActivityIndicator color={"red"} size={20} /> : <Entypo
                   name="heart-outlined"
                   size={24}
                   color={isFavItem ? "red" : "black"}
@@ -574,7 +578,7 @@ const Productdetail = ({ route }:any) => {
                       ? navigation.navigate("Favourite")
                       : addToFav(item)
                   }
-                />
+                />}
               </View>
 
               <Text style={styles.productDetails}>1Kg, price</Text>

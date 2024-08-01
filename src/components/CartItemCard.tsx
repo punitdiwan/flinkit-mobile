@@ -30,6 +30,8 @@ type CartItemProps = {
 };
 
 const CartItemCard = ({ item }: CartItemProps) => {
+  console.log("itemm",item);
+  
   const focused = useIsFocused();
   const {cartItem} = useMyContext();
 
@@ -49,6 +51,8 @@ const CartItemCard = ({ item }: CartItemProps) => {
 
   // extracting data from item
   const { product_name, price, imagename, qty, product_id } = item;
+  console.log("skdsadk",product_name, price, imagename, qty, product_id);
+  
 
   // maintaing state of alert
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -66,9 +70,9 @@ const CartItemCard = ({ item }: CartItemProps) => {
   };
 
 
-  if (currentProductQuantity.length == 0) {
-    return;
-  }
+  // if (currentProductQuantity.length == 0) {
+  //   return;
+  // }
 
   // checking currentTimeQuantityOfProduct
   if(currentProductQuantity[0]?.product_total_qty < qty){
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // Shadow position
     shadowOpacity: 0.1, // Shadow opacity
     shadowRadius: 3, // Shadow blur radius
+    
   },
   imageContainer: {
     width: width * 0.15, // 25% of screen width

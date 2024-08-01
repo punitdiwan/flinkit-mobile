@@ -184,8 +184,11 @@ const TopRated = () => {
         }}>
 
           {products?.length > 0 ? (
-            products.map(item =>
-              <TouchableOpacity
+            products.map(item => {
+              const moreCharacter = item?.product_name?.length > 15 ? true : false;
+              item.product_name = moreCharacter ? (item.product_name.slice(0,15) + "...") : item.product_name;
+
+              return ( <TouchableOpacity
                 key={item?.product_id}
                 style={[styles.card, { width: windowWidth > 600 ? "30%" : "45%" }]}
                 onPress={() =>
@@ -225,7 +228,10 @@ const TopRated = () => {
                   )}
                 </View>
               </TouchableOpacity>
+              )
+            }
             )
+          
           ) : (
             <ActivityIndicator size="large" color="rgb(105,175,94)" />
           )}
@@ -245,7 +251,7 @@ const styles = {
     minHeight: 250,
     borderColor: "rgb(233,233,233)",
     borderWidth: 1,
-    elevation: 3,
+    elevation: 0,
   },
   image: {
     width: "100%",

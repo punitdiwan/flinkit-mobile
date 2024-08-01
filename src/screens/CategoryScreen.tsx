@@ -463,10 +463,10 @@ const styles = StyleSheet.create({
     color: 'rgb(38,37,50)',
   },
   outOfStockContainer: {
-    backgroundColor: '#E3E3E3',
+    backgroundColor: '#F0f0f0',
     paddingHorizontal: 5,
     paddingVertical: 2,
-    borderRadius: 5,
+    borderRadius: 3,
   },
   outOfStockText: {
     color: 'red',
