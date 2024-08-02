@@ -174,13 +174,13 @@ const Header = ({ navigation, route }: HomeProps) => {
              <View style={{justifyContent:"center",alignItems:"center",marginTop:100,gap:40}}>
               <Text style={{fontSize:18,fontWeight:"500",color:"#818181"}}>Update your Address</Text>
                <View style={{paddingHorizontal:10,width:"100%"}}>
-               {showLocationOption == false && <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
+               {showLocationOption == false && (<><TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
                 // getCurrentLocation();
                 setShowLocationOption(!showLocationOption);
                
                }}>
                 <Text style={{color:"white",fontWeight:"bold"}}>Add new address</Text>
-              </TouchableOpacity>}
+              </TouchableOpacity></>)}
 
               {showLocationOption && <View style={{gap:5}}>
               <TouchableOpacity style={{backgroundColor:"rgb(105,175,94)",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10}} onPress={() => {
@@ -189,7 +189,10 @@ const Header = ({ navigation, route }: HomeProps) => {
                }}>
                 {isLoading ? <ActivityIndicator size={20} color={"#fff"}/> : <Text style={{color:"white",fontWeight:"bold"}}>Use Current Location</Text>}
               </TouchableOpacity>
-              <TouchableOpacity style={{backgroundColor:"#fff",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10,borderWidth:1.5,borderColor:"rgb(233,233,233)"}} onPress={() => navigation.navigate("SelectAddress")}>
+              <TouchableOpacity style={{backgroundColor:"#fff",width:"100%",justifyContent:"center",alignItems:"center",paddingVertical:15,borderRadius:10,borderWidth:1.5,borderColor:"rgb(233,233,233)"}} onPress={() =>{
+              // setModalVisible(!modalVisible)
+              navigation.navigate("SelectAddress")}
+              }>
                 <Text style={{color:"rgb(105,175,94)",fontWeight:"bold"}}>Select Location</Text>
               </TouchableOpacity>
               </View>

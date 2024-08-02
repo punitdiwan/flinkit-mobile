@@ -16,7 +16,7 @@ import { Text } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { googleApiKey } from "../../lib/constant";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const SelectAddress = () => {
   const navigation = useNavigation();
@@ -29,17 +29,35 @@ const SelectAddress = () => {
     const emptyString = "";
     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${place_id}&key=${googleApiKey}`)
      const jsonData = await response.json();
+
       const fullAddress =  emptyString.concat(jsonData?.results[0]?.formatted_address);
-      console.log("fullAddress",fullAddress);
-      console.log("response_zipCode",jsonData?.results[0]?.formatted_address,jsonData?.results[0]?.geometry.location);
+      const houseNumber = jsonData?.results[0]?.address_components[0]?.short_name;
+      const areaName = jsonData?.results[0]?.address_components[1]?.short_name;
+      const areaName1 = jsonData?.results[0]?.address_components[2]?.short_name;
+      const areaName2 = jsonData?.results[0]?.address_components[3]?.short_name;
+      const city = jsonData?.results[0]?.address_components[4]?.short_name;
+      const country = jsonData?.results[0]?.address_components[7]?.short_name
+      
+      return {
+        houseNumber,
+        areaName,
+        areaName1,
+        areaName2,
+        city,
+        country
+      }
    }
 
-//    handling location save
-  const handleChangeLocation = () => {
+
+
+  const handleChangeLocation = async () => {
     if (!newLocation) {
       Alert.alert("Invalid", "Please enter your location");
     } else {
-        getZipCodeRelatedToPlaceId(newLocation?.place_id);
+       const address = await getZipCodeRelatedToPlaceId(newLocation?.place_id);
+        navigation.navigate("ConfirmAddress",{
+          address
+        });
     }
   };
 
