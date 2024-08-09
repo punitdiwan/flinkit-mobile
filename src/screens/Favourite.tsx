@@ -6,15 +6,21 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
 } from "react-native";
+import { SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-// import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { addToCart, loadFavItem } from "./supabaseClient";
+import { loadFavItem, removeFromFavourite } from "./supabaseClient";
 import { useMyContext } from "../context/Context";
 import { useIsFocused } from "@react-navigation/native";
 import { imageUrl } from "../../lib/constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { Entypo } from "@expo/vector-icons";
+
+const { width, height } = Dimensions.get("window");
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -26,152 +32,112 @@ const loadFonts = async () => {
 
 const Favourite = () => {
   const focus = useIsFocused();
-
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const [fontLoaded, setFontLoaded] = useState(false);
   const [favItemList, setFavItemList] = useState([]);
-  const { favouriteItem, addFavouriteItemList,addingItemInCart,addAllFavItemInCart} = useMyContext();
-  // console.log("favItem",favouriteItem);
-
+  const { favouriteItem, addFavouriteItemList, addAllFavItemInCart } = useMyContext();
+  const [isFavItemLoading,setIsFavItemLoading] = useState(false);
+  const [isFavItemId,setIsFavItemId] = useState("");
 
   const loadFav = async () => {
-    const response = await loadFavItem();
-    // setFavItemList(response);
+    const userId = await AsyncStorage.getItem("userMobileNumber");
+    const response = await loadFavItem(userId);
     addFavouriteItemList(response);
+  };
+
+
+  // handle unfavourite item
+  const handleUnfavouriteItem = async (productId : any) => {
+    setIsFavItemId(productId);
+    setIsFavItemLoading(true);
+     await removeFromFavourite(productId);
+    
+     await loadFav();
+     setIsFavItemLoading(false);
+     setIsFavItemId("");
+    
   }
+ 
 
   useEffect(() => {
     loadFav();
-  }, [focus])
+    console.log("calling load fav");
+    
+  }, [focus]);
 
-  const addingAllFavItemInCart =  async () => {
-    let i = 0;
-      for(i = 0 ; i < favouriteItem?.length ; i++){
-        addAllFavItemInCart(favouriteItem[i]);
-      }
-    }
+  const addingAllFavItemInCart = async () => {
+    favouriteItem.forEach(item => addAllFavItemInCart(item));
+  };
 
-  const renderItem = ({ item }: any) => (
-    <View key={item?.product_id} style={{
-      width: "100%"
-    }}>
-      <TouchableOpacity onPress={() =>
-        navigation.navigate("Productdetail", {
-          id: item.product_id,
-        })
-      }>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            backgroundColor: "white",
-            width: "100%",
-            justifyContent: "space-between",
-            alignItems: "center",
-            height: 100,
-          }}
-        >
-          <View style={{ width: "15%" }}>
+  const renderItem = ({ item }:any) => (
+    <View style={styles.itemContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate("Productdetail", { id: item?.product_id })}>
+        <View style={styles.itemContent}>
+          <View style={styles.imageContainer}>
             <Image
               source={{ uri: `${imageUrl}${item?.imagename[0]?.name}` }}
-              style={{
-                width: "100%",
-                height: "auto",
-                aspectRatio: 1,
-                // borderColor: "black",
-              }}
+              style={styles.itemImage}
             />
           </View>
-
-          <View style={{ width: "40%",marginTop:17 }}>
+          <View style={styles.itemDetails}>
             <Text style={styles.itemName}>{item?.product_name}</Text>
             <Text style={styles.itemVolume}>{item.volume}</Text>
           </View>
-
-          <View
-            style={{
-              backgroundColor: "white",
-              display: "flex",
-              flexDirection: "row",
-              width: "20%",
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                gap: 25,
-                width: 50,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontWeight:"bold" }}>₹{item?.price}</Text>
-              <Image source={require("../../assets/Vector.png")} />
-            </View>
+          <View style={styles.itemPriceContainer}>
+            <Text style={styles.itemPrice}>₹{item?.price}</Text>
+            {/* <SimpleLineIcons name="arrow-right" size={18} color="black" /> */}
+            <TouchableOpacity onPress={() => {handleUnfavouriteItem(item?.product_id)}}>
+                {isFavItemLoading && item?.product_id == isFavItemId ? <ActivityIndicator size={20} color={"red"} /> :<Entypo name="heart" size={30} color={"red"} />}
+            </TouchableOpacity>
           </View>
         </View>
-        <Text
-          style={{
-            width: "100%",
-            backgroundColor: "#e3e1e1",
-            height: 1,
-            fontWeight: "500",
-          }}
-        ></Text>
+        <View style={styles.separator} />
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favorurite</Text>
-      <Text
-        style={{
-          width: "100%",
-          backgroundColor: "#e3e1e1",
-          height: 1,
-          fontWeight: "500",
-        }}
-      ></Text>
-      { favouriteItem.length > 0 ? <FlatList
-        showsVerticalScrollIndicator={false}
-        data={favouriteItem}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-      /> : <View style={{paddingTop:300,minHeight:600}}><Text style={{fontSize:15,fontWeight:"500",textAlign:"center"}}>Please add yours{"\n"}Favourite Products</Text></View> }
-      <View>
-       
-       {favouriteItem?.length > 0 ? <TouchableOpacity
-          style={{
-            width: "100%",
-            backgroundColor: "#69AF5D",
-            paddingVertical: 20,
-            borderRadius: 10,
-          }}
-          onPress={() => addingAllFavItemInCart()}
-        >
-          <Text style={styles.addToCartButtonText} >Add all to cart</Text>
-        </TouchableOpacity> : <TouchableOpacity
-          style={{
-            width: "100%",
-            backgroundColor: "#69AF5D",
-            paddingVertical: 20,
-            borderRadius: 10,
-          }}
-          onPress={() => navigation.replace("SearchScreen")}
-        >
-          <Text style={styles.addToCartButtonText} >Go to Category</Text>
-        </TouchableOpacity>
-}
-      </View>
+      <Text style={styles.title}>Favourite</Text>
+      <View style={styles.separator} />
+      {favouriteItem.length > 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={favouriteItem}
+          renderItem={renderItem}
+          keyExtractor={(item) => item?.product_id.toString()}
+          contentContainerStyle={styles.listContainer}
+        />
+      ) : (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyStateText}>"Please add your{'\n'}Favourite Products"</Text>
+        </View>
+      )}
+      {favouriteItem.length > 0 ? (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.addToCartButton}
+            onPress={addingAllFavItemInCart}
+          >
+            <Text style={styles.addToCartButtonText}>Add all to cart</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.goToCategoryButton}
+            onPress={() => navigation.replace("SearchScreen")}
+          >
+            <Text style={styles.goToCategoryButtonText}>Go to Category</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // marginTop: 50,
     flex: 1,
     padding: 10,
     backgroundColor: "#fff",
@@ -182,76 +148,112 @@ const styles = StyleSheet.create({
     fontFamily: "Gilroy-Bold",
     paddingVertical: 10,
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   listContainer: {
     flexGrow: 1,
   },
-  favouriteItem: {
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-    flexWrap: "wrap",
-    backgroundColor: "#c9c7c7",
+  itemContainer: {
+    width: "100%",
   },
-  itemImg: {
+  itemContent: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 100,
+    paddingHorizontal: 10,
+  },
+  imageContainer: {
+    width: "15%",
+  },
+  itemImage: {
     width: 60,
     height: 60,
-    borderRadius: 8,
+    borderRadius: 5,
   },
   itemDetails: {
-    // marginLeft: 10,
-    // justifyContent: 'center',
-    backgroundColor: "red",
+    width: "40%",
+    marginTop: 17,
   },
   itemName: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     fontFamily: "Gilroy-Bold",
-  },
-  itemPrice: {
-    marginLeft: 200,
-    fontSize: 16,
-    color: "#333",
-    fontFamily: "Gilroy-Semibold",
   },
   itemVolume: {
     fontSize: 14,
     color: "#666",
     fontFamily: "Gilroy-Medium",
   },
-  itemQuantity: {
-    fontSize: 14,
-    color: "#666",
+  itemPriceContainer: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    width: "20%",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  itemPrice: {
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+  vectorImage: {
+    width: 24,
+    height: 24,
+  },
+  separator: {
+    width: "100%",
+    backgroundColor: "#e3e1e1",
+    height: 1,
+    fontWeight: "500",
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: height * 0.6,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontWeight: "500",
+    textAlign: "center",
+    textDecorationLine:"underline"
+  },
+  buttonContainer: {
+    backgroundColor: "white",
+    height: 80,
+    justifyContent: "center",
+    paddingHorizontal: 10,
   },
   addToCartButton: {
+    width: "100%",
     backgroundColor: "#69AF5D",
-    width: 300,
-    height: 67,
     paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 20,
-    marginTop: 35,
-    marginBottom: 30,
-    marginLeft: 23,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    borderRadius: 10,
   },
   addToCartButtonText: {
     textAlign: "center",
     fontSize: 18,
     fontFamily: "Gilroy-Semibold",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    color:"white",
-    fontWeight:"bold"
+    color: "white",
+    fontWeight: "bold",
+  },
+  goToCategoryButton: {
+    width: "100%",
+    backgroundColor: "#69AF5D",
+    paddingVertical: 15,
+    borderRadius: 10,
+  },
+  goToCategoryButtonText: {
+    textAlign: "center",
+    fontSize: 18,
+    fontFamily: "Gilroy-Semibold",
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
 export default Favourite;
-
 
 

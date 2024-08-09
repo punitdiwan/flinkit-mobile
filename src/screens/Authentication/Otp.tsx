@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -13,55 +13,61 @@ import { Image } from "react-native";
 import OTPInputView from "rn-otp-textinput";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
+import { getUserRelatedToMobile, removeOTPAfterValidation } from "../supabaseClient";
+import { useMyContext } from "../../context/Context";
 
 
-const Otp = (MobileNumber: any) => {
-  const navigation = useNavigation();
-  const phone = MobileNumber.route.params.MobileNumber;
-  console.log("phone", phone);
+const Otp = (mobileNumber: any) => {
   const focus = useIsFocused();
+  const navigation = useNavigation();
+  const phone = mobileNumber.route.params.mobileNumber;
 
+  const [userNumber,setUserNumber] = useState("");
   const [userEnterOtp,setUserEnterOtp] = useState("");
-  const [generatedOtp,setGenratedOtp] = useState("");
-  const [resendText,setResendText] = useState("Resend Code")
-  console.log("generatedOtp",generatedOtp);
-  
-  // generate Otp
-  const generateOtp = () => {
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    return otp;
-  };
+  const [userValidationOtp,setUserValidationOtp] = useState("");
+  const [resendText,setResendText] = useState("Resend Code");
+  const [user,setUser] = useState([]);
 
-  const handleOtpSubmit = () => {
-    console.log("userEnteredOtp",userEnterOtp,"generatedOtp",generatedOtp);
-    
+  const generateOTP = () => {
+
+  }
+
+  const handleOtpSubmit = async() => {
       if(userEnterOtp.length == 6){
-        if(userEnterOtp){
-          navigation.navigate("SelectLocation");
+        if(userEnterOtp == userValidationOtp){
+          // const {mobile} = user
+          await removeOTPAfterValidation(userNumber);
           AsyncStorage.setItem("isLoggedIn","true");
+          AsyncStorage.setItem("userMobileNumber",userNumber);
+          navigation.navigate("SelectLocation");
         }else{
           Alert.alert("Invalid","Invalid OTP")
         }
       }else{
         Alert.alert("Invalid","Please enter OTP")
       }
-
-      // if(userEnterOtp.length == 6){
-      //   if(generatedOtp == userEnterOtp){
-      //     navigation.navigate("SelectLocation");
-      //     AsyncStorage.setItem("isLoggedIn","true");
-      //   }else{
-      //     Alert.alert("Invalid","Invalid OTP")
-      //   }
-      // }else{
-      //   Alert.alert("Invalid","Please enter OTP")
-      // }
       
   }
 
+  const getUserAndSetUser = async () => {
+    const user = await getUserRelatedToMobile(userNumber);
+    setUser(user);
+    const {otp} = user[0];
+    setUserValidationOtp(otp);
+  
+    if(user?.data > 0){
+        const {otp} = user.data[0];
+        console.log("userOTP",otp);
+        
+    }
+  }
+
   useEffect(() => {
-    const otp = generateOtp();
-    setGenratedOtp(otp);
+    getUserAndSetUser();
+  },[userNumber])
+
+  useEffect(() => {
+    setUserNumber(phone);
   },[focus])
 
   return (
@@ -115,6 +121,8 @@ const Otp = (MobileNumber: any) => {
         </Text>
       </TouchableOpacity>
 
+      {userValidationOtp && <Text>{userValidationOtp}</Text>}
+
       <View style={{ position: "absolute", right:50, bottom:40 }}>
         <TouchableOpacity
           style={{
@@ -167,7 +175,7 @@ export default Otp;
 
 
 
-
+// AsyncStorage.setItem("isLoggedIn","true");
 
 
 

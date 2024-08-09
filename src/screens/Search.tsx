@@ -70,6 +70,7 @@ export default Search;
 const styles = StyleSheet.create({
   addNewAddressMain: {
     width: "100%",
+    backgroundColor:"#fff"
   },
 
   addNewAddress: {
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   searchAddress: {
-    width: "85%",
+    // width: "85%",
     borderWidth: 1,
     paddingHorizontal: 5,
     borderColor: "grey",

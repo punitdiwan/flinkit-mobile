@@ -8,28 +8,34 @@ import {
   Animated,
   ScrollView,
   SafeAreaView,
+  Linking,
+  Alert,
 } from "react-native";
-import { getAllOrderItems, loadOrders } from "./supabaseClient";
+import {
+  getAllOrderItems,
+  getDriverDetails,
+  loadOrders,
+} from "./supabaseClient";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Entypo, AntDesign, Feather } from "@expo/vector-icons";
+import { Entypo, AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import MapView, { Marker, Polygon } from "react-native-maps";
+import { imageUrl } from "../../lib/constant";
+import MapViewDirections from "react-native-maps-directions";
+import { Dimensions } from "react-native";
 
-// Order details page
+
+const googleApiKey = "AIzaSyBpcS0RtHe9js4JhdXVZ5J2Omf4bVe6dkI";
+const { width } = Dimensions.get('window');
 
 const Order = (orderdetails: any) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
-
   const totalOrder = orderDetailsData[0]?.orderitems?.length;
-  console.log("totalOrder",totalOrder);
-  
-
-  // extract data from route
   const orderDetails = orderdetails?.route?.params?.item;
-  // setOrderDetailsData(orderDetails)
-
+  console.log("orderdetails", orderDetails?.assigndriverid);
   const fillAnimation = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
 
@@ -38,47 +44,44 @@ const Order = (orderdetails: any) => {
   const [orderList, setOrderList] = useState([]);
   const [orderStatus, setOrderStatus] = useState("");
   const [firstProductName, setFirstProductName] = useState("");
-
-  // useEffect(() => {
-  //   animateFill();
-  // }, []);
-
-  // const animateFill = () => {
-  //   Animated.timing(fillAnimation, {
-  //     toValue: 1,
-  //     duration: 2000, // Adjust duration as needed
-  //     useNativeDriver: false, // false for backgroundColor animation
-  //   }).start();
-  // };
-
-  // const interpolateColor = fillAnimation.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ["rgb(217,217,217)", "rgb(105,175,94)"], // Start with transparent and end with your desired color
-  // });
-
-  // const animatedStyle = {
-  //   backgroundColor: interpolateColor,
-  // };
   const [percentage, setPercentage] = useState(0);
-  console.log("percentage", percentage);
+  const [driverId, setDriverId] = useState("");
+  const [driverDetails, setDriverDetails] = useState([]);
+  const intervalRef = useRef(null);
+  const mapRef = useRef();
+
+  const [state, setState] = useState({
+    pickupCords: {
+      latitude: 23.2811,
+      longitude: 77.3605,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    },
+    droplocationCords: {
+      latitude: 23.1046,
+      longitude: 77.4903,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    },
+  });
+
+  const { pickupCords, droplocationCords } = state;
 
   const handlePercentage = (orderStatus) => {
-    console.log("handle Percenatege", orderStatus);
-
     if (orderStatus?.toLowerCase() == "pending") {
       setPercentage(25);
     } else if (orderStatus?.toLowerCase() == "confirmed") {
       setPercentage(50);
+    } else if (orderStatus?.toLowerCase() == "out for delivery") {
+      setPercentage(75);
     } else if (orderStatus?.toLowerCase() == "delivered") {
       setPercentage(100);
     } else if (percentage > 75 && percentage < 100) {
       setPercentage(percentage + 25);
     } else {
-      // console.log("0", percentage);
       setPercentage(0);
     }
   };
-  //  const timer = setTimeout(handlePercentage,2000);
 
   const width = `${percentage}%`;
 
@@ -96,12 +99,54 @@ const Order = (orderdetails: any) => {
 
   const loadOrdersData = async () => {
     setOrderDetailsData([orderDetails]);
+    setDriverId(orderDetails?.assigndriverid);
   };
 
   useEffect(() => {
     loadOrdersData();
     handlePercentage(orderDetails?.orderstatus);
   }, []);
+
+  const getDriver = async () => {
+    try {
+      const response = await getDriverDetails(driverId);
+      setDriverDetails(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+// Replace with your API key and coordinates
+const apiKey = 'YOUR_API_KEY';
+const origin = '37.7749,-122.4194'; // San Francisco, CA
+const destination = '34.0522,-118.2437'; // Los Angeles, CA
+
+
+const getAsstimatedDeliveryTime = () => {
+  // Construct the URL for the API request
+const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&mode=driving&key=${googleApiKey}`;
+
+// Fetch data from Google Maps Distance Matrix API
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.json();
+  })
+  .then(data => {
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+
+}
+
+  useEffect(() => {
+    console.log("calling driver details");
+    getDriver();
+    getAsstimatedDeliveryTime();
+  }, [driverId]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -172,86 +217,219 @@ const Order = (orderdetails: any) => {
                   : orderDetails?.orderstatus}
               </Text>
               <View style={{ paddingTop: 5 }}>
-                <Text style={{ fontWeight: "semibold" }}>
-                  Arriving <Text style={styles.boldText}>10:15</Text>
-                </Text>
+                {orderDetails?.orderstatus !== "Delivered" && (
+                  <Text style={{ fontWeight: "semibold" }}>
+                    Arriving <Text style={styles.boldText}>10:15</Text>
+                  </Text>
+                )}
 
-                <View
-                  style={{
-                    width: "100%",
-                    backgroundColor: "rgb(238,238,238)",
-                    height: 10,
-                    justifyContent: "center",
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}
-                >
-                  <View
-                    style={[styles.progressBar, { width, backgroundColor }]}
-                  >
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 85,
-                      }}
-                    ></View>
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 175,
-                      }}
-                    ></View>
-                    <View
-                      style={{
-                        width: 5,
-                        height: "100%",
-                        position: "absolute",
-                        backgroundColor: "white",
-                        left: 275,
-                      }}
-                    ></View>
+                <View style={styles.progressBarContainer}>
+                  <View style={[styles.progressBar, { width, backgroundColor }]}>
+                    {[85, 175, 275].map((left, index) => (
+                      <View key={index} style={[styles.progressMarker, { left }]} />
+                    ))}
                   </View>
                 </View>
 
-                {/* <View style={styles.animationContainer}>
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-                <Animated.View style={[styles.box, animatedStyle]} />
-              </View> */}
                 <View style={styles.arrivalInfo}>
-                  <Text>
-                    Estimated arrival by{" "}
-                    <Text style={styles.boldText}>10:15</Text>
-                  </Text>
+                  {orderDetails?.orderstatus !== "Delivered" ? (
+                    <Text>
+                      Estimated arrival by{" "}
+                      <Text style={styles.boldText}>10:15</Text>
+                    </Text>
+                  ) : (
+                    <Text>
+                      Arrived at <Text style={styles.boldText}>10:00</Text>
+                    </Text>
+                  )}
                   {/* Additional content */}
                 </View>
-                <View
-                  style={{
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 50,
-                  }}
-                >
-                  <Image source={require("../../assets/orderbackground.png")} />
-                  <Text
+
+                {orderDetails?.orderstatus !== "Out for delivery" && (
+                  <View
                     style={{
-                      width: "20%",
-                      backgroundColor: "#EEEEEE",
-                      height: 10,
-                      fontWeight: "500",
-                      marginTop: 30,
-                      borderRadius: 20,
+                      width: "100%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: 50,
                     }}
-                  ></Text>
-                </View>
+                  >
+                    {
+                      <Image
+                        source={require("../../assets/orderbackground.png")}
+                      />
+                    }
+                    <Text
+                      style={{
+                        width: "20%",
+                        backgroundColor: "#EEEEEE",
+                        height: 10,
+                        fontWeight: "500",
+                        marginTop: 30,
+                        borderRadius: 20,
+                      }}
+                    ></Text>
+                  </View>
+                )}
+
+                {orderDetails?.orderstatus == "Out for delivery" && (
+                  <View style={{ marginVertical: 15 }}>
+                    <MapView
+                      ref={mapRef}
+                      initialRegion={pickupCords}
+                      style={{ width: "100%", height: 350 }}
+                    >
+                      <Marker coordinate={pickupCords}>
+                        <Image
+                          source={require("../../assets/delivery-bike.png")}
+                          style={{ width: 40, height: 50 }} // Adjust width and height as needed
+                        />
+                      </Marker>
+                      <Marker
+                        coordinate={droplocationCords}
+                        style={{ width: 20, height: 20 }}
+                      />
+
+
+                      <MapViewDirections
+                        origin={pickupCords}
+                        destination={droplocationCords}
+                        apikey={googleApiKey}
+                        strokeWidth={4}
+                        strokeColor="blue"
+                        optimizeWaypoints={true}
+                        onReady={(result) => {
+                          mapRef.current.fitToCoordinates(result.coordinates, {
+                            edgePadding: {
+                              right: 30,
+                              left: 30,
+                              bottom: 300,
+                              top: 300,
+                            },
+                          });
+                        }}
+                      />
+                    </MapView>
+                  </View>
+                )}
+
+                {orderDetails?.orderstatus == "Out for delivery" &&
+                  driverDetails && (
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        gap: 10,
+                        marginVertical: 10,
+                        paddingHorizontal: 7,
+                        paddingVertical: 10,
+                        borderRadius: 5,
+                        shadowColor: "#E3E3E3", // Change this to adjust shadow color
+                        shadowOffset: { width: 0, height: 2 }, // Change shadow offset as needed
+                        shadowOpacity: 0.8, // Change opacity (0-1)
+                        shadowRadius: 2, // Change radius
+                        elevation: 3,
+                      }}
+                    >
+                      <View
+                        style={{
+                          justifyContent: "space-between",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "#f0f0f0",
+                            borderRadius: 100,
+                            elevation: 4,
+                          }}
+                        >
+                          <Image
+                            source={{
+                              uri: `${imageUrl}${driverDetails[0]?.profileimg}`,
+                            }}
+                            width={100}
+                            height={100}
+                            borderRadius={100}
+                          />
+                          <View
+                            style={{
+                              backgroundColor: "rgb(105,175,94)",
+                              borderRadius: 100,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              // paddingVertical: 1,
+                              position: "absolute",
+                              bottom: 0,
+                              width: 70,
+                              marginLeft: 17,
+                              elevation: 4,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "rgb(255,229,0)",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {" "}
+                              4.5 <Entypo name="star" />
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View
+                          style={{
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          {/* <Feather name="user-check" size={20} /> */}
+                          <Text
+                            style={{
+                              fontWeight: "bold",
+                              color: "rgb(105,175,94)",
+                              fontSize: 15,
+                            }}
+                          >
+                            {`Mr.${driverDetails[0]?.driverfirst_name} ${driverDetails[0]?.driverlast_name}`}
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() =>
+                              Linking.openURL(
+                                `tel:${"+91" + driverDetails?.contact}`
+                              )
+                            }
+                            style={{
+                              backgroundColor: "rgb(105,175,94)",
+                              width: 50,
+                              height: 50,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRadius: 100,
+                              elevation: 5,
+                            }}
+                          >
+                            <Feather
+                              name="phone"
+                              size={20}
+                              color={"#fff"}
+                              style={{ elevation: 5 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  )}
 
                 <View style={{ marginTop: 20 }}>
                   <Text style={{ fontWeight: "bold", fontSize: 15 }}>
@@ -434,7 +612,10 @@ const Order = (orderdetails: any) => {
                   </View>
                   <View style={{ paddingTop: 15 }}>
                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-                      Order Number : <Text style={{color:"rgb(105,195,74)"}}>{orderDetailsData[0]?.orderid}</Text>
+                      Order Number :{" "}
+                      <Text style={{ color: "rgb(105,195,74)" }}>
+                        {orderDetailsData[0]?.orderid}
+                      </Text>
                     </Text>
                   </View>
 
@@ -465,10 +646,16 @@ const Order = (orderdetails: any) => {
                           }}
                           onPress={() => setShowMore(!showMore)}
                         >
-                          {showMore ? "" : (
+                          {showMore ? (
+                            ""
+                          ) : (
                             <>
                               <Text
-                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)" }}
+                                style={{
+                                  fontWeight: "semibold",
+                                  fontSize: 13,
+                                  color: "rgb(105,175,94)",
+                                }}
                               >
                                 Show more
                               </Text>
@@ -512,16 +699,29 @@ const Order = (orderdetails: any) => {
                             <Text style={{ fontWeight: "bold" }}>
                               {item?.product_name}
                             </Text>
-                            {showMore && index == totalOrder-1 &&    <TouchableOpacity onPress={() => setShowMore(!showMore)} style={{flexDirection:"row",alignItems:"center",gap:5}}>
-                              <Text
-                                style={{ fontWeight: "semibold", fontSize: 13,color:"rgb(105,175,94)"}}
+                            {showMore && index == totalOrder - 1 && (
+                              <TouchableOpacity
+                                onPress={() => setShowMore(!showMore)}
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 5,
+                                }}
                               >
-                                Show less
-                              </Text>
-                              <Image
-                                source={require("../../assets/arrowbottom.png")}
-                              />
-                            </TouchableOpacity>}
+                                <Text
+                                  style={{
+                                    fontWeight: "semibold",
+                                    fontSize: 13,
+                                    color: "rgb(105,175,94)",
+                                  }}
+                                >
+                                  Show less
+                                </Text>
+                                <Image
+                                  source={require("../../assets/arrowbottom.png")}
+                                />
+                              </TouchableOpacity>
+                            )}
                           </View>
                         </View>
                       );
@@ -541,8 +741,9 @@ const Order = (orderdetails: any) => {
                     Total
                   </Text>
                   <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  
-                    <Text style={{color:"rgb(105,175,94)"}}>₹{orderDetailsData[0]?.totalamt}</Text>
+                    <Text style={{ color: "rgb(105,175,94)" }}>
+                      ₹{orderDetailsData[0]?.totalamt}
+                    </Text>
                   </Text>
                 </View>
               </View>
@@ -606,7 +807,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "rgb(238,238,238)",
     borderRadius: 5,
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   content: {
     flex: 1,
@@ -632,19 +833,85 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   box: {
-    // width: 200,
-    // height: 200,
-    // borderRadius: 10,
     width: "25%",
     marginRight: 5,
     borderRadius: 2,
     height: 7,
   },
-  // Add more styles for other sections as needed
+  // progressBarContainer: {
+  //   height: 10,
+  //   borderRadius: 5,
+  //   overflow: "hidden",
+  //   backgroundColor: "red",
+  //   marginVertical: 10,
+  // },
+  progressBarContainer: {
+    height: 10,
+    borderRadius: 5,
+    overflow: "hidden",
+    backgroundColor: "#e3e3e3",
+    marginVertical: 10,
+    width: width * 0.9, // Adjust this percentage as needed
+  },
   progressBar: {
-    height: 7,
-    borderRadius: 2,
+    height: "100%",
+    borderRadius: 5,
+    position: "relative",
+  },
+  progressMarker: {
+    position: "absolute",
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+    borderColor: "#000",
+    borderWidth: 1,
   },
 });
 
 export default Order;
+
+
+
+         {/* <View
+                  style={{
+                    width: "100%",
+                    backgroundColor: "rgb(238,238,238)",
+                    height: 10,
+                    justifyContent: "center",
+                    borderRadius: 5,
+                    marginTop: 10,
+                  }}
+                >
+                  <View
+                    style={[styles.progressBar, { width, backgroundColor }]}
+                  >
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 85,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 175,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        width: 5,
+                        height: "100%",
+                        position: "absolute",
+                        backgroundColor: "white",
+                        left: 275,
+                      }}
+                    ></View>
+                  </View>
+                </View> */}

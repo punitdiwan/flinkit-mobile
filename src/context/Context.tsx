@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { addToCart, loadCartData } from "../screens/supabaseClient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface MyContextData {
   getItemQuintity: (id: string) => number;
@@ -17,7 +18,10 @@ interface MyContextData {
   cartItem: [];
   favouriteItem:[];
   clearCart:() => void;
-  addAllFavItemInCart : (data:[]) => void
+  addAllFavItemInCart : (data:[]) => void;
+  userId:"";
+  setUserId:() => void;
+  getAsyncStorageCartItemsAndAddInCart : (data:[]) => void
 }
 
 // Create the context with initial values
@@ -32,17 +36,22 @@ type CartItem = {
 
 export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // const [cartItem, setCartItem] = useState<CartItem[]>([]);
+
   const [cartItem, setCartItem] = useState([]);
   const [favouriteItem,setFavouriteItem] = useState([]);
+  
 
   // Add to cart by harsh
-  function addingItemInCart(data: any) {
+  async function addingItemInCart(data: any) {
+    console.log("addingItemInCart",data);
     
     if (cartItem?.length == 0) {
       const itemObj = new Object(data);
       itemObj.qty = 1;
       const item = [itemObj];
       setCartItem(item);
+      AsyncStorage.setItem("cartItem",JSON.stringify(item));
+      
     } else {
       const findingProductInCartItem = cartItem?.filter((item): any => item?.product_id == data?.product_id);
       if (findingProductInCartItem?.length > 0) {
@@ -50,19 +59,24 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         findingProductInCartItem[0].qty = findingProductInCartItem[0].qty + 1;
         removeFindProduct.push(...findingProductInCartItem);
         setCartItem([...removeFindProduct]);
-
+        AsyncStorage.setItem("cartItem",JSON.stringify(removeFindProduct));
       } else {
         const newObj = new Object(data);
         newObj.qty = 1;
         const newArr = [...cartItem];
         newArr.push(newObj);
         setCartItem([...newArr]);
+        AsyncStorage.setItem("cartItem",JSON.stringify(newArr));
       }
 
     }
     // console.log("cartItem",cartItem?.length);
     
   }
+
+function getAsyncStorageCartItemsAndAddInCart(data:any){
+      setCartItem(data);
+}
 
    const deleteParticularItemInCart = (product_id) => {
     console.log(product_id);
@@ -74,7 +88,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       if(findProductExistOrNot.length > 0){
         const updatedCartItem = cartItem.filter(item => item?.product_id !== product_id);
         setCartItem([...updatedCartItem])
-        console.log("c",cartItem);
+        AsyncStorage.setItem("cartItem",JSON.stringify(updatedCartItem));
         
       }else{
         return
@@ -92,6 +106,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             findProductExistsOrNot[0].qty = findProductExistsOrNot[0]?.qty - 1;
             updatedCart.push(findProductExistsOrNot[0]);
             setCartItem(updatedCart);
+            AsyncStorage.setItem("cartItem",JSON.stringify(updatedCart));
         }else{
           deleteParticularItemInCart(product_id);
         }
@@ -106,8 +121,10 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       const updatedCart = cartItem.filter(item => item?.product_id !== product_id);
       findProductExistsOrNot[0].qty = findProductExistsOrNot[0]?.qty + 1;
       updatedCart.push(findProductExistsOrNot[0]);
+      console.log("updatedCart",updatedCart);
+      
       setCartItem(updatedCart)
-
+      AsyncStorage.setItem("cartItem",JSON.stringify(updatedCart));
     }else{
       return;
     }
@@ -123,8 +140,7 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   function addAllFavItemInCart(data){
-    console.log("dataa",data);
-    
+ 
       const findProductIsExistOrNot = cartItem.filter(item => item?.product_id == data?.product_id);
       console.log(findProductIsExistOrNot.length > 0 ? "true" : "false");
       if(findProductIsExistOrNot.length > 0){
@@ -135,12 +151,29 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         const updatedCart = cartItem;
         updatedCart.push(obj);
         setCartItem([]);
-        console.log("UpdatedCart",updatedCart);
+
         
         setCartItem([...updatedCart]);
       }
   }
+
+  const updateCartData = (cartData) => {
+    console.log("cartData",cartData);
+    
+  }
+ 
   // end
+
+  const loadCartItemFromAsyncStorage = async () => {
+    try {
+      const cart = await AsyncStorage.getItem("cartItem") || [];
+      console.log("carttt",cart);
+      setCartItem(cart)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   return (
     <MyContext.Provider
@@ -153,7 +186,9 @@ export const MyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         increaseCartQuantity,
         addFavouriteItemList,
         clearCart,
-        addAllFavItemInCart
+        addAllFavItemInCart,
+        getAsyncStorageCartItemsAndAddInCart,
+        updateCartData
       }}
     >
       {children}
@@ -167,6 +202,3 @@ export const useMyContext = () => useContext(MyContext);
 
 
 
-
-// [
-// {"category_id": 9, "created_at": "2024-06-06T10:33:44.439112+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "price": 30, "product_brand": "Coca Cola", "product_category": "Beaverages", "product_details": "7 up is a Lemon and Lime flavoured soft drink", "product_discount": "10%", "product_id": 25, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/7up.jpg", "product_imgeid": "5bc1ca71-7800-4893-a2fa-668683021a5e", "product_name": "7 Up", "product_packing_type": "liter", "product_total_qty": 120, "qty": 2, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-06T10:33:44.439112+00:00", "uuid": "1796e134-bee6-4d5f-a9e0-67d631c18935", "variant_group_id": null, "visibility": true, "weight": null}, [{"category_id": 9, "created_at": "2024-06-06T10:33:44.439112+00:00", "darkroomownerid": "2bde6510-8546-4a75-988a-a29a297b57c3", "group_id": 1, "price": 30, "product_brand": "Coca Cola", "product_category": "Beaverages", "product_details": "7 up is a Lemon and Lime flavoured soft drink", "product_discount": "10%", "product_id": 25, "product_imagename": "https://backend.delivery.maitretech.com/storage/v1/object/public/img/public/7up.jpg", "product_imgeid": "5bc1ca71-7800-4893-a2fa-668683021a5e", "product_name": "7 Up", "product_packing_type": "liter", "product_total_qty": 120, "qty": 2, "status": false, "tax_class": null, "type": "simple", "updated_at": "2024-06-06T10:33:44.439112+00:00", "uuid": "1796e134-bee6-4d5f-a9e0-67d631c18935", "variant_group_id": null, "visibility": true, "weight": null}]]

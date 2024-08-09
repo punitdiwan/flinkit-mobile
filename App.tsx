@@ -1,4 +1,4 @@
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 import { Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -17,7 +17,6 @@ import Otp from "./src/screens/Authentication/Otp";
 import AddAddress from "./src/screens/AddAddressScreen";
 import OrderListScreen from "./src/screens/OrderListScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
-import Product_Details from "./src/screens/Product_Details";
 import Productdetail from "./src/screens/Productdetail";
 import Favourite from "./src/screens/Favourite";
 
@@ -38,7 +37,11 @@ import Orders from "./src/screens/Orders";
 import UploadImage from "./src/screens/UploadImage";
 import EditProfile from "./src/screens/EditProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
+import OrderSummary from "./src/screens/OrderSummary";
+import SelectAddress from "./src/screens/SelectAddress";
+import ConfrimAddress from "./src/components/ConfrimAddress";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -72,7 +75,6 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-
   return (
     <MyProvider>
       <NavigationContainer>
@@ -95,7 +97,7 @@ export default function App() {
           <Stack.Screen
             name="Otp"
             component={Otp}
-            options={{ headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Maillogin"
@@ -125,7 +127,7 @@ export default function App() {
           <Stack.Screen
             name="AddAddress"
             component={AddAddress}
-            options={{ title: "Add Address" }}
+            options={{ title: "Current Location", headerShown: true }}
           />
           <Stack.Screen
             name="OrderListScreen"
@@ -142,11 +144,6 @@ export default function App() {
             })}
           />
 
-          <Stack.Screen
-            name="Product_Details"
-            component={Product_Details}
-            options={{ title: "Product Details" }}
-          />
           <Stack.Screen
             name="Cart"
             options={{ title: "Cart" }}
@@ -177,13 +174,17 @@ export default function App() {
             options={{ title: "Favourite" }}
             component={Favourite}
           />
-          <Stack.Screen name="TopRated" component={TopRated} options={{title:"Top Rated"}} />
+          <Stack.Screen
+            name="TopRated"
+            component={TopRated}
+            options={{ title: "Top Rated" }}
+          />
           <Stack.Screen name="About" component={About} />
           <Stack.Screen name="Help" component={Help} />
           <Stack.Screen
             name="YourProfile"
             component={YourProfile}
-            options={{ title: 'Profile' }}
+            options={{ title: "Profile" }}
           />
           <Stack.Screen
             name="SelectLocation"
@@ -197,25 +198,40 @@ export default function App() {
           />
           <Stack.Screen name="TrackOrder" component={TrackOrder} />
           <Stack.Screen
-             name="Orders"
-             component={Orders}
-             options={{title:"Order History"}}
-
+            name="Orders"
+            component={Orders}
+            options={{ title: "Order History" }}
           />
 
           <Stack.Screen
-           name="UploadImage"
-           component={UploadImage}
-          />
-     
-          <Stack.Screen 
-            name="EditProfile"
-            component={EditProfile}
-            options={{title:"Edit Profile"}}
+            name="OrderSummary"
+            component={OrderSummary}
+            options={{ headerShown: true }}
           />
 
+          <Stack.Screen name="UploadImage" component={UploadImage} />
+
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{ title: "Edit Profile" }}
+          />
+
+          <Stack.Screen
+            name="SelectAddress"
+            component={SelectAddress}
+            options={{ title: "Select Address" }}
+          />
+
+          <Stack.Screen
+            name="ConfirmAddress"
+            component={ConfrimAddress}
+            options={{ title: "Confrim Address" }}
+          />
+
+         
         </Stack.Navigator>
-        {/* <StatusBar backgroundColor="rgb(105,175,94)"/> */}
+        <StatusBar backgroundColor="#fff" barStyle={"dark-content"} />
       </NavigationContainer>
     </MyProvider>
   );

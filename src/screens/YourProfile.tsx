@@ -1,6 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { Text, View,Image, TextInput, TouchableOpacity} from 'react-native'
+import { getUserDetails } from './supabaseClient';
 
 const userImage = "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600"
 
@@ -9,11 +11,19 @@ const YourProfile = () => {
 
   const [image,setImage] = useState("");
   const [hidePassword,setHidePassword] = useState(true);
+  const [user,setUser] = useState("");
+  const {fullname,mobile} = user;
+  
   console.log("image",image);
   
- 
+  const getProfile = async () => {
+    const user = await AsyncStorage.getItem("userMobileNumber");
+    const response = await getUserDetails(user);
+    setUser(response[0])
+  }
    
   useEffect(() => {
+    getProfile();
     setImage(userImage);
   },[])
 
@@ -44,7 +54,7 @@ const YourProfile = () => {
           </View>
  
           {/* second container of card container */}
-           <View style={{width:"100%",paddingHorizontal:10,height:60,backgroundColor:"rgb(240,241,242)",justifyContent:"space-between",flexDirection:"row",alignItems:"center",borderRadius:5}}>
+           {/* <View style={{width:"100%",paddingHorizontal:10,height:60,backgroundColor:"rgb(240,241,242)",justifyContent:"space-between",flexDirection:"row",alignItems:"center",borderRadius:5}}>
                 <View style={{flexDirection:"row",alignItems:"center",gap:15}}>
                   <Image source={require("../../assets/lock.png")} style={{width:20,height:20}}/>
                   <View>
@@ -55,7 +65,7 @@ const YourProfile = () => {
                 <TouchableOpacity onPress={() => setHidePassword(!hidePassword)}>
                   {hidePassword ? <Image source={require("../../assets/hidepassword.png")} style={{width:20,height:20}}/> : <Image  source={require("../../assets/showpassword.png")} style={{width:20,height:20}}/>}
                 </TouchableOpacity>
-           </View>
+           </View> */}
 
                {/* third container of card container */}
                <View style={{width:"100%",paddingHorizontal:10,height:60,backgroundColor:"rgb(240,241,242)",justifyContent:"space-between",flexDirection:"row",alignItems:"center",borderRadius:5}}>
@@ -63,7 +73,7 @@ const YourProfile = () => {
                   <Image source={require("../../assets/lock.png")} style={{width:20,height:20}}/>
                   <View>
                     <Text style={{fontWeight:500}}>Phone</Text>
-                    <Text>8744347272</Text>
+                    <Text>{mobile}</Text>
                   </View>
                 </View>
            </View>

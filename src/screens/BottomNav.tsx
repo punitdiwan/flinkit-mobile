@@ -34,7 +34,6 @@ const BottomNav = () => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color }) => {
             let iconName;
-
             if (route.name === "Home") {
               iconName = focused
                 ? "ios-information-circle"
