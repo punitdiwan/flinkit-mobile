@@ -43,7 +43,6 @@ import OrderSummary from "./src/screens/OrderSummary";
 import SelectAddress from "./src/screens/SelectAddress";
 import ConfrimAddress from "./src/components/ConfrimAddress";
 
-
 export type RootStackParamList = {
   Home: undefined;
   Profile: { userId: string };
